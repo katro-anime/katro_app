@@ -302,7 +302,25 @@ nav button b {
 </section>
 </div>
 
-<div id="discover" class="page">
+<div id=<div id="discover" class="page">
+  <section class="section">
+    <div class="section-title">
+      <h2>اكتشف الأنمي</h2>
+    </div>
+
+    <input
+      id="animeSearch"
+      type="search"
+      placeholder="ابحث عن أنمي..."
+      style="width:100%;padding:15px;margin-bottom:20px;border-radius:14px;background:#171725;color:white;border:1px solid #34344a;outline:none;"
+    >
+
+    <div class="cards" id="searchResults"></div>
+    <p id="noResults" style="display:none;text-align:center;color:#aaa;padding:20px;">
+      لا توجد نتائج.
+    </p>
+  </section>
+  </div>" class="page">
   <section class="section">
     <div class="section-title">
       <h2>اكتشف</h2>
@@ -379,7 +397,42 @@ function openPage(page, button) {
   }
 
   window.scrollTo(0, 0);
-}
+}const animeList = [
+  {name:"ناروتو",category:"أكشن"},
+  {name:"ون بيس",category:"مغامرات"},
+  {name:"هجوم العمالقة",category:"دراما"},
+  {name:"ديمون سلاير",category:"أكشن"},
+  {name:"جوجوتسو كايسن",category:"خيال"},
+  {name:"دراغون بول",category:"أكشن"},
+  {name:"ديث نوت",category:"غموض"},
+  {name:"بليتش",category:"أكشن"}
+];
+
+const searchInput = document.getElementById("animeSearch");
+const searchResults = document.getElementById("searchResults");
+const noResults = document.getElementById("noResults");
+
+if (searchInput) {
+  searchInput.addEventListener("input", function() {
+    const value = searchInput.value.trim().toLowerCase();
+
+    const results = animeList.filter(anime =>
+      anime.name.toLowerCase().includes(value)
+    );
+
+    searchResults.innerHTML = results.map(anime => `
+      <div class="anime-card">
+        <div class="poster">🎌</div>
+        <div class="anime-info">
+          <h3>${anime.name}</h3>
+          <p>${anime.category}</p>
+        </div>
+      </div>
+    `).join("");
+
+    noResults.style.display = results.length ? "none" : "block";
+  });
+  }
 </script>
 
 </body>
