@@ -1,7 +1,10 @@
 
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
+<head><link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#8855ff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#080912">
@@ -572,6 +575,14 @@
     <div class="logo">KATRO<span style="color:#8855ff">.</span></div>
     <p>© 2026 KATRO — جميع الحقوق محفوظة</p>
   </footer>
-
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("KATRO App Ready"))
+      .catch((error) => console.log(error));
+  });
+}
+</script>
 </body>
 </html>
