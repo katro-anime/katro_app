@@ -335,6 +335,18 @@ nav button b {
 <div id="favorites" class="page">
   <section class="section">
     <div class="section-title">
+      <h2>مفضلاتك ❤️</h2>
+    </div>
+
+    <div class="cards" id="favoriteResults"></div>
+
+    <p id="emptyFavorites" class="empty">
+      لم تضف أي أنمي إلى المفضلة بعد.
+    </p>
+  </section>
+</div>
+  <section class="section">
+    <div class="section-title">
       <h2>المفضلة</h2>
     </div>
     <div class="empty">
@@ -432,7 +444,56 @@ if (searchInput) {
 
     noResults.style.display = results.length ? "none" : "block";
   });
+  }// KATRO Favorites System
+let favorites = JSON.parse(
+  localStorage.getItem("katro_favorites") || "[]"
+);
+
+function saveFavorites() {
+  localStorage.setItem(
+    "katro_favorites",
+    JSON.stringify(favorites)
+  );
+}
+
+function toggleFavorite(name) {
+  if (favorites.includes(name)) {
+    favorites = favorites.filter(item => item !== name);
+  } else {
+    favorites.push(name);
   }
+
+  saveFavorites();
+  renderFavorites();
+
+  if (searchInput) {
+    searchInput.dispatchEvent(new Event("input"));
+  }
+}
+
+function renderFavorites() {
+  const container = document.getElementById("favoriteResults");
+  const empty = document.getElementById("emptyFavorites");
+
+  if (!container || !empty) return;
+
+  container.innerHTML = favorites.map(name => `
+    <div class="anime-card">
+      <div class="poster">🎌</div>
+      <div class="anime-info">
+        <h3>${name}</h3>
+        <button onclick="toggleFavorite('${name}')"
+          style="background:#8855ff;color:white;border:0;padding:9px;border-radius:8px;width:100%;margin-top:8px;">
+          إزالة من المفضلة
+        </button>
+      </div>
+    </div>
+  `).join("");
+
+  empty.style.display = favorites.length ? "none" : "block";
+}
+
+renderFavorites();
 </script>
 
 </body>
