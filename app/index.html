@@ -180,6 +180,16 @@ header {
   line-height: 2;
 }
 
+.favorite-btn {
+  background: #8855ff;
+  color: white;
+  border: 0;
+  padding: 9px;
+  border-radius: 8px;
+  width: 100%;
+  margin-top: 10px;
+}
+
 nav {
   position: fixed;
   bottom: 0;
@@ -219,6 +229,7 @@ nav button b {
   body {
     background: #05050b;
   }
+
   .app {
     border-left: 1px solid #202030;
     border-right: 1px solid #202030;
@@ -228,7 +239,6 @@ nav button b {
 </head>
 
 <body>
-
 <div class="app">
 
 <header>
@@ -236,6 +246,7 @@ nav button b {
   <div class="profile">👤</div>
 </header>
 
+<!-- الرئيسية -->
 <div id="home" class="page active">
 
 <section class="hero">
@@ -300,75 +311,69 @@ nav button b {
     </div>
   </div>
 </section>
+
 </div>
 
-<div id=<div id="discover" class="page">
-  <section class="section">
-    <div class="section-title">
-      <h2>اكتشف الأنمي</h2>
-    </div>
+<!-- اكتشف -->
+<div id="discover" class="page">
+<section class="section">
 
-    <input
-      id="animeSearch"
-      type="search"
-      placeholder="ابحث عن أنمي..."
-      style="width:100%;padding:15px;margin-bottom:20px;border-radius:14px;background:#171725;color:white;border:1px solid #34344a;outline:none;"
-    >
+  <div class="section-title">
+    <h2>اكتشف الأنمي</h2>
+  </div>
 
-    <div class="cards" id="searchResults"></div>
-    <p id="noResults" style="display:none;text-align:center;color:#aaa;padding:20px;">
-      لا توجد نتائج.
-    </p>
-  </section>
-  </div>" class="page">
-  <section class="section">
-    <div class="section-title">
-      <h2>اكتشف</h2>
-    </div>
-    <div class="empty">
-      <div style="font-size:40px">🔎</div>
-      <p>قسم اكتشاف الأنمي<br>سيتم تطويره في المرحلة القادمة.</p>
-    </div>
-  </section>
+  <input
+    id="animeSearch"
+    type="search"
+    placeholder="ابحث عن أنمي..."
+    style="width:100%;padding:15px;margin-bottom:20px;border-radius:14px;background:#171725;color:white;border:1px solid #34344a;outline:none;"
+  >
+
+  <div class="cards" id="searchResults"></div>
+
+  <p id="noResults" style="display:none;text-align:center;color:#aaa;padding:20px;">
+    لا توجد نتائج.
+  </p>
+
+</section>
 </div>
 
+<!-- المفضلة -->
 <div id="favorites" class="page">
-  <section class="section">
-    <div class="section-title">
-      <h2>مفضلاتك ❤️</h2>
-    </div>
+<section class="section">
 
-    <div class="cards" id="favoriteResults"></div>
+  <div class="section-title">
+    <h2>مفضلاتك ❤️</h2>
+  </div>
 
-    <p id="emptyFavorites" class="empty">
-      لم تضف أي أنمي إلى المفضلة بعد.
-    </p>
-  </section>
-</div>
-  <section class="section">
-    <div class="section-title">
-      <h2>المفضلة</h2>
-    </div>
-    <div class="empty">
-      <div style="font-size:40px">♡</div>
-      <p>قائمة الأنمي المفضلة لديك<br>ستظهر هنا لاحقًا.</p>
-    </div>
-  </section>
+  <div class="cards" id="favoriteResults"></div>
+
+  <p id="emptyFavorites" class="empty">
+    لم تضف أي أنمي إلى المفضلة بعد.
+  </p>
+
+</section>
 </div>
 
+<!-- الإعدادات -->
 <div id="settings" class="page">
-  <section class="section">
-    <div class="section-title">
-      <h2>الإعدادات</h2>
-    </div>
-    <div class="empty">
-      <div style="font-size:40px">⚙️</div>
-      <p>KATRO APP<br>الإصدار الأول 1.0</p>
-    </div>
-  </section>
+<section class="section">
+
+  <div class="section-title">
+    <h2>الإعدادات</h2>
+  </div>
+
+  <div class="empty">
+    <div style="font-size:40px">⚙️</div>
+    <p>KATRO APP<br>الإصدار الأول 1.0</p>
+  </div>
+
+</section>
 </div>
 
+<!-- شريط التنقل -->
 <nav>
+
   <button class="active" onclick="openPage('home',this)">
     <b>⌂</b> الرئيسية
   </button>
@@ -384,11 +389,13 @@ nav button b {
   <button onclick="openPage('settings',this)">
     <b>⚙</b> الإعدادات
   </button>
-</nav>
 
+</nav>
 </div>
 
 <script>
+
+// التنقل بين صفحات التطبيق
 function openPage(page, button) {
   document.querySelectorAll(".page").forEach(function(item) {
     item.classList.remove("active");
@@ -396,20 +403,27 @@ function openPage(page, button) {
 
   document.getElementById(page).classList.add("active");
 
+  document.querySelectorAll("nav button").forEach(function(btn) {
+    btn.classList.remove("active");
+  });
+
   if (button) {
-    document.querySelectorAll("nav button").forEach(function(btn) {
-      btn.classList.remove("active");
-    });
     button.classList.add("active");
   } else {
-    document.querySelectorAll("nav button").forEach(function(btn) {
-      btn.classList.remove("active");
-    });
-    document.querySelectorAll("nav button")[1].classList.add("active");
+    const buttons = document.querySelectorAll("nav button");
+    const pages = ["home", "discover", "favorites", "settings"];
+    const index = pages.indexOf(page);
+
+    if (index !== -1) {
+      buttons[index].classList.add("active");
+    }
   }
 
   window.scrollTo(0, 0);
-}const animeList = [
+}
+
+// قائمة الأنمي
+const animeList = [
   {name:"ناروتو",category:"أكشن"},
   {name:"ون بيس",category:"مغامرات"},
   {name:"هجوم العمالقة",category:"دراما"},
@@ -424,27 +438,7 @@ const searchInput = document.getElementById("animeSearch");
 const searchResults = document.getElementById("searchResults");
 const noResults = document.getElementById("noResults");
 
-if (searchInput) {
-  searchInput.addEventListener("input", function() {
-    const value = searchInput.value.trim().toLowerCase();
-
-    const results = animeList.filter(anime =>
-      anime.name.toLowerCase().includes(value)
-    );
-
-    searchResults.innerHTML = results.map(anime => `
-      <div class="anime-card">
-        <div class="poster">🎌</div>
-        <div class="anime-info">
-          <h3>${anime.name}</h3>
-          <p>${anime.category}</p>
-        </div>
-      </div>
-    `).join("");
-
-    noResults.style.display = results.length ? "none" : "block";
-  });
-  }// KATRO Favorites System
+// نظام المفضلة
 let favorites = JSON.parse(
   localStorage.getItem("katro_favorites") || "[]"
 );
@@ -465,36 +459,75 @@ function toggleFavorite(name) {
 
   saveFavorites();
   renderFavorites();
-
-  if (searchInput) {
-    searchInput.dispatchEvent(new Event("input"));
-  }
+  renderSearch();
 }
 
+// عرض نتائج البحث
+function renderSearch() {
+  if (!searchInput) return;
+
+  const value = searchInput.value.trim().toLowerCase();
+
+  const results = animeList.filter(anime =>
+    anime.name.toLowerCase().includes(value)
+  );
+
+  searchResults.innerHTML = results.map(anime => {
+    const isFavorite = favorites.includes(anime.name);
+
+    return `
+      <div class="anime-card">
+        <div class="poster">🎌</div>
+        <div class="anime-info">
+          <h3>${anime.name}</h3>
+          <p>${anime.category}</p>
+
+          <button class="favorite-btn"
+            onclick="toggleFavorite('${anime.name}')">
+            ${isFavorite ? "❤️ إزالة من المفضلة" : "♡ إضافة للمفضلة"}
+          </button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  noResults.style.display = results.length ? "none" : "block";
+}
+
+searchInput.addEventListener("input", renderSearch);
+
+// عرض المفضلة
 function renderFavorites() {
   const container = document.getElementById("favoriteResults");
   const empty = document.getElementById("emptyFavorites");
 
-  if (!container || !empty) return;
+  container.innerHTML = favorites.map(name => {
+    const anime = animeList.find(item => item.name === name);
+    const category = anime ? anime.category : "أنمي";
 
-  container.innerHTML = favorites.map(name => `
-    <div class="anime-card">
-      <div class="poster">🎌</div>
-      <div class="anime-info">
-        <h3>${name}</h3>
-        <button onclick="toggleFavorite('${name}')"
-          style="background:#8855ff;color:white;border:0;padding:9px;border-radius:8px;width:100%;margin-top:8px;">
-          إزالة من المفضلة
-        </button>
+    return `
+      <div class="anime-card">
+        <div class="poster">🎌</div>
+        <div class="anime-info">
+          <h3>${name}</h3>
+          <p>${category}</p>
+
+          <button class="favorite-btn"
+            onclick="toggleFavorite('${name}')">
+            ❤️ إزالة من المفضلة
+          </button>
+        </div>
       </div>
-    </div>
-  `).join("");
+    `;
+  }).join("");
 
   empty.style.display = favorites.length ? "none" : "block";
 }
 
+// بدء التطبيق
+renderSearch();
 renderFavorites();
-</script>
 
+</script>
 </body>
 </html>
