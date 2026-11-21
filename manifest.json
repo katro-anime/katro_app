@@ -1,0 +1,13 @@
+{
+  "name": "KATRO APP",
+  "short_name": "KATRO",
+  "description": "عالم الأنمي بين يديك",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#080912",
+  "theme_color": "#8855ff",
+  "lang": "ar",
+  "dir": "rtl"
+}
