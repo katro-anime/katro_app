@@ -729,6 +729,28 @@ fallback:base+"/data-saver/"+hash+"/"+encodeURIComponent(saverFiles[i]||file)
 /* تحميل صورة مع رابط بديل */
 
 function createReaderImage(page,i){
+  const img = document.createElement("img");
+
+  img.loading = i < 3 ? "eager" : "lazy";
+  img.alt = "صفحة " + (i + 1);
+  img.src = page.primary;
+
+  img.onerror = () => {
+    if (img.dataset.fallbackUsed) return;
+
+    img.dataset.fallbackUsed = "1";
+    img.src = page.fallback;
+
+    img.onerror = () => {
+      img.onerror = null;
+      img.alt = "تعذر تحميل الصفحة " + (i + 1);
+      img.style.minHeight = "180px";
+      img.style.background = "#202938";
+    };
+  };
+
+  return img;
+  }
 
 const img=document.createElement("img");
 
