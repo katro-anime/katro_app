@@ -1,55 +1,128 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#8855ff">
-<title>KATRO Manga</title>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080912">
+<meta name="description" content="KATRO - عالم المانغا والأنمي بين يديك. اكتشف واقرأ وحمل بأسلوب مميز.">
+<title>KATRO | عالم المانغا والأنمي</title>
 
+<!-- مكتبات ضغط الصور وتصدير PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#080b12;color:#fff;font-family:Arial,Tahoma,sans-serif}
-header{background:#111827;padding:15px;position:sticky;top:0;z-index:10;border-bottom:1px solid #263246}
-.logo{font-size:25px;font-weight:900;color:#a78bfa;margin-bottom:12px}
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080912;
+  --card:#101321;
+  --purple:#8855ff;
+  --blue:#28b8ff;
+  --white:#ffffff;
+  --muted:#9699b2;
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:'Cairo',sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  overflow-x:hidden;
+}
+
+a{text-decoration:none;color:inherit}
+
+header{
+  width:100%;
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:#111827dd;
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid #263246;
+  padding:15px 7%;
+}
+nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.logo{
+  font-size:25px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+.logo span{color:var(--purple)}
+.nav-links{
+  display:flex;
+  gap:25px;
+  list-style:none;
+  color:#c4c5d5;
+  font-size:14px;
+}
+.nav-links a:hover{color:var(--white)}
+
 input,button,select{font:inherit;border:0;border-radius:10px;padding:12px}
 input,select{background:#202938;color:white;width:100%}
-button{background:#8855ff;color:white;font-weight:bold;cursor:pointer}
+button{background:var(--purple);color:white;font-weight:bold;cursor:pointer;transition:.3s}
 button:active{opacity:.75}
-.filterRow{display:flex;gap:8px;margin-top:8px;align-items:center}
-.filterRow select{padding:8px 12px;font-size:13px}
-.tabs{display:flex;gap:8px;margin-top:10px}
-.tabs button{flex:1}
-.container{padding:14px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.card{background:#151d2a;border-radius:12px;overflow:hidden;cursor:pointer;border:1px solid #263246;position:relative}
+
+.filterRow{display:flex;gap:8px;margin-top:10px;align-items:center}
+.filterRow select{padding:10px;font-size:13px}
+
+.container{padding:30px 7%}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:20px}
+.card{background:#151d2a;border-radius:14px;overflow:hidden;cursor:pointer;border:1px solid #263246;position:relative;transition:.3s}
+.card:hover{transform:translateY(-5px);border-color:var(--purple)}
 .card img{width:100%;height:230px;object-fit:cover;background:#202938}
-.card .info{padding:10px}
+.card .info{padding:12px}
 .card h3{margin:0 0 5px;font-size:14px}
 .card p{margin:0;font-size:12px;color:#9ba9bc}
-.badge{position:absolute;top:8px;right:8px;background:#8855ff;color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;font-weight:bold}
-.panel{background:#151d2a;padding:14px;border-radius:13px;margin-bottom:14px}
-.status{text-align:center;padding:15px;color:#aaa;background:#151d2a;border-radius:10px;margin:10px 0}
-.alertBox{background:#2a1f3d;border:1px solid #8855ff;color:#e0d4ff;padding:12px;border-radius:10px;margin-bottom:12px;font-size:13px;text-align:center}
-.chapter{background:#202938;border-radius:10px;padding:13px;margin:8px 0}
+.badge-manga{position:absolute;top:8px;right:8px;background:var(--purple);color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;font-weight:bold}
+
+.panel{background:#151d2a;padding:16px;border-radius:14px;margin-bottom:14px}
+.status{text-align:center;padding:20px;color:#aaa;background:#151d2a;border-radius:10px;margin:10px 0}
+.alertBox{background:#2a1f3d;border:1px solid var(--purple);color:#e0d4ff;padding:12px;border-radius:10px;margin-bottom:12px;font-size:13px;text-align:center}
+
+.chapter{background:#202938;border-radius:10px;padding:13px;margin:10px 0}
 .chapter small{color:#b3b8c8;display:block;margin-top:5px}
-.chapterActions{display:flex;gap:8px;margin-top:10px}
+.chapterActions{display:flex;gap:6px;margin-top:10px}
 .chapterActions button{flex:1;padding:8px;font-size:12px}
+
 .secondary{background:#303b50}
 .danger{background:#a83248}
 .hidden{display:none!important}
-#reader{position:fixed;inset:0;background:#05070b;z-index:100;overflow:auto}
+
+#reader{position:fixed;inset:0;background:#05070b;z-index:200;overflow:auto}
 .readerTop{position:sticky;top:0;background:#111827;padding:12px;display:flex;gap:8px;align-items:center;z-index:2}
 .readerTop button{padding:10px}
 .readerTitle{flex:1;font-size:14px;text-align:center}
 .pages img{display:block;width:100%;max-width:900px;margin:auto;background:#111;min-height:50px}
+
 .downloadItem{background:#202938;padding:12px;border-radius:10px;margin:10px 0}
 .downloadItem button{margin:8px 4px 0 0}
+
 #detailCover{width:140px;height:200px;object-fit:cover;border-radius:10px}
-.detailHeader{display:flex;gap:12px;align-items:flex-start}
-#moreSearch{width:100%;margin-top:15px}
+.detailHeader{display:flex;gap:15px;align-items:flex-start}
+#moreSearch{width:100%;margin-top:20px}
+
+.hero{min-height:85vh;display:flex;align-items:center;padding:80px 7%;position:relative;overflow:hidden}
+.hero-content{position:relative;z-index:2;max-width:750px}
+.hero h1{font-size:clamp(35px, 6vw, 65px);font-weight:900;line-height:1.3;margin-bottom:20px}
+.hero h1 span{background:linear-gradient(90deg, #a77aff, #42c8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--muted);font-size:16px;line-height:1.8;margin-bottom:30px}
+
+.tabs-app{display:flex;gap:10px;margin-top:20px}
+.tabs-app button{flex:1;padding:14px;font-size:15px}
+
+footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777990;font-size:13px;margin-top:50px}
+
 @media(min-width:650px){
 .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 .card img{height:300px}
@@ -59,79 +132,99 @@ button:active{opacity:.75}
 
 <body>
 
-<header>
-<div class="logo">KATRO MANGA</div>
-<input id="search" placeholder="ابحث بالعربية أو الإنجليزية (مثلاً: ون بيس، Naruto)..." autocomplete="off">
+  <header>
+    <nav>
+      <a href="#" class="logo" onclick="backToHome()">KATRO<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="#" onclick="backToHome()">الرئيسية</a></li>
+        <li><a href="#" onclick="showTab('searchTab')">المانغا</a></li>
+        <li><a href="#" onclick="showTab('downloadsTab')">تحميلاتي 📥</a></li>
+      </ul>
+    </nav>
+  </header>
 
-<div class="filterRow">
-<select id="searchLangFilter" onchange="searchManga(true)">
-<option value="ar">عرض المانغا المترجمة للعربية فقط 🇸🇦</option>
-<option value="all">عرض جميع المانغا العالمية 🌍</option>
-</select>
-</div>
+  <main id="homeSection" class="hero">
+    <div class="hero-content">
+      <span class="badge" style="display:inline-block;padding:8px 16px;border:1px solid #39304e;background:#171326;border-radius:50px;color:#c4aaff;font-size:12px;margin-bottom:20px">✦ عالم المانغا والأنمي بين يديك</span>
+      <h1>عالمك المفضل من المانغا<br><span>يبدأ هنا.</span></h1>
+      <p>اكتشف آلاف عناوين المانغا المترجمة للعربية وعالم الأنمي بتجربة سريعة، تصميم مميز، وإمكانية القراءة والتحميل بدون إنترنت.</p>
+      
+      <div style="display:flex;gap:15px;flex-wrap:wrap;">
+        <button onclick="showTab('searchTab')" style="padding:15px 30px;font-size:16px;font-weight:800;background:linear-gradient(135deg, #8751ff, #5734ce);">تصفح المانغا الآن 📖</button>
+      </div>
+    </div>
+  </main>
 
-<div class="tabs">
-<button onclick="showTab('searchTab')">المانغا</button>
-<button onclick="showTab('downloadsTab')">تحميلاتي 📥</button>
-</div>
-</header>
+  <div class="container hidden" id="appContainer">
 
-<div class="container">
+    <div class="tabs-app" style="margin-bottom:20px;">
+      <button class="secondary" onclick="backToHome()">🏠 الرئيسية</button>
+      <button onclick="showTab('searchTab')">📚 استعراض المانغا</button>
+      <button onclick="showTab('downloadsTab')">📥 تحميلاتي</button>
+    </div>
 
-<section id="searchTab">
-<div id="results" class="grid"></div>
-<div id="searchStatus" class="status">جاري تحميل المانغا العربية...</div>
-<button id="moreSearch" class="hidden" onclick="loadMoreSearch()">تحميل المزيد</button>
-</section>
+    <section id="searchTab">
+      <input id="search" placeholder="ابحث بالعربية أو الإنجليزية (مثلاً: ون بيس، Naruto)..." autocomplete="off">
+      <div class="filterRow">
+        <select id="searchLangFilter" onchange="searchManga(true)">
+          <option value="ar">عرض المانغا المترجمة للعربية فقط 🇸🇦</option>
+          <option value="all">عرض جميع المانغا العالمية 🌍</option>
+        </select>
+      </div>
+      <div id="results" class="grid"></div>
+      <div id="searchStatus" class="status">جاري تحميل المانغا العربية...</div>
+      <button id="moreSearch" class="hidden" onclick="loadMoreSearch()">تحميل المزيد</button>
+    </section>
 
-<section id="downloadsTab" class="hidden">
-<h3>📥 تحميلاتي (محفوظة داخل التطبيق)</h3>
-<div id="downloadsList"></div>
-</section>
+    <section id="downloadsTab" class="hidden">
+      <h3>📥 تحميلاتي (محفوظة داخل التطبيق)</h3>
+      <div id="downloadsList"></div>
+    </section>
 
-<section id="detailTab" class="hidden">
+    <section id="detailTab" class="hidden">
+      <button class="secondary" onclick="showTab('searchTab')" style="margin-bottom:15px;">⬅ رجوع للبحث</button>
 
-<button class="secondary" onclick="backToSearch()">⬅ رجوع</button>
+      <div class="panel detailHeader">
+        <img id="detailCover" src="" alt="غلاف">
+        <div>
+          <h3 id="detailTitle" style="font-size:18px;margin-bottom:8px;"></h3>
+          <p id="detailDescription" style="font-size:13px;color:#9ba9bc;line-height:1.6;max-height:150px;overflow-y:auto;"></p>
+        </div>
+      </div>
 
-<div class="panel detailHeader" style="margin-top:12px">
-<img id="detailCover" src="" alt="غلاف">
-<div>
-<h3 id="detailTitle"></h3>
-<p id="detailDescription"></p>
-</div>
-</div>
+      <div class="panel">
+        <label>لغة الفصول المطلوبة</label>
+        <select id="language" style="margin-top:8px;">
+          <option value="ar">العربية أولاً (مع البديل الإنجليزي)</option>
+          <option value="ar_only">العربية فقط (بدون بدائل)</option>
+          <option value="en">English (الإنجليزية)</option>
+          <option value="all">كل اللغات</option>
+        </select>
 
-<div class="panel">
-<label>لغة الفصول المطلوبة</label>
-<select id="language">
-<option value="ar">العربية أولاً (مع البديل الإنجليزي)</option>
-<option value="ar_only">العربية فقط (بدون بدائل)</option>
-<option value="en">English (الإنجليزية)</option>
-<option value="all">كل اللغات</option>
-</select>
+        <button style="width:100%;margin-top:12px" onclick="loadChapters(true)">عرض الفصول</button>
+      </div>
 
-<button style="width:100%;margin-top:10px" onclick="loadChapters(true)">
-عرض الفصول
-</button>
-</div>
+      <div id="chapters"></div>
+    </section>
 
-<div id="chapters"></div>
+  </div>
 
-</section>
-</div>
+  <div id="reader" class="hidden">
+    <div class="readerTop">
+      <button onclick="closeReader()">✕ إغلاق</button>
+      <button class="secondary" onclick="readerPrevious()">السابق</button>
+      <div class="readerTitle" id="readerTitle">قارئ KATRO</div>
+      <button onclick="readerNext()">التالي</button>
+    </div>
+    <div id="readerPages" class="pages"></div>
+  </div>
 
-<div id="reader" class="hidden">
-<div class="readerTop">
-<button onclick="closeReader()">✕</button>
-<button class="secondary" onclick="readerPrevious()">السابق</button>
-<div class="readerTitle" id="readerTitle">قارئ KATRO</div>
-<button onclick="readerNext()">التالي</button>
-</div>
-<div id="readerPages" class="pages"></div>
-</div>
+  <footer>
+    <div class="logo">KATRO<span style="color:#8855ff">.</span></div>
+    <p>© 2026 KATRO — جميع الحقوق محفوظة</p>
+  </footer>
 
 <script>
-
 const API="https://katro-manga-api.mmmzzz126038.workers.dev";
 
 let searchOffset=0;
@@ -173,19 +266,25 @@ ar:"العربية", en:"الإنجليزية", fr:"الفرنسية", es:"ال�
 pt:"البرتغالية", ru:"الروسية", ja:"اليابانية", ko:"الكورية"
 };
 
-const results=document.getElementById("results");
-const searchStatus=document.getElementById("searchStatus");
-const moreSearch=document.getElementById("moreSearch");
+function backToHome(){
+document.getElementById("homeSection").classList.remove("hidden");
+document.getElementById("appContainer").classList.add("hidden");
+}
 
 function showTab(id){
+document.getElementById("homeSection").classList.add("hidden");
+document.getElementById("appContainer").classList.remove("hidden");
+
 ["searchTab","downloadsTab","detailTab"].forEach(x=>{
 document.getElementById(x).classList.add("hidden");
 });
 document.getElementById(id).classList.remove("hidden");
-if(id==="downloadsTab") loadDownloads();
-}
 
-function backToSearch(){ showTab("searchTab"); }
+if(id==="downloadsTab") loadDownloads();
+if(id==="searchTab" && document.getElementById("results").children.length === 0){
+searchManga(true);
+}
+}
 
 function coverURL(m){
 const cover=m.relationships?.find(x=>x.type==="cover_art");
@@ -217,7 +316,7 @@ card.className="card";
 const hasArabic = (m.attributes?.availableTranslatedLanguages || []).includes("ar");
 if(hasArabic){
 const badge=document.createElement("div");
-badge.className="badge";
+badge.className="badge-manga";
 badge.textContent="عربي 🇸🇦";
 card.appendChild(badge);
 }
@@ -250,6 +349,10 @@ return card;
 async function searchManga(reset=true){
 if(searchBusy)return;
 searchBusy=true;
+
+const results=document.getElementById("results");
+const searchStatus=document.getElementById("searchStatus");
+const moreSearch=document.getElementById("moreSearch");
 
 if(reset){
 searchOffset=0;
@@ -538,21 +641,28 @@ fallback:base+"/data-saver/"+hash+"/"+encodeURIComponent(saverFiles[i]||file)
 }));
 }
 
-function createReaderImage(page,i){
-const img=document.createElement("img");
-img.loading=i<3?"eager":"lazy";
-img.alt="صفحة "+(i+1);
-img.src=page.primary;
-img.onerror=()=>{
-if(img.dataset.fallbackUsed)return;
-img.dataset.fallbackUsed="1";
-img.src=page.fallback;
-img.onerror=()=>{
-img.onerror=null;
-img.alt="تعذر تحميل الصفحة "+(i+1);
-img.style.minHeight="180px";
-img.style.background="#202938";
-};
+/* دالة مُحدثة لمعالجة وتحسين تحميل الصور وتخطي أخطاء الضغط والشبكة */
+function createReaderImage(page, i) {
+const img = document.createElement("img");
+img.loading = i < 3 ? "eager" : "lazy";
+img.alt = "صفحة " + (i + 1);
+img.src = page.primary;
+
+let retryCount = 0;
+img.onerror = () => {
+  if (retryCount === 0) {
+    retryCount++;
+    img.src = page.fallback; // الانتقال للرابط البديل
+  } else if (retryCount === 1) {
+    retryCount++;
+    // إعادة محاولة أخيرة بوضع طابع زمني لتجاوز الكاش (Cache)
+    img.src = page.primary + (page.primary.includes('?') ? '&' : '?') + 'retry=' + Date.now();
+  } else {
+    img.onerror = null;
+    img.alt = "تعذر تحميل الصفحة " + (i + 1);
+    img.style.minHeight = "100px";
+    img.style.background = "#202938";
+  }
 };
 return img;
 }
@@ -792,9 +902,6 @@ img.loading="lazy";
 box.appendChild(img);
 });
 }
-
-searchManga(true);
-
 </script>
 </body>
 </html>
