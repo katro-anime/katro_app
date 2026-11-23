@@ -103,7 +103,7 @@ button:active{opacity:.75}
 .readerTop{position:sticky;top:0;background:#111827;padding:12px;display:flex;gap:8px;align-items:center;z-index:2}
 .readerTop button{padding:10px}
 .readerTitle{flex:1;font-size:14px;text-align:center}
-.pages img{display:block;width:100%;max-width:900px;margin:auto;background:#111;min-height:50px}
+.pages img{display:block;width:100%;max-width:900px;margin:auto;background:#111;min-height:150px}
 
 .downloadItem{background:#202938;padding:12px;border-radius:10px;margin:10px 0}
 .downloadItem button{margin:8px 4px 0 0}
@@ -641,27 +641,36 @@ fallback:base+"/data-saver/"+hash+"/"+encodeURIComponent(saverFiles[i]||file)
 }));
 }
 
-/* دالة مُحدثة لمعالجة وتحسين تحميل الصور وتخطي أخطاء الضغط والشبكة */
+/* تحديث شامل: فرض تحميل الصور فوراً بدون انتظار التمرير، مع نظام إعادة محاولة ذكي وثلاثي */
 function createReaderImage(page, i) {
 const img = document.createElement("img");
-img.loading = i < 3 ? "eager" : "lazy";
+img.loading = "eager"; // فرض التحميل الفوري لكل الصور لمنع تعليق الصور السفلية
 img.alt = "صفحة " + (i + 1);
 img.src = page.primary;
 
-let retryCount = 0;
+let attempts = 0;
 img.onerror = () => {
-  if (retryCount === 0) {
-    retryCount++;
-    img.src = page.fallback; // الانتقال للرابط البديل
-  } else if (retryCount === 1) {
-    retryCount++;
-    // إعادة محاولة أخيرة بوضع طابع زمني لتجاوز الكاش (Cache)
+  attempts++;
+  if (attempts === 1) {
+    img.src = page.fallback; // استخدام جودة التوفير (Data-Saver)
+  } else if (attempts === 2) {
+    // محاولة إضافية عبر جلب الرابط الأساسي مع تجاوز الـ Cache
     img.src = page.primary + (page.primary.includes('?') ? '&' : '?') + 'retry=' + Date.now();
   } else {
     img.onerror = null;
-    img.alt = "تعذر تحميل الصفحة " + (i + 1);
-    img.style.minHeight = "100px";
-    img.style.background = "#202938";
+    // إضافة زر إعادة محاولة يدوي في حال فشلت المحاولات التلقائية
+    const wrapper = document.createElement("div");
+    wrapper.style.cssText = "padding:20px;text-align:center;background:#151d2a;color:#fff;margin:10px 0;border-radius:8px;";
+    wrapper.innerHTML = `<p style="margin-bottom:8px;font-size:13px;">تعذر تحميل الصفحة ${i + 1}</p>`;
+    const retryBtn = document.createElement("button");
+    retryBtn.textContent = "إعادة المحاولة";
+    retryBtn.style.cssText = "padding:6px 14px;font-size:12px;background:#8855ff;border-radius:6px;cursor:pointer;";
+    retryBtn.onclick = () => {
+      img.src = page.primary + "?r=" + Math.random();
+      wrapper.replaceWith(img);
+    };
+    wrapper.appendChild(retryBtn);
+    img.replaceWith(wrapper);
   }
 };
 return img;
@@ -898,7 +907,7 @@ box.innerHTML="";
 item.pages.forEach(blob=>{
 const img=document.createElement("img");
 img.src=URL.createObjectURL(blob);
-img.loading="lazy";
+img.loading="eager"; // فرض التحميل الفوري حتى في وضع القراءة دون إنترنت
 box.appendChild(img);
 });
 }
