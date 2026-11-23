@@ -6,9 +6,7 @@
 <meta name="theme-color" content="#8855ff">
 <title>KATRO Manga</title>
 
-<!-- مكتبة ضغط الصور وتصدير الملفات -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<!-- مكتبة تحويل الصور إلى PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
@@ -202,13 +200,17 @@ return t.ar||t.en||Object.values(t)[0]||"مانغا بدون اسم";
 
 function englishTitle(m){ return m.attributes?.title?.en||""; }
 
-/* دالة تنظيف الوصف من أكواد HTML ليعرض نصاً صافياً */
+/* دالة متطورة لتنظيف الوصف وإزالة الأكواد والرموز الزائدة */
 function descriptionOf(m){
-const d=m.attributes?.description||{};
-let rawDesc = d.ar||d.en||Object.values(d)[0]||"لا يوجد وصف متوفر.";
-const tempDiv = document.createElement("div");
-tempDiv.innerHTML = rawDesc;
-return tempDiv.textContent || tempDiv.innerText || "لا يوجد وصف متوفر.";
+const d = m.attributes?.description || {};
+let rawDesc = d.ar || d.en || Object.values(d)[0] || "لا يوجد وصف متوفر.";
+
+// إزالة أكواد الـ Markdown والروابط والرموز المزعجة
+let cleanText = rawDesc
+.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // إزالة الروابط وصيغ الأقواس
+.replace(/[*_#`]/g, '') // إزالة النجوم والرموز
+.replace(/https?:\/\/[^\s]+/g, ''); // إزالة الروابط المباشرة
+return cleanText.trim() || "لا يوجد وصف متوفر.";
 }
 
 function createCard(m){
@@ -450,7 +452,7 @@ const chapters=data.data||[];
 chapterTotal=Number(data.total||0);
 
 if(!chapters.length){
-if(reset){ box.innerHTML='<div class="status">عذراً، لا توجد فصول متوفرة.</div>'; }
+if(reset){ box.innerHTML='<div class="status">عذراً، هذه المانغا محمية أو لا توجد لها فصول متاحة حالياً على الخادم.</div>'; }
 chapterLoading=false;
 return;
 }
@@ -569,9 +571,9 @@ try{
 const pageList=await getChapterPages(ch);
 pages.innerHTML="";
 pageList.forEach((page,i)=>pages.appendChild(createReaderImage(page,i)));
-if(!pageList.length) pages.innerHTML='<div class="status">هذا الفصل لا يحتوي على صفحات.</div>';
+if(!pageList.length) pages.innerHTML='<div class="status">هذا الفصل لا يحتوي على صفحات أو تم حذفه من المصدر.</div>';
 }catch(e){
-pages.innerHTML='<div class="status">تعذر تحميل صفحات الفصل. حاول مرة أخرى.</div>';
+pages.innerHTML='<div class="status">تعذر تحميل صفحات الفصل (قد تكون محمية أو غير متوفرة).</div>';
 }
 }
 
@@ -579,7 +581,6 @@ function closeReader(){ document.getElementById("reader").classList.add("hidden"
 function readerNext(){ if(currentReaderIndex>=0&&currentReaderIndex<currentChapterList.length-1) readChapter(currentChapterList[currentReaderIndex+1]); }
 function readerPrevious(){ if(currentReaderIndex>0) readChapter(currentChapterList[currentReaderIndex-1]); }
 
-/* تحميل الفصل كملف ZIP للهاتف */
 async function downloadChapterZIP(ch){
 try{
 const chapterNum = ch.attributes?.chapter || "؟";
@@ -609,11 +610,10 @@ document.body.removeChild(a);
 URL.revokeObjectURL(blobUrl);
 alert("تم تنزيل ملف ZIP بنجاح!");
 }catch(e){
-alert("تعذر تنزيل الملف المضغوط.");
+alert("تعذر تنزيل الملف المضغوط (قد تكون الفصول محمية).");
 }
 }
 
-/* تحميل الفصل كملف PDF للهاتف */
 async function downloadChapterPDF(ch){
 try{
 const chapterNum = ch.attributes?.chapter || "؟";
@@ -647,7 +647,6 @@ alert("تعذر إنشاء ملف PDF.");
 }
 }
 
-/* نظام التخزين المؤقت الداخلي للقراءة بدون إنترنت */
 const DB_NAME="KATRO_MANGA_DB";
 const DB_STORE="chapters";
 
@@ -679,7 +678,7 @@ return new Promise((resolve,reject)=>{
 const tx=db.transaction(DB_STORE,"readonly");
 const request=tx.objectStore(DB_STORE).get(id);
 request.onsuccess=()=>resolve(request.result||null);
-request.onerror=()=>reject(tx.error);
+request.onerror=()=>reject(request.error);
 });
 }
 
@@ -689,7 +688,7 @@ return new Promise((resolve,reject)=>{
 const tx=db.transaction(DB_STORE,"readonly");
 const request=tx.objectStore(DB_STORE).getAll();
 request.onsuccess=()=>resolve(request.result||[]);
-request.onerror=()=>reject(tx.error);
+request.onerror=()=>reject(request.error);
 });
 }
 
@@ -729,7 +728,7 @@ pages:pages, savedAt:Date.now()
 await saveChapterRecord(record);
 alert("تم حفظ الفصل بنجاح داخل قسم (تحميلاتي)!");
 }catch(e){
-alert("تعذر الحفظ. تأكد من مساحة الذاكرة لديك.");
+alert("تعذر الحفظ (قد تكون الفصول محمية).");
 }
 }
 
