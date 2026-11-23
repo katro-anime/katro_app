@@ -1,9 +1,11 @@
-const CACHE_NAME = "katro-app-v1";
+
+const CACHE_NAME = "katro-app-v2";
 
 const FILES_TO_CACHE = [
   "./",
   "./index.html",
-  "./manifest.json"
+  "./manifest.json",
+  "./manga.html"
 ];
 
 self.addEventListener("install", (event) => {
@@ -12,6 +14,7 @@ self.addEventListener("install", (event) => {
       return cache.addAll(FILES_TO_CACHE);
     })
   );
+
   self.skipWaiting();
 });
 
@@ -25,6 +28,7 @@ self.addEventListener("activate", (event) => {
       );
     })
   );
+
   self.clients.claim();
 });
 
@@ -36,12 +40,16 @@ self.addEventListener("fetch", (event) => {
       .then((response) => {
         if (response && response.status === 200) {
           const copy = response.clone();
+
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, copy);
           });
         }
+
         return response;
       })
-      .catch(() => caches.match(event.request))
+      .catch(() => {
+        return caches.match(event.request);
+      })
   );
 });
