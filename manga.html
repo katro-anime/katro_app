@@ -200,16 +200,13 @@ return t.ar||t.en||Object.values(t)[0]||"مانغا بدون اسم";
 
 function englishTitle(m){ return m.attributes?.title?.en||""; }
 
-/* دالة متطورة لتنظيف الوصف وإزالة الأكواد والرموز الزائدة */
 function descriptionOf(m){
 const d = m.attributes?.description || {};
 let rawDesc = d.ar || d.en || Object.values(d)[0] || "لا يوجد وصف متوفر.";
-
-// إزالة أكواد الـ Markdown والروابط والرموز المزعجة
 let cleanText = rawDesc
-.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // إزالة الروابط وصيغ الأقواس
-.replace(/[*_#`]/g, '') // إزالة النجوم والرموز
-.replace(/https?:\/\/[^\s]+/g, ''); // إزالة الروابط المباشرة
+.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+.replace(/[*_#`]/g, '')
+.replace(/https?:\/\/[^\s]+/g, '');
 return cleanText.trim() || "لا يوجد وصف متوفر.";
 }
 
@@ -570,8 +567,11 @@ pages.innerHTML='<div class="status">جاري تحميل صفحات الفصل..
 try{
 const pageList=await getChapterPages(ch);
 pages.innerHTML="";
+if(!pageList || !pageList.length){
+pages.innerHTML='<div class="status">هذا الفصل لا يحتوي على صفحات أو تم حذفه من المصدر.</div>';
+return;
+}
 pageList.forEach((page,i)=>pages.appendChild(createReaderImage(page,i)));
-if(!pageList.length) pages.innerHTML='<div class="status">هذا الفصل لا يحتوي على صفحات أو تم حذفه من المصدر.</div>';
 }catch(e){
 pages.innerHTML='<div class="status">تعذر تحميل صفحات الفصل (قد تكون محمية أو غير متوفرة).</div>';
 }
@@ -588,6 +588,8 @@ const mangaName = currentManga ? titleOf(currentManga) : "Manga";
 const safeTitle = mangaName.replace(/[/\\?%*:|"<>]/g, '');
 alert("جاري تجهيز ملف ZIP، يرجى الانتظار...");
 const urls = await getChapterPages(ch);
+if(!urls || !urls.length){ alert("هذا الفصل فارغ ولا يمكن تنزيله."); return; }
+
 const zip = new JSZip();
 const folder = zip.folder(`${safeTitle} - Ch ${chapterNum}`);
 
@@ -610,7 +612,7 @@ document.body.removeChild(a);
 URL.revokeObjectURL(blobUrl);
 alert("تم تنزيل ملف ZIP بنجاح!");
 }catch(e){
-alert("تعذر تنزيل الملف المضغوط (قد تكون الفصول محمية).");
+alert("تعذر تنزيل الملف المضغوط (الفصل محمي أو غير متوفر).");
 }
 }
 
@@ -622,6 +624,8 @@ const safeTitle = mangaName.replace(/[/\\?%*:|"<>]/g, '');
 alert("جاري إنشاء ملف PDF (قد يستغرق بضع ثوانٍ)...");
 
 const urls = await getChapterPages(ch);
+if(!urls || !urls.length){ alert("هذا الفصل فارغ ولا يمكن تحويله لـ PDF."); return; }
+
 const { jsPDF } = window.jspdf;
 const pdf = new jsPDF({orientation: "portrait", unit: "px", format: [595, 842]});
 
@@ -678,7 +682,7 @@ return new Promise((resolve,reject)=>{
 const tx=db.transaction(DB_STORE,"readonly");
 const request=tx.objectStore(DB_STORE).get(id);
 request.onsuccess=()=>resolve(request.result||null);
-request.onerror=()=>reject(request.error);
+request.onerror=()=>reject(tx.error);
 });
 }
 
@@ -688,7 +692,7 @@ return new Promise((resolve,reject)=>{
 const tx=db.transaction(DB_STORE,"readonly");
 const request=tx.objectStore(DB_STORE).getAll();
 request.onsuccess=()=>resolve(request.result||[]);
-request.onerror=()=>reject(request.error);
+request.onerror=()=>reject(tx.error);
 });
 }
 
@@ -710,6 +714,8 @@ if(exists){ alert("هذا الفصل محفوظ بالفعل داخل التطب
 
 alert("جاري الحفظ للقراءة بدون إنترنت...");
 const urls=await getChapterPages(ch);
+if(!urls || !urls.length){ alert("هذا الفصل فارغ ولا يمكن حفظه."); return; }
+
 const pages=[];
 for(let i=0;i<urls.length;i++){
 let res = await fetch(urls[i].primary).catch(()=>null);
