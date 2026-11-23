@@ -120,7 +120,13 @@ data.data.forEach(m=>{
 const card=document.createElement("div");
 card.className="card";
 const img=document.createElement("img");
-img.src=getCover(m);
+img.src=
+function getCover(m){
+  const c=m.relationships.find(x=>x.type==="cover_art");
+  if(!c || !c.attributes || !c.attributes.fileName) return "";
+  return API+"/covers/"+m.id+"/"+encodeURIComponent(c.attributes.fileName)+".256.jpg";
+}
+
 img.loading="lazy";
 img.alt=getTitle(m);
 const h=document.createElement("h3");
