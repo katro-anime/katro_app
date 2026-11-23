@@ -178,7 +178,7 @@ showTab("searchTab");
 function coverURL(m){
 const cover=m.relationships?.find(x=>x.type==="cover_art");
 
-if(!cover)return "";
+if(!cover || !cover.attributes || !cover.attributes.fileName) return "";
 
 return API+"/covers/"+m.id+"/"+encodeURIComponent(cover.attributes.fileName)+".256.jpg";
 }
@@ -186,16 +186,16 @@ return API+"/covers/"+m.id+"/"+encodeURIComponent(cover.attributes.fileName)+".2
 /* أسماء المانغا */
 
 function titleOf(m){
-const t=m.attributes.title||{};
+const t=m.attributes?.title||{};
 return t.ar||t.en||Object.values(t)[0]||"مانغا بدون اسم";
 }
 
 function englishTitle(m){
-return m.attributes.title?.en||"";
+return m.attributes?.title?.en||"";
 }
 
 function descriptionOf(m){
-const d=m.attributes.description||{};
+const d=m.attributes?.description||{};
 return d.ar||d.en||Object.values(d)[0]||"";
 }
 
@@ -449,20 +449,6 @@ try{
 
 let data;
 
-/*
-العربية:
-1. البحث عن الفصول العربية
-2. إذا لم توجد، البحث بالإنجليزية
-3. إذا لم توجد، عرض جميع اللغات
-
-الإنجليزية:
-1. البحث بالإنجليزية
-2. إذا لم توجد، عرض جميع اللغات
-
-كل اللغات:
-عرض جميع الفصول
-*/
-
 if(reset){
 
 if(chapterMode==="ar"){
@@ -538,11 +524,7 @@ chapterLoading=false;
 return;
 }
 
-/* ترتيب الفصول */
-
 sortChapters(chapters);
-
-/* إضافة الفصول دون تكرار */
 
 chapters.forEach(ch=>{
 
@@ -553,9 +535,9 @@ currentChapterList.push(ch);
 const row=document.createElement("div");
 row.className="chapter";
 
-const num=ch.attributes.chapter||"؟";
-const name=ch.attributes.title||"";
-const lang=ch.attributes.translatedLanguage||"";
+const num=ch.attributes?.chapter||"؟";
+const name=ch.attributes?.title||"";
+const lang=ch.attributes?.translatedLanguage||"";
 const langName=languageNames[lang]||lang||"غير معروف";
 
 const group=ch.relationships?.find(x=>x.type==="scanlation_group");
@@ -601,17 +583,11 @@ box.appendChild(row);
 
 });
 
-/* حساب الصفحة التالية */
-
 chapterOffset+=chapters.length;
-
-/* إظهار زر المزيد */
 
 if(chapterOffset<chapterTotal){
 showMoreChaptersButton();
 }
-
-/* رسالة اللغة المستخدمة */
 
 if(reset){
 
@@ -677,7 +653,7 @@ currentReaderIndex=currentChapterList.findIndex(x=>x.id===ch.id);
 document.getElementById("reader").classList.remove("hidden");
 
 document.getElementById("readerTitle").textContent=
-"الفصل "+(ch.attributes.chapter||"");
+"الفصل "+(ch.attributes?.chapter||"");
 
 const pages=document.getElementById("readerPages");
 
@@ -841,8 +817,8 @@ alert("هذا الفصل محمّل بالفعل.");
 return;
 }
 
-const chapterNum=ch.attributes.chapter||"؟";
-const lang=ch.attributes.translatedLanguage||"";
+const chapterNum=ch.attributes?.chapter||"؟";
+const lang=ch.attributes?.translatedLanguage||"";
 
 const mangaName=currentManga
 ?titleOf(currentManga)
@@ -863,7 +839,7 @@ pages.push(await response.blob());
 
 const record={
 id:id,
-mangaId:currentManga.id,
+mangaId:currentManga?currentManga.id:"",
 mangaName:mangaName,
 chapterNum:chapterNum,
 language:languageNames[lang]||lang,
@@ -987,4 +963,4 @@ searchManga(true);
 
 </script>
 </body>
-  </html>
+</html>
