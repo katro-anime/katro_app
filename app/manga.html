@@ -1,0 +1,588 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head><link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#8855ff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080912">
+  <meta name="description" content="KATRO - عالم الأنمي بين يديك. اكتشف الأنمي واستمتع بتجربة مشاهدة مميزة.">
+  <title>KATRO | عالم الأنمي</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #080912;
+      --card: #101321;
+      --purple: #8855ff;
+      --blue: #28b8ff;
+      --white: #ffffff;
+      --muted: #9699b2;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* NAVBAR */
+
+    header {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      z-index: 100;
+      padding: 20px 7%;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 29px;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .logo span {
+      color: var(--purple);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+      color: #c4c5d5;
+      font-size: 14px;
+    }
+
+    .nav-links a:hover {
+      color: var(--white);
+    }
+
+    .nav-btn {
+      background: linear-gradient(135deg, var(--purple), #5b37d8);
+      padding: 10px 22px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    /* HERO */
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 130px 8% 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: var(--purple);
+      filter: blur(170px);
+      opacity: .18;
+      top: -100px;
+      right: -100px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 350px;
+      height: 350px;
+      background: var(--blue);
+      filter: blur(160px);
+      opacity: .13;
+      bottom: 0;
+      left: -100px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 750px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border: 1px solid #39304e;
+      background: #171326;
+      border-radius: 50px;
+      color: #c4aaff;
+      font-size: 12px;
+      margin-bottom: 25px;
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 8vw, 85px);
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(90deg, #a77aff, #42c8ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 2;
+      max-width: 550px;
+      margin-bottom: 32px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px 27px;
+      border-radius: 12px;
+      font-weight: 800;
+      transition: .3s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #8751ff, #5734ce);
+      box-shadow: 0 5px 35px #7045ff33;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 35px #7045ff55;
+    }
+
+    .btn-secondary {
+      border: 1px solid #303248;
+      background: #111320;
+    }
+
+    .btn-secondary:hover {
+      background: #1b1d30;
+    }
+
+    .hero-art {
+      position: absolute;
+      left: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 370px;
+      height: 450px;
+      border-radius: 35px;
+      border: 1px solid #29253f;
+      background:
+        radial-gradient(circle at 50% 30%, #7849f933, transparent 55%),
+        linear-gradient(145deg, #151627, #090a12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 90px #7849f915;
+    }
+
+    .hero-art-inner {
+      text-align: center;
+    }
+
+    .hero-symbol {
+      font-size: 120px;
+      font-weight: 900;
+      color: #9671ff;
+      text-shadow: 0 0 45px #8c55ff66;
+    }
+
+    .hero-art-inner h2 {
+      font-size: 27px;
+      letter-spacing: 8px;
+    }
+
+    .hero-art-inner p {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #7f8199;
+      letter-spacing: 3px;
+    }
+
+    /* SECTION */
+
+    section {
+      padding: 90px 8%;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-title small {
+      color: var(--purple);
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .section-title h2 {
+      font-size: 35px;
+      margin-top: 10px;
+    }
+
+    .section-title p {
+      color: var(--muted);
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    /* FEATURES */
+
+    .features {
+      background: #0c0e18;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .feature-card {
+      background: var(--card);
+      padding: 30px;
+      border: 1px solid #202236;
+      border-radius: 18px;
+      transition: .3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-7px);
+      border-color: #6e4bc7;
+    }
+
+    .feature-icon {
+      width: 55px;
+      height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 15px;
+      background: #211b38;
+      font-size: 25px;
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 12px;
+      font-size: 19px;
+    }
+
+    .feature-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    /* DOWNLOAD */
+
+    .download {
+      text-align: center;
+    }
+
+    .download-box {
+      max-width: 800px;
+      margin: auto;
+      border: 1px solid #30274a;
+      border-radius: 25px;
+      padding: 55px 25px;
+      background:
+        radial-gradient(circle at 50% 0%, #794bff20, transparent 60%),
+        #101220;
+    }
+
+    .download-box h2 {
+      font-size: 32px;
+      margin-bottom: 15px;
+    }
+
+    .download-box p {
+      color: var(--muted);
+      margin-bottom: 25px;
+      line-height: 1.9;
+    }
+
+    .download-note {
+      display: block;
+      color: #74778f;
+      margin-top: 20px;
+      font-size: 12px;
+    }
+
+    /* FOOTER */
+
+    footer {
+      padding: 30px 8%;
+      border-top: 1px solid #1b1d2b;
+      text-align: center;
+      color: #777990;
+      font-size: 13px;
+    }
+
+    footer .logo {
+      margin-bottom: 12px;
+      color: white;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 900px) {
+      .hero-art {
+        display: none;
+      }
+
+      .hero {
+        text-align: center;
+        justify-content: center;
+        min-height: 90vh;
+      }
+
+      .hero-content {
+        margin: auto;
+      }
+
+      .hero p {
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      .hero-buttons {
+        justify-content: center;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 18px 5%;
+      }
+
+      .nav-links {
+        gap: 13px;
+        font-size: 11px;
+      }
+
+      .nav-btn {
+        display: none;
+      }
+
+      .hero {
+        padding: 120px 6% 70px;
+      }
+
+      .hero h1 {
+        font-size: 48px;
+      }
+
+      .hero p {
+        font-size: 14px;
+      }
+
+      section {
+        padding: 65px 6%;
+      }
+
+      .section-title h2 {
+        font-size: 27px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card {
+        padding: 25px;
+      }
+
+      .download-box h2 {
+        font-size: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav>
+      <a href="#" class="logo">KATRO<span>.</span></a>
+
+      <ul class="nav-links">
+        <li><a href="#home">الرئيسية</a></li>
+        <li><a href="#features">المميزات</a></li>
+        <li><a href="#download">تحميل</a></li>
+      </ul>
+
+      <a href="#download" class="nav-btn">تحميل التطبيق</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <main>
+    <section class="hero" id="home">
+
+      <div class="hero-content">
+        <span class="badge">✦ عالم الأنمي بين يديك</span>
+
+        <h1>
+          عالمك المفضل<br>
+          <span>يبدأ هنا.</span>
+        </h1>
+
+        <p>
+          اكتشف عالم الأنمي بطريقة مختلفة.
+          تجربة بسيطة، تصميم مميز، وعالم من الحكايات
+          التي تنتظرك في مكان واحد.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#download" class="btn btn-primary">
+            ⬇ تحميل KATRO
+          </a>
+
+          <a href="#features" class="btn btn-secondary">
+            اكتشف المزيد
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-art">
+        <div class="hero-art-inner">
+          <div class="hero-symbol">K</div>
+          <h2>KATRO</h2>
+          <p>ANIME EXPERIENCE</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" id="features">
+
+      <div class="section-title">
+        <small>WHY KATRO</small>
+        <h2>تجربة تستحق اكتشافها</h2>
+        <p>صُممت لتكون بسيطة، جميلة، وممتعة.</p>
+      </div>
+
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon">🎌</div>
+          <h3>عالم الأنمي</h3>
+          <p>
+            اكتشف عوالم الأنمي واستمتع بتجربة
+            تجمع بين البساطة والأناقة.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>تصميم سريع وبسيط</h3>
+          <p>
+            واجهة سهلة الاستخدام، منظمة،
+            ومناسبة لمختلف أحجام الشاشات.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🌙</div>
+          <h3>راحة للعين</h3>
+          <p>
+            ألوان داكنة ولمسات هادئة
+            تمنحك تجربة استخدام مريحة.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- DOWNLOAD -->
+    <section class="download" id="download">
+
+      <div class="download-box">
+        <div class="feature-icon" style="margin: 0 auto 20px;">📱</div>
+
+        <h2>جاهز لدخول عالم KATRO؟</h2>
+
+        <p>
+          تطبيق KATRO قادم ليمنحك تجربة جديدة.<br>
+          تابعنا لمعرفة موعد توفر التطبيق.
+        </p>
+
+        <a href="#" class="btn btn-primary">
+          ⬇ تحميل التطبيق
+        </a>
+
+        <span class="download-note">
+          سيتم تفعيل رابط التحميل عند توفر ملف التطبيق.
+        </span>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="logo">KATRO<span style="color:#8855ff">.</span></div>
+    <p>© 2026 KATRO — جميع الحقوق محفوظة</p>
+  </footer>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("KATRO App Ready"))
+      .catch((error) => console.log(error));
+  });
+}
+</script>
+</body>
+  </html>
