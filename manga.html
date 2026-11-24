@@ -7,77 +7,29 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="KATRO - عالم المانغا والمانهو بين يديك. اكتشف واقرأ وحمل بأسلوب مميز.">
 <title>KATRO | عالم المانغا والمانهو</title>
 
-<!-- مكتبات ضغط الصور وتصدير PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
-
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#080912;
-  --card:#101321;
-  --purple:#8855ff;
-  --blue:#28b8ff;
-  --white:#ffffff;
-  --muted:#9699b2;
-}
-
+:root{--bg:#080912;--card:#101321;--purple:#8855ff;--blue:#28b8ff;--white:#ffffff;--muted:#9699b2;}
 html{scroll-behavior:smooth}
-body{
-  font-family:'Cairo',sans-serif;
-  background:var(--bg);
-  color:var(--white);
-  overflow-x:hidden;
-}
-
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;}
 a{text-decoration:none;color:inherit}
-
-header{
-  width:100%;
-  position:sticky;
-  top:0;
-  z-index:100;
-  background:#111827dd;
-  backdrop-filter:blur(10px);
-  border-bottom:1px solid #263246;
-  padding:15px 7%;
-}
-nav{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-.logo{
-  font-size:25px;
-  font-weight:900;
-  letter-spacing:2px;
-  cursor:pointer;
-}
+header{width:100%;position:sticky;top:0;z-index:100;background:#111827dd;backdrop-filter:blur(10px);border-bottom:1px solid #263246;padding:15px 7%;}
+nav{display:flex;align-items:center;justify-content:space-between;}
+.logo{font-size:25px;font-weight:900;letter-spacing:2px;cursor:pointer;}
 .logo span{color:var(--purple)}
-.nav-links{
-  display:flex;
-  gap:20px;
-  list-style:none;
-  color:#c4c5d5;
-  font-size:14px;
-  align-items:center;
-}
+.nav-links{display:flex;gap:15px;list-style:none;color:#c4c5d5;font-size:14px;align-items:center;}
 .nav-links a{cursor:pointer;padding:6px 10px;border-radius:8px;transition:.2s}
 .nav-links a:hover{color:var(--white);background:#202938}
-
 input,button,select{font:inherit;border:0;border-radius:10px;padding:12px}
 input,select{background:#202938;color:white;width:100%}
 button{background:var(--purple);color:white;font-weight:bold;cursor:pointer;transition:.3s}
 button:active{opacity:.75}
-
-.filterRow{display:flex;gap:8px;margin-top:10px;align-items:center}
-.filterRow select{padding:10px;font-size:13px}
-
 .container{padding:30px 7%}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:20px}
 .card{background:#151d2a;border-radius:14px;overflow:hidden;cursor:pointer;border:1px solid #263246;position:relative;transition:.3s}
@@ -87,45 +39,16 @@ button:active{opacity:.75}
 .card h3{margin:0 0 5px;font-size:14px}
 .card p{margin:0;font-size:12px;color:#9ba9bc}
 .badge-manga{position:absolute;top:8px;right:8px;background:var(--purple);color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;font-weight:bold}
-
-.panel{background:#151d2a;padding:16px;border-radius:14px;margin-bottom:14px}
 .status{text-align:center;padding:20px;color:#aaa;background:#151d2a;border-radius:10px;margin:10px 0}
-.alertBox{background:#2a1f3d;border:1px solid var(--purple);color:#e0d4ff;padding:12px;border-radius:10px;margin-bottom:12px;font-size:13px;text-align:center}
-
-.chapter{background:#202938;border-radius:10px;padding:13px;margin:10px 0}
-.chapter small{color:#b3b8c8;display:block;margin-top:5px}
-.chapterActions{display:flex;gap:6px;margin-top:10px}
-.chapterActions button{flex:1;padding:8px;font-size:12px}
-
 .secondary{background:#303b50}
-.danger{background:#a83248}
 .hidden{display:none!important}
-
-#reader{position:fixed;inset:0;background:#05070b;z-index:200;overflow:auto}
-.readerTop{position:sticky;top:0;background:#111827;padding:12px;display:flex;gap:8px;align-items:center;z-index:2}
-.readerTop button{padding:10px}
-.readerTitle{flex:1;font-size:14px;text-align:center}
-.pages img{display:block;width:100%;max-width:900px;margin:auto;background:#111;min-height:150px}
-
-.downloadItem{background:#202938;padding:12px;border-radius:10px;margin:10px 0}
-.downloadItem button{margin:8px 4px 0 0}
-
-#detailCover{width:140px;height:200px;object-fit:cover;border-radius:10px}
-.detailHeader{display:flex;gap:15px;align-items:flex-start}
-#moreSearch{width:100%;margin-top:20px}
-
 .hero{min-height:85vh;display:flex;align-items:center;padding:80px 7%;position:relative;overflow:hidden}
 .hero-content{position:relative;z-index:2;max-width:750px}
 .hero h1{font-size:clamp(35px, 6vw, 65px);font-weight:900;line-height:1.3;margin-bottom:20px}
 .hero h1 span{background:linear-gradient(90deg, #a77aff, #42c8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hero p{color:var(--muted);font-size:16px;line-height:1.8;margin-bottom:30px}
-
 footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777990;font-size:13px;margin-top:50px}
-
-@media(min-width:650px){
-.grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-.card img{height:300px}
-}
+@media(min-width:650px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.card img{height:300px}}
 </style>
 </head>
 
@@ -137,7 +60,7 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
       <ul class="nav-links">
         <li><a href="#" onclick="backToHome()">الرئيسية</a></li>
         <li><a href="#" onclick="showTab('searchTab')">المانغا 📚</a></li>
-        <li><a href="#" onclick="showManhwaSection()">المانهو العربية 🇰🇷</a></li>
+        <li><a href="#" onclick="showManhwaSection()">المانهو الكورية 🇰🇷</a></li>
         <li><a href="#" onclick="showTab('downloadsTab')">تحميلاتي 📥</a></li>
       </ul>
     </nav>
@@ -148,7 +71,6 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
       <span class="badge" style="display:inline-block;padding:8px 16px;border:1px solid #39304e;background:#171326;border-radius:50px;color:#c4aaff;font-size:12px;margin-bottom:20px">✦ عالم المانغا والمانهو بين يديك</span>
       <h1>عالمك المفضل من المانغا والمانهو<br><span>يبدأ هنا.</span></h1>
       <p>اكتشف آلاف عناوين المانغا والمانهو المترجمة للعربية بتجربة سريعة، تصميم مميز، وإمكانية القراءة والتحميل بدون إنترنت.</p>
-      
       <div style="display:flex;gap:15px;flex-wrap:wrap;">
         <button onclick="showTab('searchTab')" style="padding:15px 30px;font-size:16px;font-weight:800;background:linear-gradient(135deg, #8751ff, #5734ce);">تصفح المانغا 📖</button>
         <button onclick="showManhwaSection()" style="padding:15px 30px;font-size:16px;font-weight:800;background:linear-gradient(135deg, #28b8ff, #1a73e8);">تصفح المانهو 🇰🇷</button>
@@ -157,197 +79,87 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
   </main>
 
   <div class="container hidden" id="appContainer">
-
     <div class="tabs-app" style="display:flex;gap:10px;margin-bottom:20px;">
       <button class="secondary" onclick="backToHome()">🏠 الرئيسية</button>
       <button onclick="showTab('searchTab')">📚 المانغا</button>
-      <button onclick="showManhwaSection()" style="background:#28b8ff;">🇰🇷 المانهو العربية</button>
+      <button onclick="showManhwaSection()" style="background:#28b8ff;">🇰🇷 المانهو الكورية</button>
       <button onclick="showTab('downloadsTab')">📥 تحميلاتي</button>
     </div>
 
-    <!-- قسم المانغا الأساسي (MangaDex) -->
+    <!-- قسم المانغا (MangaDex) -->
     <section id="searchTab">
-      <input id="search" placeholder="ابحث بالعربية أو الإنجليزية (مثلاً: ون بيس، Naruto)..." autocomplete="off">
-      <div class="filterRow">
-        <select id="searchLangFilter" onchange="searchManga(true)">
-          <option value="ar">عرض المانغا المترجمة للعربية فقط 🇸🇦</option>
-          <option value="all">عرض جميع المانغا العالمية 🌍</option>
-        </select>
-      </div>
+      <h2 style="font-size:22px;margin-bottom:15px;color:#c4aaff;">📚 قسم المانغا (MangaDex)</h2>
+      <input id="search" placeholder="ابحث في المانغا..." autocomplete="off">
       <div id="results" class="grid"></div>
       <div id="searchStatus" class="status">جاري تحميل المانغا...</div>
-      <button id="moreSearch" class="hidden" onclick="loadMoreSearch()">تحميل المزيد</button>
     </section>
 
     <!-- قسم المانهو المستقل (Comick API) -->
     <section id="manhwaSectionTab" class="hidden">
       <div style="margin-bottom:15px;">
-        <h2 style="font-size:20px;color:#c4aaff;">🎨 قسم المانهو العربية المستقل</h2>
-        <p style="font-size:13px;color:#9ba9bc;margin-top:5px;">محتوى مانهو كوري حصري عبر Comick API</p>
+        <h2 style="font-size:22px;color:#28b8ff;">🎨 قسم المانهو الكورية (Comick API)</h2>
       </div>
-      <input id="manhwaSearchInput" placeholder="ابحث في مانهو Comick (مثلاً: Solo Leveling)..." style="margin-bottom:15px;" autocomplete="off">
+      <input id="manhwaSearchInput" placeholder="ابحث في مانهو Comick (مثل: Solo Leveling)..." style="margin-bottom:15px;" autocomplete="off">
       <div id="manhwaGridResults" class="grid"></div>
       <div id="manhwaStatusBox" class="status">جاري تحميل المانهو...</div>
     </section>
 
     <section id="downloadsTab" class="hidden">
-      <h3>📥 تحميلاتي (محفوظة داخل التطبيق)</h3>
+      <h3>📥 تحميلاتي</h3>
       <div id="downloadsList"></div>
     </section>
-
-    <section id="detailTab" class="hidden">
-      <button class="secondary" onclick="showTab('searchTab')" style="margin-bottom:15px;">⬅ رجوع للبحث</button>
-
-      <div class="panel detailHeader">
-        <img id="detailCover" src="" alt="غلاف">
-        <div>
-          <h3 id="detailTitle" style="font-size:18px;margin-bottom:8px;"></h3>
-          <p id="detailDescription" style="font-size:13px;color:#9ba9bc;line-height:1.6;max-height:150px;overflow-y:auto;"></p>
-        </div>
-      </div>
-
-      <div class="panel">
-        <label>لغة الفصول المطلوبة</label>
-        <select id="language" style="margin-top:8px;">
-          <option value="ar">العربية أولاً (مع البديل الإنجليزي)</option>
-          <option value="ar_only">العربية فقط (بدون بدائل)</option>
-          <option value="en">English (الإنجليزية)</option>
-          <option value="all">كل اللغات</option>
-        </select>
-
-        <button style="width:100%;margin-top:12px" onclick="loadChapters(true)">عرض الفصول</button>
-      </div>
-
-      <div id="chapters"></div>
-    </section>
-
-  </div>
-
-  <div id="reader" class="hidden">
-    <div class="readerTop">
-      <button onclick="closeReader()">✕ إغلاق</button>
-      <button class="secondary" onclick="readerPrevious()">السابق</button>
-      <div class="readerTitle" id="readerTitle">قارئ KATRO</div>
-      <button onclick="readerNext()">التالي</button>
-    </div>
-    <div id="readerPages" class="pages"></div>
   </div>
 
   <footer>
     <div class="logo">KATRO<span style="color:#8855ff">.</span></div>
-    <p>© 2026 KATRO — تطوير: Katro 10k — جميع الحقوق محفوظة</p>
+    <p>© 2026 KATRO — تطوير: Katro 10k</p>
     <p style="font-size:11px;color:#777990;margin-top:5px;">
-      Powered by MangaDex API & Comick API. All content is provided by respective copyright holders.
+      Powered by MangaDex API & Comick API. Content provided by respective platforms.
     </p>
   </footer>
 
 <script>
 const API="https://katro-manga-api.mmmzzz126038.workers.dev";
 
-let searchOffset=0;
-let currentManga=null;
-let currentChapter=null;
-let currentChapterList=[];
-let currentReaderIndex=-1;
-
-let searchBusy=false;
-let chapterLoading=false;
-let chapterOffset=0;
-let chapterTotal=0;
-let chapterMode="ar";
-let searchTimer;
-
-const arabicToEnglishMap = {
-"ون بيس": "One Piece", "ناروتو": "Naruto", "بليتش": "Bleach",
-"هجوم العمالقة": "Attack on Titan", "قاتل الشياطين": "Demon Slayer",
-"جوجوتسو كايسن": "Jujutsu Kaisen", "هنتر": "Hunter x Hunter",
-"القناص": "Hunter x Hunter", "دراغون بول": "Dragon Ball",
-"بلاك كلوفر": "Black Clover", "أكاديمية بطلي": "My Hero Academia",
-"طوكيو غول": "Tokyo Ghoul", "طوكيو ريفينجرز": "Tokyo Revengers",
-"رجل المنشار": "Chainsaw Man", "سولو ليفلينج": "Solo Leveling",
-"بيرسيرك": "Berserk", "مذكرة الموت": "Death Note",
-"ون بنش مان": "One Punch Man", "المحقق كونان": "Detective Conan",
-"فيري تيل": "Fairy Tail", "بلو لوك": "Blue Lock"
-};
-
-function translateQueryIfNeeded(q) {
-const clean = q.trim();
-for (const [arKey, enVal] of Object.entries(arabicToEnglishMap)) {
-if (clean.includes(arKey)) return enVal;
-}
-return clean;
-}
-
-const languageNames={
-ar:"العربية", en:"الإنجليزية", fr:"الفرنسية", es:"الإسبانية",
-pt:"البرتغالية", ru:"الروسية", ja:"اليابانية", ko:"الكورية"
-};
-
 function backToHome(){
-document.getElementById("homeSection").classList.remove("hidden");
-document.getElementById("appContainer").classList.add("hidden");
+  document.getElementById("homeSection").classList.remove("hidden");
+  document.getElementById("appContainer").classList.add("hidden");
 }
 
 function showTab(id){
-document.getElementById("homeSection").classList.add("hidden");
-document.getElementById("appContainer").classList.remove("hidden");
-
-["searchTab","manhwaSectionTab","downloadsTab","detailTab"].forEach(x=>{
-const el = document.getElementById(x);
-if(el) el.classList.add("hidden");
-});
-document.getElementById(id).classList.remove("hidden");
-
-if(id==="downloadsTab") loadDownloads();
-if(id==="searchTab" && document.getElementById("results").children.length === 0){
-searchManga(true);
-}
-}
-
-// دالة عرض واجهة المانهو المستقلة المعتمدة على Comick
-async function showManhwaSection() {
   document.getElementById("homeSection").classList.add("hidden");
   document.getElementById("appContainer").classList.remove("hidden");
-
-  ["searchTab", "downloadsTab", "detailTab", "manhwaSectionTab"].forEach(x => {
-    const el = document.getElementById(x);
-    if(el) el.classList.add("hidden");
+  ["searchTab","manhwaSectionTab","downloadsTab"].forEach(x=>{
+    document.getElementById(x).classList.add("hidden");
   });
-
-  let manhwaSec = document.getElementById("manhwaSectionTab");
-  if (!manhwaSec) {
-    manhwaSec = document.createElement("section");
-    manhwaSec.id = "manhwaSectionTab";
-    manhwaSec.innerHTML = `
-      <div style="margin-bottom:15px;">
-        <h2 style="font-size:20px;color:#c4aaff;">🎨 قسم المانهو العربية المستقل</h2>
-        <p style="font-size:13px;color:#9ba9bc;margin-top:5px;">محتوى حصري عبر Comick API</p>
-      </div>
-      <input id="manhwaSearchInput" placeholder="ابحث في مانهو Comick..." style="margin-bottom:15px;" autocomplete="off">
-      <div id="manhwaGridResults" class="grid"></div>
-      <div id="manhwaStatusBox" class="status">جاري تحميل المانهو...</div>
-    `;
-    document.getElementById("appContainer").appendChild(manhwaSec);
-
-    document.getElementById("manhwaSearchInput").addEventListener("input", (e) => {
-      clearTimeout(window.manhwaTimer);
-      window.manhwaTimer = setTimeout(() => {
-        fetchComickManhwa(e.target.value.trim());
-      }, 500);
-    });
-  } else {
-    manhwaSec.classList.remove("hidden");
+  document.getElementById(id).classList.remove("hidden");
+  if(id==="searchTab" && document.getElementById("results").children.length === 0){
+    searchManga();
   }
+}
 
+function showManhwaSection() {
+  document.getElementById("homeSection").classList.add("hidden");
+  document.getElementById("appContainer").classList.remove("hidden");
+  ["searchTab", "downloadsTab", "manhwaSectionTab"].forEach(x => {
+    document.getElementById(x).classList.add("hidden");
+  });
+  document.getElementById("manhwaSectionTab").classList.remove("hidden");
   fetchComickManhwa("");
 }
+
+document.getElementById("manhwaSearchInput").addEventListener("input", (e) => {
+  clearTimeout(window.manhwaTimer);
+  window.manhwaTimer = setTimeout(() => {
+    fetchComickManhwa(e.target.value.trim());
+  }, 500);
+});
 
 async function fetchComickManhwa(query) {
   const grid = document.getElementById("manhwaGridResults");
   const status = document.getElementById("manhwaStatusBox");
-  
   grid.innerHTML = "";
-  status.textContent = "جاري البحث في قاعدة بيانات المانهو...";
+  status.textContent = "جاري البحث في المانهو الكورية...";
   status.classList.remove("hidden");
 
   try {
@@ -374,10 +186,11 @@ async function fetchComickManhwa(query) {
 
       const img = document.createElement("img");
       img.loading = "lazy";
-      img.src = item.cover || "";
+      // تمرير رابط الغلاف عبر الـ Proxy الخاص بالـ Worker لضمان ظهوره وعدم حجبه
+      img.src = item.cover ? (API + "/proxy-cover?url=" + encodeURIComponent(item.cover)) : "";
       img.onerror = () => {
         img.onerror = null;
-        img.src = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400"><rect width="100%" height="100%" fill="#202938"/><text x="50%" y="50%" fill="white" font-size="25" text-anchor="middle">KATRO MANHWA</text></svg>');
+        img.src = "data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400"><rect width="100%" height="100%" fill="#202938"/><text x="50%" y="50%" fill="white" font-size="20" text-anchor="middle">KATRO MANHWA</text></svg>');
       };
 
       const info = document.createElement("div");
@@ -385,17 +198,12 @@ async function fetchComickManhwa(query) {
       const h = document.createElement("h3");
       h.textContent = item.title;
       const p = document.createElement("p");
-      p.textContent = "اضغط للتفاصيل";
+      p.textContent = "محتوى Comick API";
 
       info.appendChild(h);
       info.appendChild(p);
       card.appendChild(img);
       card.appendChild(info);
-
-      card.onclick = () => {
-        alert("عنوان المانهو: " + item.title + "\n(قريباً سيتم ربط عارض الفصول الخاص بـ Comick لهذا العمل)");
-      };
-
       grid.appendChild(card);
     });
   } catch (e) {
@@ -405,627 +213,60 @@ async function fetchComickManhwa(query) {
 }
 
 function coverURL(m){
-const cover=m.relationships?.find(x=>x.type==="cover_art");
-if(!cover?.attributes?.fileName)return "";
-return API+"/covers/"+m.id+"/"+encodeURIComponent(cover.attributes.fileName)+".256.jpg";
+  const cover=m.relationships?.find(x=>x.type==="cover_art");
+  if(!cover?.attributes?.fileName)return "";
+  return API+"/covers/"+m.id+"/"+encodeURIComponent(cover.attributes.fileName)+".256.jpg";
 }
 
 function titleOf(m){
-const t=m.attributes?.title||{};
-return t.ar||t.en||Object.values(t)[0]||"مانغا بدون اسم";
-}
-
-function englishTitle(m){ return m.attributes?.title?.en||""; }
-
-function descriptionOf(m){
-const d = m.attributes?.description || {};
-let rawDesc = d.ar || d.en || Object.values(d)[0] || "لا يوجد وصف متوفر.";
-let cleanText = rawDesc
-.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-.replace(/[*_#`]/g, '')
-.replace(/https?:\/\/[^\s]+/g, '');
-return cleanText.trim() || "لا يوجد وصف متوفر.";
+  const t=m.attributes?.title||{};
+  return t.ar||t.en||Object.values(t)[0]||"بدون اسم";
 }
 
 function createCard(m){
-const card=document.createElement("div");
-card.className="card";
-
-const hasArabic = (m.attributes?.availableTranslatedLanguages || []).includes("ar");
-if(hasArabic){
-const badge=document.createElement("div");
-badge.className="badge-manga";
-badge.textContent="عربي 🇸🇦";
-card.appendChild(badge);
+  const card=document.createElement("div");
+  card.className="card";
+  const img=document.createElement("img");
+  img.loading="lazy";
+  img.src=coverURL(m);
+  img.onerror=()=>{
+    img.onerror=null;
+    img.src="data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400"><rect width="100%" height="100%" fill="#202938"/><text x="50%" y="50%" fill="white" font-size="25" text-anchor="middle">KATRO</text></svg>');
+  };
+  const info=document.createElement("div");
+  info.className="info";
+  const h=document.createElement("h3");
+  h.textContent=titleOf(m);
+  const p=document.createElement("p");
+  p.textContent="MangaDex API";
+  info.appendChild(h);
+  info.appendChild(p);
+  card.appendChild(img);
+  card.appendChild(info);
+  return card;
 }
 
-const img=document.createElement("img");
-img.loading="lazy";
-img.src=coverURL(m);
-img.onerror=()=>{
-img.onerror=null;
-img.src="data:image/svg+xml,"+encodeURIComponent(
-'<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400"><rect width="100%" height="100%" fill="#202938"/><text x="50%" y="50%" fill="white" font-size="30" text-anchor="middle">KATRO</text></svg>'
-);
-};
+async function searchManga(){
+  const results=document.getElementById("results");
+  const searchStatus=document.getElementById("searchStatus");
+  results.innerHTML="";
+  searchStatus.textContent="جاري البحث...";
+  searchStatus.classList.remove("hidden");
 
-const info=document.createElement("div");
-info.className="info";
-const h=document.createElement("h3");
-h.textContent=titleOf(m);
-const p=document.createElement("p");
-p.textContent=englishTitle(m)!==titleOf(m) ? englishTitle(m) : "اضغط لعرض الفصول";
-
-info.appendChild(h);
-info.appendChild(p);
-card.appendChild(img);
-card.appendChild(info);
-card.onclick=()=>openManga(m);
-return card;
-}
-
-async function searchManga(reset=true){
-if(searchBusy)return;
-searchBusy=true;
-
-const results=document.getElementById("results");
-const searchStatus=document.getElementById("searchStatus");
-const moreSearch=document.getElementById("moreSearch");
-
-if(reset){
-searchOffset=0;
-results.innerHTML="";
-moreSearch.classList.add("hidden");
-}
-
-searchStatus.textContent="جاري البحث...";
-searchStatus.classList.remove("hidden");
-
-const rawQuery = document.getElementById("search").value.trim();
-const translatedQuery = translateQueryIfNeeded(rawQuery);
-const langFilter = document.getElementById("searchLangFilter").value;
-
-try{
-let url=API+"/manga?limit=40&offset="+searchOffset+
-"&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&order[followedCount]=desc";
-
-if(langFilter === "ar"){
-url+="&availableTranslatedLanguage[]=ar";
-}
-if(translatedQuery){
-url+="&title="+encodeURIComponent(translatedQuery);
-}
-
-const r=await fetch(url);
-if(!r.ok)throw Error("Search failed");
-const data=await r.json();
-
-if(reset&&(!data.data||data.data.length===0)){
-searchStatus.textContent = langFilter === "ar" 
-? "لم يتم العثور على مانغا عربية بهذا الاسم. جرب تغيير الفلتر إلى (جميع المانغا العالمية)."
-: "لم يتم العثور على نتائج.";
-searchBusy=false;
-return;
-}
-
-(data.data||[]).forEach(m=>{
-results.appendChild(createCard(m));
-});
-
-searchOffset+=(data.data||[]).length;
-if(data.data?.length){
-searchStatus.classList.add("hidden");
-moreSearch.classList.remove("hidden");
-}else{
-searchStatus.textContent="لا توجد نتائج أخرى";
-moreSearch.classList.add("hidden");
-}
-}catch(e){
-searchStatus.textContent="فشل الاتصال بالخادم. تأكد من الإنترنت وحاول مرة أخرى.";
-}
-searchBusy=false;
-}
-
-function loadMoreSearch(){ searchManga(false); }
-
-document.getElementById("search").addEventListener("input",()=>{
-clearTimeout(searchTimer);
-searchTimer=setTimeout(()=>{ searchManga(true); },500);
-});
-
-async function openManga(m){
-currentManga=m;
-showTab("detailTab");
-
-document.getElementById("detailCover").src=coverURL(m);
-document.getElementById("detailTitle").textContent=titleOf(m);
-
-const en=englishTitle(m);
-if(en&&en!==titleOf(m)){
-document.getElementById("detailTitle").textContent=titleOf(m)+" | "+en;
-}
-
-document.getElementById("detailDescription").textContent=descriptionOf(m);
-currentChapterList=[];
-chapterOffset=0;
-chapterTotal=0;
-
-document.getElementById("language").value = "ar";
-loadChapters(true);
-}
-
-function chapterNumber(ch){
-const value=ch?.attributes?.chapter;
-if(value===null||value===undefined||value==="") return null;
-const num=parseFloat(String(value).replace(/[^0-9.]/g,""));
-return Number.isFinite(num)?num:null;
-}
-
-function sortChapters(list){
-return list.sort((a,b)=>{
-const na=chapterNumber(a);
-const nb=chapterNumber(b);
-if(na===null&&nb===null)return 0;
-if(na===null)return 1;
-if(nb===null)return -1;
-return na-nb;
-});
-}
-
-async function fetchChapterFeed(language,offset=0){
-const limit=100;
-let url=API+"/manga/"+currentManga.id+"/feed?limit="+limit+"&offset="+offset+"&order[chapter]=asc";
-if(language&&language!=="all"){
-url+="&translatedLanguage[]="+encodeURIComponent(language);
-}
-const response=await fetch(url);
-if(!response.ok) throw new Error("Feed HTTP "+response.status);
-return await response.json();
-}
-
-function removeChapterStatus(){
-document.getElementById("chapters").querySelectorAll(".status").forEach(el=>el.remove());
-}
-
-function removeMoreChapters(){
-const old=document.getElementById("moreChapters");
-if(old)old.remove();
-}
-
-function showMoreChaptersButton(){
-removeMoreChapters();
-if(chapterOffset>=chapterTotal)return;
-
-const more=document.createElement("button");
-more.id="moreChapters";
-more.textContent="تحميل المزيد من الفصول";
-more.style.width="100%";
-more.style.margin="12px 0";
-more.onclick=()=>{
-more.remove();
-loadChapters(false);
-};
-document.getElementById("chapters").appendChild(more);
-}
-
-async function loadChapters(reset=true){
-const box=document.getElementById("chapters");
-if(chapterLoading)return;
-chapterLoading=true;
-
-if(reset){
-chapterOffset=0;
-chapterMode=document.getElementById("language").value;
-chapterTotal=0;
-box.innerHTML="";
-currentChapterList=[];
-removeMoreChapters();
-}
-
-const status=document.createElement("div");
-status.className="status";
-status.textContent=reset ? "جاري البحث عن الفصول..." : "جاري تحميل المزيد...";
-box.appendChild(status);
-
-let fallbackNotice = "";
-
-try{
-let data;
-if(reset){
-if(chapterMode==="ar"){
-status.textContent="جاري البحث عن الفصول العربية...";
-data=await fetchChapterFeed("ar",0);
-if(!data.data?.length){
-fallbackNotice = "⚠️ لا تتوفر فصول عربية، تم عرض الفصول الإنجليزية كبديل.";
-data=await fetchChapterFeed("en",0);
-if(data.data?.length){ chapterMode="en"; }
-else{
-fallbackNotice = "⚠️ لا تتوفر فصول عربية أو إنجليزية، تم عرض جميع اللغات.";
-data=await fetchChapterFeed("",0);
-chapterMode="all";
-}
-}
-}else if(chapterMode==="ar_only"){
-data=await fetchChapterFeed("ar",0);
-chapterMode="ar";
-}else if(chapterMode==="en"){
-data=await fetchChapterFeed("en",0);
-}else{
-data=await fetchChapterFeed("",0);
-}
-}else{
-data=await fetchChapterFeed(chapterMode==="all"?"":chapterMode, chapterOffset);
-}
-
-removeChapterStatus();
-
-if(reset && fallbackNotice){
-const alertDiv = document.createElement("div");
-alertDiv.className = "alertBox";
-alertDiv.textContent = fallbackNotice;
-box.prepend(alertDiv);
-}
-
-const chapters=data.data||[];
-chapterTotal=Number(data.total||0);
-
-if(!chapters.length){
-if(reset){ box.innerHTML='<div class="status">عذراً، هذه المانغا محمية أو لا توجد لها فصول متاحة حالياً على الخادم.</div>'; }
-chapterLoading=false;
-return;
-}
-
-sortChapters(chapters);
-
-chapters.forEach(ch=>{
-if(currentChapterList.some(x=>x.id===ch.id)) return;
-currentChapterList.push(ch);
-
-const row=document.createElement("div");
-row.className="chapter";
-
-const num=ch.attributes?.chapter||"؟";
-const name=ch.attributes?.title||"";
-const lang=ch.attributes?.translatedLanguage||"";
-const langName=languageNames[lang]||lang||"غير معروف";
-
-const title=document.createElement("div");
-title.textContent="الفصل "+num+(name?" - "+name:"");
-
-const info=document.createElement("small");
-info.textContent="🌐 اللغة: "+langName;
-
-row.appendChild(title);
-row.appendChild(info);
-
-const actions=document.createElement("div");
-actions.className="chapterActions";
-
-const readBtn=document.createElement("button");
-readBtn.textContent="📖 قراءة";
-readBtn.onclick=(e)=>{ e.stopPropagation(); readChapter(ch); };
-
-const downloadZipBtn=document.createElement("button");
-downloadZipBtn.textContent="⬇ ZIP";
-downloadZipBtn.className="secondary";
-downloadZipBtn.onclick=(e)=>{ e.stopPropagation(); downloadChapterZIP(ch); };
-
-const downloadPdfBtn=document.createElement("button");
-downloadPdfBtn.textContent="⬇ PDF";
-downloadPdfBtn.className="secondary";
-downloadPdfBtn.onclick=(e)=>{ e.stopPropagation(); downloadChapterPDF(ch); };
-
-const saveAppBtn=document.createElement("button");
-saveAppBtn.textContent="📥 حفظ";
-saveAppBtn.onclick=(e)=>{ e.stopPropagation(); saveChapterInternal(ch); };
-
-actions.appendChild(readBtn);
-actions.appendChild(downloadZipBtn);
-actions.appendChild(downloadPdfBtn);
-actions.appendChild(saveAppBtn);
-
-row.appendChild(actions);
-row.onclick=()=>readChapter(ch);
-box.appendChild(row);
-});
-
-chapterOffset+=chapters.length;
-if(chapterOffset<chapterTotal) showMoreChaptersButton();
-
-}catch(e){
-removeChapterStatus();
-const error=document.createElement("div");
-error.className="status";
-error.textContent="تعذر تحميل الفصول. حاول مرة أخرى.";
-box.appendChild(error);
-}
-chapterLoading=false;
-}
-
-async function getChapterPages(ch){
-const r=await fetch(API+"/at-home/server/"+ch.id);
-if(!r.ok) throw Error("Chapter server unavailable");
-const data=await r.json();
-const base=data.baseUrl;
-const hash=data.chapter?.hash;
-const files=data.chapter?.data||[];
-const saverFiles=data.chapter?.dataSaver||files;
-
-if(!base||!hash||!files.length) throw Error("No chapter pages");
-
-return files.map((file,i)=>({
-primary:base+"/data/"+hash+"/"+encodeURIComponent(file),
-fallback:base+"/data-saver/"+hash+"/"+encodeURIComponent(saverFiles[i]||file)
-}));
-}
-
-function createReaderImage(page, i) {
-const img = document.createElement("img");
-img.loading = "eager";
-img.alt = "صفحة " + (i + 1);
-img.src = page.primary;
-
-let attempts = 0;
-img.onerror = () => {
-  attempts++;
-  if (attempts === 1) {
-    img.src = page.fallback;
-  } else if (attempts === 2) {
-    img.src = page.primary + (page.primary.includes('?') ? '&' : '?') + 'retry=' + Date.now();
-  } else {
-    img.onerror = null;
-    const wrapper = document.createElement("div");
-    wrapper.style.cssText = "padding:20px;text-align:center;background:#151d2a;color:#fff;margin:10px 0;border-radius:8px;";
-    wrapper.innerHTML = `<p style="margin-bottom:8px;font-size:13px;">تعذر تحميل الصفحة ${i + 1}</p>`;
-    const retryBtn = document.createElement("button");
-    retryBtn.textContent = "إعادة المحاولة";
-    retryBtn.style.cssText = "padding:6px 14px;font-size:12px;background:#8855ff;border-radius:6px;cursor:pointer;";
-    retryBtn.onclick = () => {
-      img.src = page.primary + "?r=" + Math.random();
-      wrapper.replaceWith(img);
-    };
-    wrapper.appendChild(retryBtn);
-    img.replaceWith(wrapper);
+  const query = document.getElementById("search").value.trim();
+  try{
+    let url=API+"/manga?limit=40&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&order[followedCount]=desc";
+    if(query) url+="&title="+encodeURIComponent(query);
+    const r=await fetch(url);
+    const data=await r.json();
+    searchStatus.classList.add("hidden");
+    (data.data||[]).forEach(m=>results.appendChild(createCard(m)));
+  }catch(e){
+    searchStatus.textContent="فشل الاتصال بالخادم.";
   }
-};
-return img;
 }
 
-async function readChapter(ch){
-currentChapter=ch;
-currentReaderIndex=currentChapterList.findIndex(x=>x.id===ch.id);
-document.getElementById("reader").classList.remove("hidden");
-document.getElementById("readerTitle").textContent="الفصل "+(ch.attributes?.chapter||"");
-const pages=document.getElementById("readerPages");
-pages.innerHTML='<div class="status">جاري تحميل صفحات الفصل...</div>';
-try{
-const pageList=await getChapterPages(ch);
-pages.innerHTML="";
-if(!pageList || !pageList.length){
-pages.innerHTML='<div class="status">هذا الفصل لا يحتوي على صفحات أو تم حذفه من المصدر.</div>';
-return;
-}
-pageList.forEach((page,i)=>pages.appendChild(createReaderImage(page,i)));
-}catch(e){
-pages.innerHTML='<div class="status">تعذر تحميل صفحات الفصل (قد تكون محمية أو غير متوفرة).</div>';
-}
-}
-
-function closeReader(){ document.getElementById("reader").classList.add("hidden"); }
-function readerNext(){ if(currentReaderIndex>=0&&currentReaderIndex<currentChapterList.length-1) readChapter(currentChapterList[currentReaderIndex+1]); }
-function readerPrevious(){ if(currentReaderIndex>0) readChapter(currentChapterList[currentReaderIndex-1]); }
-
-async function downloadChapterZIP(ch){
-try{
-const chapterNum = ch.attributes?.chapter || "؟";
-const mangaName = currentManga ? titleOf(currentManga) : "Manga";
-const safeTitle = mangaName.replace(/[/\\?%*:|"<>]/g, '');
-alert("جاري تجهيز ملف ZIP، يرجى الانتظار...");
-const urls = await getChapterPages(ch);
-if(!urls || !urls.length){ alert("هذا الفصل فارغ ولا يمكن تنزيله."); return; }
-
-const zip = new JSZip();
-const folder = zip.folder(`${safeTitle} - Ch ${chapterNum}`);
-
-for(let i=0; i<urls.length; i++){
-let res = await fetch(urls[i].primary).catch(()=>null);
-if(!res || !res.ok) res = await fetch(urls[i].fallback);
-if(!res || !res.ok) continue;
-const blob = await res.blob();
-folder.file(String(i+1).padStart(3, '0') + ".jpg", blob);
-}
-
-const content = await zip.generateAsync({type:"blob"});
-const blobUrl = URL.createObjectURL(content);
-const a = document.createElement('a');
-a.href = blobUrl;
-a.download = `${safeTitle}_Ch_${chapterNum}.zip`;
-document.body.appendChild(a);
-a.click();
-document.body.removeChild(a);
-URL.revokeObjectURL(blobUrl);
-alert("تم تنزيل ملف ZIP بنجاح!");
-}catch(e){
-alert("تعذر تنزيل الملف المضغوط (الفصل محمي أو غير متوفر).");
-}
-}
-
-async function downloadChapterPDF(ch){
-try{
-const chapterNum = ch.attributes?.chapter || "؟";
-const mangaName = currentManga ? titleOf(currentManga) : "Manga";
-const safeTitle = mangaName.replace(/[/\\?%*:|"<>]/g, '');
-alert("جاري إنشاء ملف PDF (قد يستغرق بضع ثوانٍ)...");
-
-const urls = await getChapterPages(ch);
-if(!urls || !urls.length){ alert("هذا الفصل فارغ ولا يمكن تحويله لـ PDF."); return; }
-
-const { jsPDF } = window.jspdf;
-const pdf = new jsPDF({orientation: "portrait", unit: "px", format: [595, 842]});
-
-for(let i=0; i<urls.length; i++){
-let res = await fetch(urls[i].primary).catch(()=>null);
-if(!res || !res.ok) res = await fetch(urls[i].fallback);
-if(!res || !res.ok) continue;
-const blob = await res.blob();
-const dataUrl = await new Promise((resolve)=>{
-const reader = new FileReader();
-reader.onload = ()=>resolve(reader.result);
-reader.readAsDataURL(blob);
-});
-
-if(i > 0) pdf.addPage([595, 842]);
-pdf.addImage(dataUrl, 'JPEG', 0, 0, 595, 842);
-}
-
-pdf.save(`${safeTitle}_Ch_${chapterNum}.pdf`);
-alert("تم تنزيل ملف PDF بنجاح!");
-}catch(e){
-alert("تعذر إنشاء ملف PDF.");
-}
-}
-
-const DB_NAME="KATRO_MANGA_DB";
-const DB_STORE="chapters";
-
-function openDB(){
-return new Promise((resolve,reject)=>{
-const request=indexedDB.open(DB_NAME,1);
-request.onupgradeneeded=()=>{
-const db=request.result;
-if(!db.objectStoreNames.contains(DB_STORE)) db.createObjectStore(DB_STORE,{keyPath:"id"});
-};
-request.onsuccess=()=>resolve(request.result);
-request.onerror=()=>reject(request.error);
-});
-}
-
-async function saveChapterRecord(record){
-const db=await openDB();
-return new Promise((resolve,reject)=>{
-const tx=db.transaction(DB_STORE,"readwrite");
-tx.objectStore(DB_STORE).put(record);
-tx.oncomplete=()=>resolve();
-tx.onerror=()=>reject(tx.error);
-});
-}
-
-async function getSavedChapter(id){
-const db=await openDB();
-return new Promise((resolve,reject)=>{
-const tx=db.transaction(DB_STORE,"readonly");
-const request=tx.objectStore(DB_STORE).get(id);
-request.onsuccess=()=>resolve(request.result||null);
-request.onerror=()=>reject(tx.error);
-});
-}
-
-async function getAllSaved(){
-const db=await openDB();
-return new Promise((resolve,reject)=>{
-const tx=db.transaction(DB_STORE,"readonly");
-const request=tx.objectStore(DB_STORE).getAll();
-request.onsuccess=()=>resolve(request.result||[]);
-request.onerror=()=>reject(tx.error);
-});
-}
-
-async function deleteSavedChapter(id){
-const db=await openDB();
-return new Promise((resolve,reject)=>{
-const tx=db.transaction(DB_STORE,"readwrite");
-tx.objectStore(DB_STORE).delete(id);
-tx.oncomplete=()=>resolve();
-tx.onerror=()=>reject(tx.error);
-});
-}
-
-async function saveChapterInternal(ch){
-try{
-const id=ch.id;
-const exists=await getSavedChapter(id);
-if(exists){ alert("هذا الفصل محفوظ بالفعل داخل التطبيق."); return; }
-
-alert("جاري الحفظ للقراءة بدون إنترنت...");
-const urls=await getChapterPages(ch);
-if(!urls || !urls.length){ alert("هذا الفصل فارغ ولا يمكن حفظه."); return; }
-
-const pages=[];
-for(let i=0;i<urls.length;i++){
-let res = await fetch(urls[i].primary).catch(()=>null);
-if(!res || !res.ok) res = await fetch(urls[i].fallback);
-if(!res || !res.ok) continue;
-const blob=await res.blob();
-pages.push(blob);
-}
-
-const record={
-id:id, mangaId:currentManga?.id||"", mangaName:currentManga?titleOf(currentManga):"مانغا",
-chapterNum:ch.attributes?.chapter||"؟", language:languageNames[ch.attributes?.translatedLanguage]||ch.attributes?.translatedLanguage,
-pages:pages, savedAt:Date.now()
-};
-
-await saveChapterRecord(record);
-alert("تم حفظ الفصل بنجاح داخل قسم (تحميلاتي)!");
-}catch(e){
-alert("تعذر الحفظ (قد تكون الفصول محمية).");
-}
-}
-
-async function loadDownloads(){
-const box=document.getElementById("downloadsList");
-box.innerHTML='<div class="status">جاري التحميل...</div>';
-try{
-const saved=await getAllSaved();
-box.innerHTML="";
-if(!saved.length){ box.innerHTML='<div class="status">لا توجد فصول محفوظة حتى الآن.</div>'; return; }
-
-saved.sort((a,b)=>b.savedAt-a.savedAt);
-saved.forEach(item=>{
-const div=document.createElement("div");
-div.className="downloadItem";
-const title=document.createElement("strong");
-title.textContent=item.mangaName;
-const info=document.createElement("p");
-info.textContent="الفصل "+item.chapterNum+" | "+item.language+" | "+item.pages.length+" صفحة";
-
-const read=document.createElement("button");
-read.textContent="📖 قراءة";
-read.onclick=()=>readOffline(item);
-
-const del=document.createElement("button");
-del.className="danger";
-del.textContent="حذف";
-del.onclick=async()=>{
-if(confirm("هل تريد حذف هذا الفصل؟")){
-await deleteSavedChapter(item.id);
-loadDownloads();
-}
-};
-
-div.appendChild(title);
-div.appendChild(info);
-div.appendChild(read);
-div.appendChild(del);
-box.appendChild(div);
-});
-}catch(e){
-box.innerHTML='<div class="status">تعذر عرض المحفوظات.</div>';
-}
-}
-
-function readOffline(item){
-document.getElementById("reader").classList.remove("hidden");
-document.getElementById("readerTitle").textContent=item.mangaName+" - الفصل "+item.chapterNum;
-const box=document.getElementById("readerPages");
-box.innerHTML="";
-item.pages.forEach(blob=>{
-const img=document.createElement("img");
-img.src=URL.createObjectURL(blob);
-img.loading="eager";
-box.appendChild(img);
-});
-}
+document.getElementById("search").addEventListener("input",()=>searchManga());
 </script>
 </body>
 </html>
