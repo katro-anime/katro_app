@@ -7,7 +7,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080912">
 <meta name="description" content="KATRO - عالم المانغا والمانهو بين يديك. اكتشف واقرأ وحمل بأسلوب مميز.">
 <title>KATRO | عالم المانغا والمانهو</title>
 
@@ -62,10 +61,11 @@ nav{
 .logo span{color:var(--purple)}
 .nav-links{
   display:flex;
-  gap:25px;
+  gap:20px;
   list-style:none;
   color:#c4c5d5;
   font-size:14px;
+  align-items:center;
 }
 .nav-links a{cursor:pointer;padding:6px 10px;border-radius:8px;transition:.2s}
 .nav-links a:hover{color:var(--white);background:#202938}
@@ -75,8 +75,8 @@ input,select{background:#202938;color:white;width:100%}
 button{background:var(--purple);color:white;font-weight:bold;cursor:pointer;transition:.3s}
 button:active{opacity:.75}
 
-.filterRow{display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap}
-.filterRow select{padding:10px;font-size:13px;flex:1;min-width:140px}
+.filterRow{display:flex;gap:8px;margin-top:10px;align-items:center}
+.filterRow select{padding:10px;font-size:13px}
 
 .container{padding:30px 7%}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:20px}
@@ -87,7 +87,6 @@ button:active{opacity:.75}
 .card h3{margin:0 0 5px;font-size:14px}
 .card p{margin:0;font-size:12px;color:#9ba9bc}
 .badge-manga{position:absolute;top:8px;right:8px;background:var(--purple);color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;font-weight:bold}
-.badge-type{position:absolute;top:8px;left:8px;background:#111827dd;color:#42c8ff;font-size:10px;padding:3px 7px;border-radius:6px;font-weight:bold;border:1px solid #263246}
 
 .panel{background:#151d2a;padding:16px;border-radius:14px;margin-bottom:14px}
 .status{text-align:center;padding:20px;color:#aaa;background:#151d2a;border-radius:10px;margin:10px 0}
@@ -137,7 +136,8 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
       <a href="#" class="logo" onclick="backToHome()">KATRO<span>.</span></a>
       <ul class="nav-links">
         <li><a href="#" onclick="backToHome()">الرئيسية</a></li>
-        <li><a href="#" onclick="showTab('searchTab')">المانغا والمانهو 🌍</a></li>
+        <li><a href="#" onclick="showTab('searchTab')">المانغا 📚</a></li>
+        <li><a href="#" onclick="showManhwaSection()">المانهو العربية 🇰🇷</a></li>
         <li><a href="#" onclick="showTab('downloadsTab')">تحميلاتي 📥</a></li>
       </ul>
     </nav>
@@ -147,10 +147,11 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
     <div class="hero-content">
       <span class="badge" style="display:inline-block;padding:8px 16px;border:1px solid #39304e;background:#171326;border-radius:50px;color:#c4aaff;font-size:12px;margin-bottom:20px">✦ عالم المانغا والمانهو بين يديك</span>
       <h1>عالمك المفضل من المانغا والمانهو<br><span>يبدأ هنا.</span></h1>
-      <p>اكتشف آلاف عناوين المانغا اليابانية والمانهو الكورية المترجمة، بتجربة سريعة، تصميم مميز، وإمكانية القراءة والتحميل بدون إنترنت.</p>
+      <p>اكتشف آلاف عناوين المانغا والمانهو المترجمة للعربية بتجربة سريعة، تصميم مميز، وإمكانية القراءة والتحميل بدون إنترنت.</p>
       
       <div style="display:flex;gap:15px;flex-wrap:wrap;">
-        <button onclick="showTab('searchTab')" style="padding:15px 30px;font-size:16px;font-weight:800;background:linear-gradient(135deg, #8751ff, #5734ce);">تصفح الكل الآن 📖</button>
+        <button onclick="showTab('searchTab')" style="padding:15px 30px;font-size:16px;font-weight:800;background:linear-gradient(135deg, #8751ff, #5734ce);">تصفح المانغا 📖</button>
+        <button onclick="showManhwaSection()" style="padding:15px 30px;font-size:16px;font-weight:800;background:linear-gradient(135deg, #28b8ff, #1a73e8);">تصفح المانهو 🇰🇷</button>
       </div>
     </div>
   </main>
@@ -159,27 +160,34 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
 
     <div class="tabs-app" style="display:flex;gap:10px;margin-bottom:20px;">
       <button class="secondary" onclick="backToHome()">🏠 الرئيسية</button>
-      <button onclick="showTab('searchTab')">📚 استعراض الكل</button>
+      <button onclick="showTab('searchTab')">📚 المانغا</button>
+      <button onclick="showManhwaSection()" style="background:#28b8ff;">🇰🇷 المانهو العربية</button>
       <button onclick="showTab('downloadsTab')">📥 تحميلاتي</button>
     </div>
 
+    <!-- قسم المانغا الأساسي (MangaDex) -->
     <section id="searchTab">
-      <input id="search" placeholder="ابحث بالعربية أو الإنجليزية (مثلاً: ون بيس، Solo Leveling)..." autocomplete="off">
+      <input id="search" placeholder="ابحث بالعربية أو الإنجليزية (مثلاً: ون بيس، Naruto)..." autocomplete="off">
       <div class="filterRow">
-        <select id="searchTypeFilter" onchange="searchManga(true)">
-          <option value="all">النوع: الكل (مانغا + مانهو) 🌍</option>
-          <option value="manga">النوع: المانغا اليابانية فقط 🇯🇵</option>
-          <option value="manhwa">النوع: المانهو الكورية فقط 🇰🇷</option>
-        </select>
-
         <select id="searchLangFilter" onchange="searchManga(true)">
-          <option value="ar">المترجمة للعربية فقط 🇸🇦</option>
-          <option value="all">جميع اللغات العالمية 🌍</option>
+          <option value="ar">عرض المانغا المترجمة للعربية فقط 🇸🇦</option>
+          <option value="all">عرض جميع المانغا العالمية 🌍</option>
         </select>
       </div>
       <div id="results" class="grid"></div>
-      <div id="searchStatus" class="status">جاري تحميل المحتوى...</div>
+      <div id="searchStatus" class="status">جاري تحميل المانغا...</div>
       <button id="moreSearch" class="hidden" onclick="loadMoreSearch()">تحميل المزيد</button>
+    </section>
+
+    <!-- قسم المانهو المستقل (Comick API) -->
+    <section id="manhwaSectionTab" class="hidden">
+      <div style="margin-bottom:15px;">
+        <h2 style="font-size:20px;color:#c4aaff;">🎨 قسم المانهو العربية المستقل</h2>
+        <p style="font-size:13px;color:#9ba9bc;margin-top:5px;">محتوى مانهو كوري حصري عبر Comick API</p>
+      </div>
+      <input id="manhwaSearchInput" placeholder="ابحث في مانهو Comick (مثلاً: Solo Leveling)..." style="margin-bottom:15px;" autocomplete="off">
+      <div id="manhwaGridResults" class="grid"></div>
+      <div id="manhwaStatusBox" class="status">جاري تحميل المانهو...</div>
     </section>
 
     <section id="downloadsTab" class="hidden">
@@ -204,7 +212,7 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
           <option value="ar">العربية أولاً (مع البديل الإنجليزي)</option>
           <option value="ar_only">العربية فقط (بدون بدائل)</option>
           <option value="en">English (الإنجليزية)</option>
-          <option value="all">كل اللغات (لتجاوز الأعمال المحجوبة)</option>
+          <option value="all">كل اللغات</option>
         </select>
 
         <button style="width:100%;margin-top:12px" onclick="loadChapters(true)">عرض الفصول</button>
@@ -228,6 +236,9 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
   <footer>
     <div class="logo">KATRO<span style="color:#8855ff">.</span></div>
     <p>© 2026 KATRO — تطوير: Katro 10k — جميع الحقوق محفوظة</p>
+    <p style="font-size:11px;color:#777990;margin-top:5px;">
+      Powered by MangaDex API & Comick API. All content is provided by respective copyright holders.
+    </p>
   </footer>
 
 <script>
@@ -281,8 +292,9 @@ function showTab(id){
 document.getElementById("homeSection").classList.add("hidden");
 document.getElementById("appContainer").classList.remove("hidden");
 
-["searchTab","downloadsTab","detailTab"].forEach(x=>{
-document.getElementById(x).classList.add("hidden");
+["searchTab","manhwaSectionTab","downloadsTab","detailTab"].forEach(x=>{
+const el = document.getElementById(x);
+if(el) el.classList.add("hidden");
 });
 document.getElementById(id).classList.remove("hidden");
 
@@ -290,6 +302,106 @@ if(id==="downloadsTab") loadDownloads();
 if(id==="searchTab" && document.getElementById("results").children.length === 0){
 searchManga(true);
 }
+}
+
+// دالة عرض واجهة المانهو المستقلة المعتمدة على Comick
+async function showManhwaSection() {
+  document.getElementById("homeSection").classList.add("hidden");
+  document.getElementById("appContainer").classList.remove("hidden");
+
+  ["searchTab", "downloadsTab", "detailTab", "manhwaSectionTab"].forEach(x => {
+    const el = document.getElementById(x);
+    if(el) el.classList.add("hidden");
+  });
+
+  let manhwaSec = document.getElementById("manhwaSectionTab");
+  if (!manhwaSec) {
+    manhwaSec = document.createElement("section");
+    manhwaSec.id = "manhwaSectionTab";
+    manhwaSec.innerHTML = `
+      <div style="margin-bottom:15px;">
+        <h2 style="font-size:20px;color:#c4aaff;">🎨 قسم المانهو العربية المستقل</h2>
+        <p style="font-size:13px;color:#9ba9bc;margin-top:5px;">محتوى حصري عبر Comick API</p>
+      </div>
+      <input id="manhwaSearchInput" placeholder="ابحث في مانهو Comick..." style="margin-bottom:15px;" autocomplete="off">
+      <div id="manhwaGridResults" class="grid"></div>
+      <div id="manhwaStatusBox" class="status">جاري تحميل المانهو...</div>
+    `;
+    document.getElementById("appContainer").appendChild(manhwaSec);
+
+    document.getElementById("manhwaSearchInput").addEventListener("input", (e) => {
+      clearTimeout(window.manhwaTimer);
+      window.manhwaTimer = setTimeout(() => {
+        fetchComickManhwa(e.target.value.trim());
+      }, 500);
+    });
+  } else {
+    manhwaSec.classList.remove("hidden");
+  }
+
+  fetchComickManhwa("");
+}
+
+async function fetchComickManhwa(query) {
+  const grid = document.getElementById("manhwaGridResults");
+  const status = document.getElementById("manhwaStatusBox");
+  
+  grid.innerHTML = "";
+  status.textContent = "جاري البحث في قاعدة بيانات المانهو...";
+  status.classList.remove("hidden");
+
+  try {
+    const res = await fetch(API + "/comick-search?q=" + encodeURIComponent(query));
+    const json = await res.json();
+    const list = json.data || [];
+
+    status.classList.add("hidden");
+    if (list.length === 0) {
+      status.textContent = "لا توجد نتائج مطابقة.";
+      status.classList.remove("hidden");
+      return;
+    }
+
+    list.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const badge = document.createElement("div");
+      badge.className = "badge-manga";
+      badge.style.background = "#28b8ff";
+      badge.textContent = "مانهو 🇰🇷";
+      card.appendChild(badge);
+
+      const img = document.createElement("img");
+      img.loading = "lazy";
+      img.src = item.cover || "";
+      img.onerror = () => {
+        img.onerror = null;
+        img.src = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400"><rect width="100%" height="100%" fill="#202938"/><text x="50%" y="50%" fill="white" font-size="25" text-anchor="middle">KATRO MANHWA</text></svg>');
+      };
+
+      const info = document.createElement("div");
+      info.className = "info";
+      const h = document.createElement("h3");
+      h.textContent = item.title;
+      const p = document.createElement("p");
+      p.textContent = "اضغط للتفاصيل";
+
+      info.appendChild(h);
+      info.appendChild(p);
+      card.appendChild(img);
+      card.appendChild(info);
+
+      card.onclick = () => {
+        alert("عنوان المانهو: " + item.title + "\n(قريباً سيتم ربط عارض الفصول الخاص بـ Comick لهذا العمل)");
+      };
+
+      grid.appendChild(card);
+    });
+  } catch (e) {
+    status.textContent = "فشل جلب بيانات المانهو من الخادم.";
+    status.classList.remove("hidden");
+  }
 }
 
 function coverURL(m){
@@ -300,7 +412,7 @@ return API+"/covers/"+m.id+"/"+encodeURIComponent(cover.attributes.fileName)+".2
 
 function titleOf(m){
 const t=m.attributes?.title||{};
-return t.ar||t.en||Object.values(t)[0]||"عمل بدون اسم";
+return t.ar||t.en||Object.values(t)[0]||"مانغا بدون اسم";
 }
 
 function englishTitle(m){ return m.attributes?.title?.en||""; }
@@ -326,12 +438,6 @@ badge.className="badge-manga";
 badge.textContent="عربي 🇸🇦";
 card.appendChild(badge);
 }
-
-const origLang = m.attributes?.originalLanguage;
-const typeBadge=document.createElement("div");
-typeBadge.className="badge-type";
-typeBadge.textContent = origLang === "ko" ? "مانهو" : (origLang === "ja" ? "مانغا" : "كوميك");
-card.appendChild(typeBadge);
 
 const img=document.createElement("img");
 img.loading="lazy";
@@ -372,23 +478,16 @@ results.innerHTML="";
 moreSearch.classList.add("hidden");
 }
 
-searchStatus.textContent="جاري البحث عن المانغا والمانهو...";
+searchStatus.textContent="جاري البحث...";
 searchStatus.classList.remove("hidden");
 
 const rawQuery = document.getElementById("search").value.trim();
 const translatedQuery = translateQueryIfNeeded(rawQuery);
 const langFilter = document.getElementById("searchLangFilter").value;
-const typeFilter = document.getElementById("searchTypeFilter").value;
 
 try{
 let url=API+"/manga?limit=40&offset="+searchOffset+
-"&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&order[followedCount]=desc";
-
-if(typeFilter === "manga"){
-url+="&originalLanguage[]=ja";
-} else if(typeFilter === "manhwa"){
-url+="&originalLanguage[]=ko";
-}
+"&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&order[followedCount]=desc";
 
 if(langFilter === "ar"){
 url+="&availableTranslatedLanguage[]=ar";
@@ -403,7 +502,7 @@ const data=await r.json();
 
 if(reset&&(!data.data||data.data.length===0)){
 searchStatus.textContent = langFilter === "ar" 
-? "لم يتم العثور على نتائج عربية مطابقة. جرب تغيير الفلتر إلى (جميع اللغات العالمية)."
+? "لم يتم العثور على مانغا عربية بهذا الاسم. جرب تغيير الفلتر إلى (جميع المانغا العالمية)."
 : "لم يتم العثور على نتائج.";
 searchBusy=false;
 return;
@@ -537,11 +636,11 @@ if(chapterMode==="ar"){
 status.textContent="جاري البحث عن الفصول العربية...";
 data=await fetchChapterFeed("ar",0);
 if(!data.data?.length){
-fallbackNotice = "⚠️ لا تتوفر فصول عربية (قد تكون محمية بحقوق الطبع والنشر)، تم عرض الفصول الإنجليزية كبديل.";
+fallbackNotice = "⚠️ لا تتوفر فصول عربية، تم عرض الفصول الإنجليزية كبديل.";
 data=await fetchChapterFeed("en",0);
 if(data.data?.length){ chapterMode="en"; }
 else{
-fallbackNotice = "⚠️ لا تتوفر فصول عربية أو إنجليزية، تم عرض جميع اللغات المتاحة.";
+fallbackNotice = "⚠️ لا تتوفر فصول عربية أو إنجليزية، تم عرض جميع اللغات.";
 data=await fetchChapterFeed("",0);
 chapterMode="all";
 }
@@ -571,7 +670,7 @@ const chapters=data.data||[];
 chapterTotal=Number(data.total||0);
 
 if(!chapters.length){
-if(reset){ box.innerHTML='<div class="status">عذراً، هذا العمل محمي بحقوق النشر أو لا توجد له فصول متاحة حالياً. حاول اختيار (كل اللغات) لعرض الفصول البديلة.</div>'; }
+if(reset){ box.innerHTML='<div class="status">عذراً، هذه المانغا محمية أو لا توجد لها فصول متاحة حالياً على الخادم.</div>'; }
 chapterLoading=false;
 return;
 }
@@ -703,12 +802,12 @@ try{
 const pageList=await getChapterPages(ch);
 pages.innerHTML="";
 if(!pageList || !pageList.length){
-pages.innerHTML='<div class="status">هذا الفصل محمي بحقوق النشر أو لا يحتوي على صفحات متاحة حالياً.</div>';
+pages.innerHTML='<div class="status">هذا الفصل لا يحتوي على صفحات أو تم حذفه من المصدر.</div>';
 return;
 }
 pageList.forEach((page,i)=>pages.appendChild(createReaderImage(page,i)));
 }catch(e){
-pages.innerHTML='<div class="status">تعذر تحميل صفحات الفصل (قد تكون محمية رسمياً من المصدر).</div>';
+pages.innerHTML='<div class="status">تعذر تحميل صفحات الفصل (قد تكون محمية أو غير متوفرة).</div>';
 }
 }
 
@@ -723,7 +822,7 @@ const mangaName = currentManga ? titleOf(currentManga) : "Manga";
 const safeTitle = mangaName.replace(/[/\\?%*:|"<>]/g, '');
 alert("جاري تجهيز ملف ZIP، يرجى الانتظار...");
 const urls = await getChapterPages(ch);
-if(!urls || !urls.length){ alert("هذا الفصل محمي أو فارغ ولا يمكن تنزيله."); return; }
+if(!urls || !urls.length){ alert("هذا الفصل فارغ ولا يمكن تنزيله."); return; }
 
 const zip = new JSZip();
 const folder = zip.folder(`${safeTitle} - Ch ${chapterNum}`);
@@ -747,7 +846,7 @@ document.body.removeChild(a);
 URL.revokeObjectURL(blobUrl);
 alert("تم تنزيل ملف ZIP بنجاح!");
 }catch(e){
-alert("تعذر تنزيل الملف المضغوط (الفصل محمي بحقوق الطبع والنشر).");
+alert("تعذر تنزيل الملف المضغوط (الفصل محمي أو غير متوفر).");
 }
 }
 
@@ -759,7 +858,7 @@ const safeTitle = mangaName.replace(/[/\\?%*:|"<>]/g, '');
 alert("جاري إنشاء ملف PDF (قد يستغرق بضع ثوانٍ)...");
 
 const urls = await getChapterPages(ch);
-if(!urls || !urls.length){ alert("هذا الفصل محمي أو فارغ ولا يمكن تحويله لـ PDF."); return; }
+if(!urls || !urls.length){ alert("هذا الفصل فارغ ولا يمكن تحويله لـ PDF."); return; }
 
 const { jsPDF } = window.jspdf;
 const pdf = new jsPDF({orientation: "portrait", unit: "px", format: [595, 842]});
@@ -849,7 +948,7 @@ if(exists){ alert("هذا الفصل محفوظ بالفعل داخل التطب
 
 alert("جاري الحفظ للقراءة بدون إنترنت...");
 const urls=await getChapterPages(ch);
-if(!urls || !urls.length){ alert("هذا الفصل محمي أو فارغ ولا يمكن حفظه."); return; }
+if(!urls || !urls.length){ alert("هذا الفصل فارغ ولا يمكن حفظه."); return; }
 
 const pages=[];
 for(let i=0;i<urls.length;i++){
@@ -869,7 +968,7 @@ pages:pages, savedAt:Date.now()
 await saveChapterRecord(record);
 alert("تم حفظ الفصل بنجاح داخل قسم (تحميلاتي)!");
 }catch(e){
-alert("تعذر الحفظ (الفصل محمي أو غير متوفر).");
+alert("تعذر الحفظ (قد تكون الفصول محمية).");
 }
 }
 
