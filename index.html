@@ -45,4 +45,168 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
 <body>
 
   <header>
-    <nav
+    <nav>
+      <a href="#" class="logo" onclick="backToHome()">KATRO<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="#" onclick="backToHome()">الرئيسية</a></li>
+        <li><a href="#" onclick="showSection('ja')">المانغا اليابانية 🇯🇵</a></li>
+        <li><a href="#" onclick="showSection('ko')">المانهو الكورية 🇰🇷</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="homeSection" class="hero">
+    <div class="hero-content">
+      <span class="badge" style="display:inline-block;padding:8px 16px;border:1px solid #39304e;background:#171326;border-radius:50px;color:#c4aaff;font-size:12px;margin-bottom:20px">✦ قاعدة بيانات ضخمة من MangaDex</span>
+      <h1>عالمك المفضل من المانغا والمانهو<br><span>بين يديك.</span></h1>
+      <p>اكتشف عشرات الآلاف من العناوين العالمية والمترجمة للعربية بسرعة فائقة.</p>
+      <div style="display:flex;gap:15px;flex-wrap:wrap;">
+        <button onclick="showSection('ja')" style="padding:15px 30px;font-size:16px;font-weight:800;background:linear-gradient(135deg, #8751ff, #5734ce);">تصفح المانغا 🇯🇵</button>
+        <button onclick="showSection('ko')" style="padding:15px 30px;font-size:16px;font-weight:800;background:linear-gradient(135deg, #28b8ff, #1a73e8);">تصفح المانهو 🇰🇷</button>
+      </div>
+    </div>
+  </main>
+
+  <div class="container hidden" id="appContainer">
+    <div class="tabs-app" style="display:flex;gap:10px;margin-bottom:20px;">
+      <button class="secondary" onclick="backToHome()">🏠 الرئيسية</button>
+      <button onclick="showSection('ja')">🇯🇵 المانغا اليابانية</button>
+      <button onclick="showSection('ko')" style="background:#28b8ff;">🇰🇷 المانهو الكورية</button>
+    </div>
+
+    <section id="browseSection">
+      <h2 id="sectionTitle" style="font-size:22px;margin-bottom:15px;color:#c4aaff;">📚 أرشيف الأعمال</h2>
+      <input id="search" placeholder="ابحث عن اسم العمل..." autocomplete="off">
+      <div id="results" class="grid"></div>
+      <div id="searchStatus" class="status">جاري التحميل...</div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="logo">KATRO<span>.</span></div>
+    <p>© 2026 KATRO — تطوير: Katro 10k</p>
+    <p style="font-size:11px;color:#777990;margin-top:5px;">
+      This product uses the MangaDex API but is not endorsed or certified by MangaDex. Powered by MangaDex API.
+    </p>
+  </footer>
+
+<script>
+try {
+  const API = "https://katro-manga-api.mmmzzz126038.workers.dev";
+  let currentLangType = "ja";
+  let searchTimer;
+
+  function backToHome(){
+    document.getElementById("homeSection").classList.remove("hidden");
+    document.getElementById("appContainer").classList.add("hidden");
+  }
+
+  function showSection(langType){
+    currentLangType = langType;
+    document.getElementById("homeSection").classList.add("hidden");
+    document.getElementById("appContainer").classList.remove("hidden");
+    
+    const title = document.getElementById("sectionTitle");
+    title.textContent = langType === "ja" ? "📚 قسم المانغا اليابانية (MangaDex)" : "🎨 قسم المانهو الكورية (MangaDex)";
+    
+    const searchInput = document.getElementById("search");
+    if(searchInput) searchInput.value = "";
+    fetchManga("");
+  }
+
+  function coverURL(m){
+    try {
+      const cover = m.relationships?.find(x => x.type === "cover_art");
+      if(!cover?.attributes?.fileName) return "";
+      return API + "/covers/" + m.id + "/" + encodeURIComponent(cover.attributes.fileName) + ".256.jpg";
+    } catch(e) {
+      return "";
+    }
+  }
+
+  function titleOf(m){
+    try {
+      const t = m.attributes?.title || {};
+      return t.ar || t.en || Object.values(t)[0] || "بدون اسم";
+    } catch(e) {
+      return "بدون اسم";
+    }
+  }
+
+  function createCard(m){
+    const card = document.createElement("div");
+    card.className = "card";
+    
+    const badge = document.createElement("div");
+    badge.className = "badge-manga";
+    badge.textContent = currentLangType === "ja" ? "مانغا 🇯🇵" : "مانهو 🇰🇷";
+    card.appendChild(badge);
+
+    const img = document.createElement("img");
+    img.loading = "lazy";
+    img.src = coverURL(m);
+    img.onerror = () => {
+      img.onerror = null;
+      img.src = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400"><rect width="100%" height="100%" fill="#202938"/><text x="50%" y="50%" fill="white" font-size="25" text-anchor="middle">KATRO</text></svg>');
+    };
+
+    const info = document.createElement("div");
+    info.className = "info";
+    const h = document.createElement("h3");
+    h.textContent = titleOf(m);
+    const p = document.createElement("p");
+    p.textContent = "MangaDex API";
+
+    info.appendChild(h);
+    info.appendChild(p);
+    card.appendChild(img);
+    card.appendChild(info);
+    return card;
+  }
+
+  async function fetchManga(query = ""){
+    const results = document.getElementById("results");
+    const searchStatus = document.getElementById("searchStatus");
+    if(!results || !searchStatus) return;
+    
+    results.innerHTML = "";
+    searchStatus.textContent = "جاري جلب المحتوى من MangaDex...";
+    searchStatus.classList.remove("hidden");
+
+    try {
+      let url = `${API}/manga?limit=40&langType=${currentLangType}`;
+      if(query) url += `&q=${encodeURIComponent(query)}`;
+
+      const r = await fetch(url);
+      const data = await r.json();
+      searchStatus.classList.add("hidden");
+      
+      const list = data.data || [];
+      if(list.length === 0){
+        searchStatus.textContent = "لم يتم العثور على نتائج.";
+        searchStatus.classList.remove("hidden");
+        return;
+      }
+      
+      list.forEach(m => results.appendChild(createCard(m)));
+    } catch(e){
+      searchStatus.textContent = "تعذر الاتصال بالمصدر. تحقق من الإنترنت والـ Worker.";
+      searchStatus.classList.remove("hidden");
+    }
+  }
+
+  const searchInputElem = document.getElementById("search");
+  if(searchInputElem){
+    searchInputElem.addEventListener("input", (e) => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        fetchManga(e.target.value.trim());
+      }, 500);
+    });
+  }
+} catch(err) {
+  console.error("KATRO Init Error:", err);
+}
+</script>
+</body>
+</html>
