@@ -49,20 +49,20 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
       <a href="#" class="logo" onclick="backToHome()">KATRO<span>.</span></a>
       <ul class="nav-links">
         <li><a href="#" onclick="backToHome()">الرئيسية</a></li>
-        <li><a href="#" onclick="showTab('searchTab')">المانغا 📚</a></li>
-        <li><a href="#" onclick="showManhwaSection()">المانهو الكورية 🇰🇷</a></li>
+        <li><a href="#" onclick="showSection('ja')">المانغا اليابانية 🇯🇵</a></li>
+        <li><a href="#" onclick="showSection('ko')">المانهو الكورية 🇰🇷</a></li>
       </ul>
     </nav>
   </header>
 
   <main id="homeSection" class="hero">
     <div class="hero-content">
-      <span class="badge" style="display:inline-block;padding:8px 16px;border:1px solid #39304e;background:#171326;border-radius:50px;color:#c4aaff;font-size:12px;margin-bottom:20px">✦ عالم المانغا والمانهو بين يديك</span>
-      <h1>عالمك المفضل من المانغا والمانهو<br><span>يبدأ هنا.</span></h1>
-      <p>اكتشف آلاف عناوين المانغا والمانهو المترجمة للعربية بتجربة سريعة وتصميم مميز.</p>
+      <span class="badge" style="display:inline-block;padding:8px 16px;border:1px solid #39304e;background:#171326;border-radius:50px;color:#c4aaff;font-size:12px;margin-bottom:20px">✦ قاعدة بيانات ضخمة من MangaDex</span>
+      <h1>عالمك المفضل من المانغا والمانهو<br><span>بين يديك.</span></h1>
+      <p>اكتشف عشرات الآلاف من العناوين العالمية والمترجمة للعربية بسرعة فائقة.</p>
       <div style="display:flex;gap:15px;flex-wrap:wrap;">
-        <button onclick="showTab('searchTab')" style="padding:15px 30px;font-size:16px;font-weight:800;background:linear-gradient(135deg, #8751ff, #5734ce);">تصفح المانغا 📖</button>
-        <button onclick="showManhwaSection()" style="padding:15px 30px;font-size:16px;font-weight:800;background:linear-gradient(135deg, #28b8ff, #1a73e8);">تصفح المانهو 🇰🇷</button>
+        <button onclick="showSection('ja')" style="padding:15px 30px;font-size:16px;font-weight:800;background:linear-gradient(135deg, #8751ff, #5734ce);">تصفح المانغا 🇯🇵</button>
+        <button onclick="showSection('ko')" style="padding:15px 30px;font-size:16px;font-weight:800;background:linear-gradient(135deg, #28b8ff, #1a73e8);">تصفح المانهو 🇰🇷</button>
       </div>
     </div>
   </main>
@@ -70,26 +70,15 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
   <div class="container hidden" id="appContainer">
     <div class="tabs-app" style="display:flex;gap:10px;margin-bottom:20px;">
       <button class="secondary" onclick="backToHome()">🏠 الرئيسية</button>
-      <button onclick="showTab('searchTab')">📚 المانغا</button>
-      <button onclick="showManhwaSection()" style="background:#28b8ff;">🇰🇷 المانهو الكورية</button>
+      <button onclick="showSection('ja')">🇯🇵 المانغا اليابانية</button>
+      <button onclick="showSection('ko')" style="background:#28b8ff;">🇰🇷 المانهو الكورية</button>
     </div>
 
-    <!-- قسم المانغا (MangaDex) -->
-    <section id="searchTab">
-      <h2 style="font-size:22px;margin-bottom:15px;color:#c4aaff;">📚 قسم المانغا (MangaDex API)</h2>
-      <input id="search" placeholder="ابحث في المانغا (مثلاً: One Piece)..." autocomplete="off">
+    <section id="browseSection">
+      <h2 id="sectionTitle" style="font-size:22px;margin-bottom:15px;color:#c4aaff;">📚 أرشيف الأعمال</h2>
+      <input id="search" placeholder="ابحث عن اسم العمل..." autocomplete="off">
       <div id="results" class="grid"></div>
-      <div id="searchStatus" class="status">جاري تحميل المانغا...</div>
-    </section>
-
-    <!-- قسم المانهو (Comick API) -->
-    <section id="manhwaSectionTab" class="hidden">
-      <div style="margin-bottom:15px;">
-        <h2 style="font-size:22px;color:#28b8ff;">🎨 قسم المانهو الكورية (Comick API)</h2>
-      </div>
-      <input id="manhwaSearchInput" placeholder="ابحث في مانهو Comick (مثلاً: Solo Leveling)..." style="margin-bottom:15px;" autocomplete="off">
-      <div id="manhwaGridResults" class="grid"></div>
-      <div id="manhwaStatusBox" class="status">جاري تحميل المانهو...</div>
+      <div id="searchStatus" class="status">جاري التحميل...</div>
     </section>
   </div>
 
@@ -97,12 +86,13 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
     <div class="logo">KATRO<span>.</span></div>
     <p>© 2026 KATRO — تطوير: Katro 10k</p>
     <p style="font-size:11px;color:#777990;margin-top:5px;">
-      Powered by MangaDex API & Comick API. Content provided by respective platforms.
+      This product uses the MangaDex API but is not endorsed or certified by MangaDex. Powered by MangaDex API.
     </p>
   </footer>
 
 <script>
 const API = "https://katro-manga-api.mmmzzz126038.workers.dev";
+let currentLangType = "ja";
 let searchTimer;
 
 function backToHome(){
@@ -110,89 +100,15 @@ function backToHome(){
   document.getElementById("appContainer").classList.add("hidden");
 }
 
-function showTab(id){
+function showSection(langType){
+  currentLangType = langType;
   document.getElementById("homeSection").classList.add("hidden");
   document.getElementById("appContainer").classList.remove("hidden");
-  ["searchTab", "manhwaSectionTab"].forEach(x => {
-    document.getElementById(x).classList.add("hidden");
-  });
-  document.getElementById(id).classList.remove("hidden");
-  if(id === "searchTab" && document.getElementById("results").children.length === 0){
-    searchManga("");
-  }
-}
-
-function showManhwaSection() {
-  document.getElementById("homeSection").classList.add("hidden");
-  document.getElementById("appContainer").classList.remove("hidden");
-  ["searchTab", "manhwaSectionTab"].forEach(x => {
-    document.getElementById(x).classList.add("hidden");
-  });
-  document.getElementById("manhwaSectionTab").classList.remove("hidden");
-  fetchComickManhwa("");
-}
-
-document.getElementById("manhwaSearchInput").addEventListener("input", (e) => {
-  clearTimeout(window.manhwaTimer);
-  window.manhwaTimer = setTimeout(() => {
-    fetchComickManhwa(e.target.value.trim());
-  }, 500);
-});
-
-async function fetchComickManhwa(query) {
-  const grid = document.getElementById("manhwaGridResults");
-  const status = document.getElementById("manhwaStatusBox");
-  grid.innerHTML = "";
-  status.textContent = "جاري البحث في المانهو الكورية...";
-  status.classList.remove("hidden");
-
-  try {
-    const res = await fetch(API + "/comick-search?q=" + encodeURIComponent(query));
-    const json = await res.json();
-    const list = json.data || [];
-
-    status.classList.add("hidden");
-    if (list.length === 0) {
-      status.textContent = "لا توجد نتائج مطابقة.";
-      status.classList.remove("hidden");
-      return;
-    }
-
-    list.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "card";
-
-      const badge = document.createElement("div");
-      badge.className = "badge-manga";
-      badge.style.background = "#28b8ff";
-      badge.textContent = "مانهو 🇰🇷";
-      card.appendChild(badge);
-
-      const img = document.createElement("img");
-      img.loading = "lazy";
-      img.src = item.cover ? (API + "/proxy-cover?url=" + encodeURIComponent(item.cover)) : "";
-      img.onerror = () => {
-        img.onerror = null;
-        img.src = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400"><rect width="100%" height="100%" fill="#202938"/><text x="50%" y="50%" fill="white" font-size="20" text-anchor="middle">KATRO</text></svg>');
-      };
-
-      const info = document.createElement("div");
-      info.className = "info";
-      const h = document.createElement("h3");
-      h.textContent = item.title;
-      const p = document.createElement("p");
-      p.textContent = "Comick API";
-
-      info.appendChild(h);
-      info.appendChild(p);
-      card.appendChild(img);
-      card.appendChild(info);
-      grid.appendChild(card);
-    });
-  } catch (e) {
-    status.textContent = "تعذر الاتصال بالمصدر. تحقق من الإنترنت والـ Worker.";
-    status.classList.remove("hidden");
-  }
+  
+  const title = document.getElementById("sectionTitle");
+  title.textContent = langType === "ja" ? "📚 قسم المانغا اليابانية (MangaDex)" : "🎨 قسم المانهو الكورية (MangaDex)";
+  
+  fetchManga("");
 }
 
 function coverURL(m){
@@ -209,6 +125,12 @@ function titleOf(m){
 function createCard(m){
   const card = document.createElement("div");
   card.className = "card";
+  
+  const badge = document.createElement("div");
+  badge.className = "badge-manga";
+  badge.textContent = currentLangType === "ja" ? "مانغا 🇯🇵" : "مانهو 🇰🇷";
+  card.appendChild(badge);
+
   const img = document.createElement("img");
   img.loading = "lazy";
   img.src = coverURL(m);
@@ -216,12 +138,14 @@ function createCard(m){
     img.onerror = null;
     img.src = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400"><rect width="100%" height="100%" fill="#202938"/><text x="50%" y="50%" fill="white" font-size="25" text-anchor="middle">KATRO</text></svg>');
   };
+
   const info = document.createElement("div");
   info.className = "info";
   const h = document.createElement("h3");
   h.textContent = titleOf(m);
   const p = document.createElement("p");
   p.textContent = "MangaDex API";
+
   info.appendChild(h);
   info.appendChild(p);
   card.appendChild(img);
@@ -229,25 +153,28 @@ function createCard(m){
   return card;
 }
 
-async function searchManga(query = ""){
+async function fetchManga(query = ""){
   const results = document.getElementById("results");
   const searchStatus = document.getElementById("searchStatus");
   results.innerHTML = "";
-  searchStatus.textContent = "جاري البحث...";
+  searchStatus.textContent = "جاري جلب المحتوى من MangaDex...";
   searchStatus.classList.remove("hidden");
 
   try {
-    let url = API + "/manga?limit=40&includes[]=cover_art&contentRating[]=safe&contentRating[]=suggestive&order[followedCount]=desc";
-    if(query) url += "&title=" + encodeURIComponent(query);
+    let url = `${API}/manga?limit=40&langType=${currentLangType}`;
+    if(query) url += `&q=${encodeURIComponent(query)}`;
+
     const r = await fetch(url);
     const data = await r.json();
     searchStatus.classList.add("hidden");
-    const list = data.data || data.results || [];
+    
+    const list = data.data || [];
     if(list.length === 0){
       searchStatus.textContent = "لم يتم العثور على نتائج.";
       searchStatus.classList.remove("hidden");
       return;
     }
+    
     list.forEach(m => results.appendChild(createCard(m)));
   } catch(e){
     searchStatus.textContent = "تعذر الاتصال بالمصدر. تحقق من الإنترنت والـ Worker.";
@@ -258,7 +185,7 @@ async function searchManga(query = ""){
 document.getElementById("search").addEventListener("input", (e) => {
   clearTimeout(searchTimer);
   searchTimer = setTimeout(() => {
-    searchManga(e.target.value.trim());
+    fetchManga(e.target.value.trim());
   }, 500);
 });
 </script>
