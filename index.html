@@ -68,6 +68,7 @@ nav{
   color:#c4c5d5;
   font-size:14px;
   font-weight:700;
+  align-items:center;
 }
 .nav-links a{cursor:pointer;padding:6px 10px;border-radius:8px;transition:.2s}
 .nav-links a:hover, .nav-links a.active-nav{color:var(--white);background:#202938}
@@ -136,6 +137,50 @@ button:active{opacity:.75}
 .detailHeader{display:flex;gap:15px;align-items:flex-start}
 #moreSearch{width:100%;margin-top:20px}
 
+/* إعدادات المطور */
+.dev-card {
+  background: linear-gradient(135deg, #151d2a, #1c152e);
+  border: 1px solid #39304e;
+  border-radius: 16px;
+  padding: 25px;
+  text-align: center;
+  margin-top: 15px;
+}
+.dev-avatar {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+.dev-card h3 {
+  font-size: 20px;
+  color: #c4aaff;
+  margin-bottom: 8px;
+}
+.dev-card p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.social-btn {
+  background: #202938;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  border: 1px solid #263246;
+  transition: .3s;
+}
+.social-btn:hover {
+  background: var(--purple);
+  border-color: var(--purple);
+}
+
 footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777990;font-size:13px;margin-top:50px}
 
 @media(min-width:650px){
@@ -150,11 +195,11 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
   <!-- NAVBAR -->
   <header>
     <nav>
-      <a class="logo" onclick="selectCategory('manga')">KATRO<span>.</span></a>
+      <a class="logo" onclick="selectCategory('all')">KATRO<span>.</span></a>
       <ul class="nav-links">
-        <li><a id="navManga" class="active-nav" onclick="selectCategory('manga')">المانغا 🇯🇵</a></li>
-        <li><a id="navManhwa" onclick="selectCategory('manhwa')">المانهو 🇰🇷</a></li>
+        <li><a id="navHome" class="active-nav" onclick="selectCategory('all')">الرئيسية (الكل) 🌍</a></li>
         <li><a id="navDownloads" onclick="showTab('downloadsTab')">تحميلاتي 📥</a></li>
+        <li><a id="navSettings" onclick="showTab('settingsTab')">الإعدادات ⚙️</a></li>
       </ul>
     </nav>
   </header>
@@ -162,20 +207,20 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
   <!-- APP CONTAINER -->
   <div class="container" id="appContainer">
 
-    <!-- BROWSE TAB (المانغا في الرئيسية افتراضياً) -->
+    <!-- BROWSE TAB (المانغا والمانهو معاً في الرئيسية) -->
     <section id="searchTab">
       <div class="sectionHeader">
-        <h2 id="categoryTitle">📚 المانغا اليابانية (الرئيسية)</h2>
-        <span id="categoryBadge">Manga</span>
+        <h2 id="categoryTitle">🌍 أحدث المانغا والمانهو</h2>
+        <span id="categoryBadge">All Works</span>
       </div>
 
-      <input id="search" placeholder="ابحث بالعربية أو الإنجليزية (مثلاً: ون بيس، Naruto)..." autocomplete="off">
+      <input id="search" placeholder="ابحث بالعربية أو الإنجليزية (مثلاً: ون بيس، Solo Leveling)..." autocomplete="off">
       
       <div class="filterRow">
         <select id="searchTypeFilter" onchange="onTypeFilterChange()">
+          <option value="all">النوع: الكل (مانغا + مانهو) 🌍</option>
           <option value="manga">النوع: المانغا اليابانية فقط 🇯🇵</option>
           <option value="manhwa">النوع: المانهو الكورية فقط 🇰🇷</option>
-          <option value="all">النوع: الكل (مانغا + مانهو) 🌍</option>
         </select>
 
         <select id="searchLangFilter" onchange="searchManga(true)">
@@ -185,7 +230,7 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
       </div>
 
       <div id="results" class="grid"></div>
-      <div id="searchStatus" class="status">جاري تحميل المانغا...</div>
+      <div id="searchStatus" class="status">جاري تحميل المحتوى...</div>
       <button id="moreSearch" class="hidden" onclick="loadMoreSearch()">تحميل المزيد</button>
     </section>
 
@@ -193,6 +238,30 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
     <section id="downloadsTab" class="hidden">
       <h3 style="margin-bottom:15px;">📥 تحميلاتي (محفوظة داخل التطبيق)</h3>
       <div id="downloadsList"></div>
+    </section>
+
+    <!-- SETTINGS & DEV CONTACT TAB -->
+    <section id="settingsTab" class="hidden">
+      <div class="sectionHeader">
+        <h2>⚙️ إعدادات وتواصل المطور</h2>
+        <span>Settings</span>
+      </div>
+
+      <div class="dev-card">
+        <div class="dev-avatar">👑</div>
+        <h3>Katro 10k</h3>
+        <p>تطبيق KATRO لعالم المانغا والمانهو — تم تصميمه بعناية فائقة لتجربة قراءة سريعة، مريحة، وبدون إعلانات مزعجة.</p>
+        
+        <div style="margin-bottom: 15px; font-size: 13px; color: #c4aaff;">
+          للتواصل، الإبلاغ عن مشكلة، أو طلبات التطوير:
+        </div>
+
+        <div class="social-links">
+          <a href="https://t.me/" target="_blank" class="social-btn">Telegram ✈️</a>
+          <a href="https://github.com/" target="_blank" class="social-btn">GitHub 💻</a>
+          <a href="mailto:support@katro.app" class="social-btn">البريد الإلكتروني ✉️</a>
+        </div>
+      </div>
     </section>
 
     <!-- DETAIL TAB -->
@@ -237,8 +306,8 @@ footer{padding:30px 7%;border-top:1px solid #1b1d2b;text-align:center;color:#777
 
   <!-- FOOTER -->
   <footer>
-    <div class="logo" onclick="selectCategory('manga')">KATRO<span style="color:#8855ff">.</span></div>
-    <p>© 2026 KATRO — جميع الحقوق محفوظة</p>
+    <div class="logo" onclick="selectCategory('all')">KATRO<span style="color:#8855ff">.</span></div>
+    <p>© 2026 KATRO — تطوير: Katro 10k — جميع الحقوق محفوظة</p>
   </footer>
 
 <script>
@@ -284,10 +353,14 @@ pt:"البرتغالية", ru:"الروسية", ja:"اليابانية", ko:"ا�
 };
 
 function updateNavUI(activeId){
-["navManga","navManhwa","navDownloads"].forEach(id=>{
-document.getElementById(id).classList.remove("active-nav");
+["navHome","navDownloads","navSettings"].forEach(id=>{
+const el = document.getElementById(id);
+if(el) el.classList.remove("active-nav");
 });
-if(activeId) document.getElementById(activeId).classList.add("active-nav");
+if(activeId) {
+const activeEl = document.getElementById(activeId);
+if(activeEl) activeEl.classList.add("active-nav");
+}
 }
 
 function updateCategoryHeader(type){
@@ -296,20 +369,19 @@ const badgeEl = document.getElementById("categoryBadge");
 const searchInput = document.getElementById("search");
 
 if(type === "manga"){
-titleEl.textContent = "📚 المانغا اليابانية (الرئيسية)";
+titleEl.textContent = "📚 المانغا اليابانية";
 badgeEl.textContent = "Manga 🇯🇵";
 searchInput.placeholder = "ابحث في المانغا (مثلاً: ون بيس، Naruto)...";
-updateNavUI("navManga");
 } else if(type === "manhwa"){
 titleEl.textContent = "🎨 المانهو الكورية";
 badgeEl.textContent = "Manhwa 🇰🇷";
 searchInput.placeholder = "ابحث في المانهو (مثلاً: سولو ليفلينج، Solo Leveling)...";
-updateNavUI("navManhwa");
 } else {
-titleEl.textContent = "🌍 جميع الأعمال (مانغا ومانهو)";
+titleEl.textContent = "🌍 أحدث المانغا والمانهو";
 badgeEl.textContent = "All Works";
-updateNavUI("navManga");
+searchInput.placeholder = "ابحث بالعربية أو الإنجليزية (مثلاً: ون بيس، Solo Leveling)...";
 }
+updateNavUI("navHome");
 }
 
 function selectCategory(type){
@@ -326,14 +398,18 @@ searchManga(true);
 }
 
 function showTab(id, autoFetch=true){
-["searchTab","downloadsTab","detailTab"].forEach(x=>{
-document.getElementById(x).classList.add("hidden");
+["searchTab","downloadsTab","settingsTab","detailTab"].forEach(x=>{
+const el = document.getElementById(x);
+if(el) el.classList.add("hidden");
 });
-document.getElementById(id).classList.remove("hidden");
+const target = document.getElementById(id);
+if(target) target.classList.remove("hidden");
 
 if(id==="downloadsTab"){
 updateNavUI("navDownloads");
 loadDownloads();
+} else if(id==="settingsTab"){
+updateNavUI("navSettings");
 } else if(id==="searchTab"){
 const type = document.getElementById("searchTypeFilter").value;
 updateCategoryHeader(type);
@@ -979,8 +1055,8 @@ box.appendChild(img);
 });
 }
 
-// التشغيل التلقائي لقائمة المانغا اليابانية كواجهة رئيسية
-selectCategory('manga');
+// التشغيل التلقائي لعرض الكل (مانغا + مانهو) في الواجهة الرئيسية
+selectCategory('all');
 </script>
 </body>
-        </html>
+  </html>
