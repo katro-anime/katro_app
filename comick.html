@@ -1,56 +1,237 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#080912"><title>KATRO | Comick</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080912">
+<title>KATRO | Comick</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;background:#080912;color:#fff;font-family:Arial,Tahoma,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:#080912;color:#fff;font-family:Arial,Tahoma,sans-serif}
 header{position:sticky;top:0;background:#111827ee;border-bottom:1px solid #263246;padding:14px 5%;z-index:5}
-nav{display:flex;justify-content:space-between;align-items:center;gap:10px}.logo{font-size:22px;font-weight:900}.logo span{color:#8855ff}
-main{padding:22px 5%;max-width:1200px;margin:auto}h1{font-size:21px;margin:4px 0 14px}
-input,button{font:inherit;border:0;border-radius:10px;padding:12px}input{width:100%;background:#202938;color:#fff}button{background:#8855ff;color:white;font-weight:700;cursor:pointer}
+nav{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.logo{font-size:22px;font-weight:900}
+.logo span{color:#8855ff}
+main{padding:22px 5%;max-width:1200px;margin:auto}
+h1{font-size:21px;margin:4px 0 14px}
+input,button{font:inherit;border:0;border-radius:10px;padding:12px}
+input{width:100%;background:#202938;color:#fff}
+button{background:#8855ff;color:white;font-weight:700;cursor:pointer}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
 .card{background:#151d2a;border:1px solid #263246;border-radius:13px;overflow:hidden;display:flex;flex-direction:column}
-.card img{width:100%;height:220px;object-fit:cover;background:#202938}.info{padding:11px;display:flex;flex-direction:column;gap:8px;flex:1}
-.info h3{font-size:14px;line-height:1.5;margin:0}.info p{font-size:12px;color:#aab3c4;margin:0;line-height:1.5}
-.info button{margin-top:auto}.status{padding:18px;text-align:center;color:#aab3c4;background:#151d2a;border-radius:10px;margin-top:15px}
-@media(min-width:650px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.card img{height:300px}}
-</style></head>
+.card img{width:100%;height:220px;object-fit:cover;background:#202938}
+.info{padding:11px;display:flex;flex-direction:column;gap:8px;flex:1}
+.info h3{font-size:14px;line-height:1.5;margin:0}
+.info p{font-size:12px;color:#aab3c4;margin:0;line-height:1.5}
+.info button{margin-top:auto}
+.status{padding:18px;text-align:center;color:#aab3c4;background:#151d2a;border-radius:10px;margin-top:15px;line-height:1.7}
+@media(min-width:650px){
+.grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card img{height:300px}
+}
+</style>
+</head>
 <body>
-<header><nav><div class="logo">KATRO<span>.</span></div><a href="./index.html" style="color:#bbb">عودة للتطبيق ↩</a></nav></header>
+<header>
+<nav>
+<div class="logo">KATRO<span>.</span></div>
+<a href="./index.html" style="color:#bbb">عودة للتطبيق ↩</a>
+</nav>
+</header>
+
 <main>
 <h1>📚 Comick — مانغا ومانهو</h1>
-<p style="color:#aab3c4;font-size:13px;line-height:1.7;margin:0 0 12px">ابحث في كتالوج Comick. فتح العمل يذهب إلى صفحة Comick الرسمية لقراءة الفصول.</p>
-<form id="searchForm"><input id="query" placeholder="ابحث بالإنجليزية عن العمل..." autocomplete="off"></form>
-<div id="results" class="grid"></div><div id="status" class="status">اكتب اسم العمل للبحث.</div>
+<p style="color:#aab3c4;font-size:13px;line-height:1.7;margin:0 0 12px">
+ابحث في كتالوج Comick. فتح العمل يذهب إلى صفحة Comick الرسمية لقراءة الفصول.
+</p>
+
+<form id="searchForm">
+<input id="query" placeholder="ابحث بالإنجليزية عن العمل..." autocomplete="off">
+</form>
+
+<div id="results" class="grid"></div>
+<div id="status" class="status">اكتب اسم العمل للبحث.</div>
 </main>
+
 <script>
 const API="https://katro-manga-api.mmmzzz126038.workers.dev";
-const results=document.getElementById("results"),status=document.getElementById("status"),query=document.getElementById("query");
+
+const results=document.getElementById("results");
+const status=document.getElementById("status");
+const query=document.getElementById("query");
+
 let timer;
-function safeText(v){return String(v||"").trim()}
-function showStatus(t){status.textContent=t;status.style.display="block"}
-function card(item){
- const el=document.createElement("article");el.className="card";
- const img=document.createElement("img");img.loading="lazy";img.alt=safeText(item.title)||"Comick";
- img.src=item.cover||item.thumbnail||"";
- img.onerror=()=>{img.onerror=null;img.src="data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400"><rect width="100%" height="100%" fill="#202938"/><text x="50%" y="50%" fill="white" font-size="28" text-anchor="middle">KATRO</text></svg>')};
- const info=document.createElement("div");info.className="info";
- const h=document.createElement("h3");h.textContent=safeText(item.title)||"بدون عنوان";
- const p=document.createElement("p");p.textContent=safeText(item.desc||item.description).slice(0,220)||"معلومات غير متوفرة";
- const b=document.createElement("button");b.textContent="فتح في Comick";
- b.onclick=()=>{const target=item.url||("https://comick.dev/comic/"+encodeURIComponent(item.slug||item.hid||item.id||""));window.open(target,"_blank","noopener")};
- info.append(h,p,b);el.append(img,info);return el;
+let controller;
+
+function safeText(v){
+  return String(v||"").trim();
 }
+
+function showStatus(text){
+  status.textContent=text;
+  status.style.display="block";
+}
+
+function getTitle(item){
+  return safeText(item.title || item.name || item.slug) || "بدون عنوان";
+}
+
+function getCover(item){
+  return item.cover ||
+    item.thumbnail ||
+    item.cover_url ||
+    item.poster ||
+    item.comic?.cover ||
+    item.comic?.cover_url ||
+    "";
+}
+
+function getSlug(item){
+  return item.slug ||
+    item.hid ||
+    item.id ||
+    item.comic?.slug ||
+    item.comic?.hid ||
+    "";
+}
+
+function getDescription(item){
+  return safeText(item.desc || item.description || item.synopsis)
+    .slice(0,220);
+}
+
+function getComickURL(item){
+  if(item.url && /^https?:\/\//i.test(item.url)){
+    return item.url;
+  }
+
+  const slug=getSlug(item);
+  return slug
+    ? "https://comick.io/comic/"+encodeURIComponent(slug)
+    : "https://comick.io";
+}
+
+function placeholder(){
+  return "data:image/svg+xml,"+encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400">'+
+    '<rect width="100%" height="100%" fill="#202938"/>'+
+    '<text x="50%" y="50%" fill="white" font-size="28" text-anchor="middle">KATRO</text>'+
+    '</svg>'
+  );
+}
+
+function createCard(item){
+  const el=document.createElement("article");
+  el.className="card";
+
+  const img=document.createElement("img");
+  img.loading="lazy";
+  img.alt=getTitle(item);
+  img.src=getCover(item) || placeholder();
+
+  img.onerror=()=>{
+    img.onerror=null;
+    img.src=placeholder();
+  };
+
+  const info=document.createElement("div");
+  info.className="info";
+
+  const h=document.createElement("h3");
+  h.textContent=getTitle(item);
+
+  const p=document.createElement("p");
+  p.textContent=getDescription(item) || "Comick";
+
+  const b=document.createElement("button");
+  b.textContent="فتح في Comick";
+  b.onclick=()=>{
+    window.open(getComickURL(item),"_blank","noopener,noreferrer");
+  };
+
+  info.append(h,p,b);
+  el.append(img,info);
+
+  return el;
+}
+
 async function search(){
- const q=query.value.trim();results.innerHTML="";if(!q){showStatus("اكتب اسم العمل للبحث.");return}showStatus("جاري البحث...");
- try{
-  const res=await fetch(API+"/comick-search?q="+encodeURIComponent(q)+"&page=1");if(!res.ok)throw Error("HTTP "+res.status);
-  const json=await res.json();const items=Array.isArray(json)?json:(json.data||json.results||[]);
-  if(!items.length){showStatus("لم تظهر نتائج. جرّب الاسم الإنجليزي أو تحقق من اتصال Worker.");return}
-  items.forEach(x=>results.appendChild(card(x)));status.style.display="none";
- }catch(e){showStatus("تعذر البحث في Comick. قد تكون خدمة البحث أو Worker غير متاح حاليًا.")}
+  const q=query.value.trim();
+  results.innerHTML="";
+
+  if(!q){
+    showStatus("اكتب اسم العمل للبحث.");
+    return;
+  }
+
+  if(controller){
+    controller.abort();
+  }
+
+  controller=new AbortController();
+  showStatus("جاري البحث في Comick...");
+
+  try{
+    const url=API+"/comick/search?q="+encodeURIComponent(q)+"&limit=30";
+
+    const res=await fetch(url,{
+      signal:controller.signal,
+      headers:{Accept:"application/json"}
+    });
+
+    const raw=await res.text();
+    let json;
+
+    try{
+      json=JSON.parse(raw);
+    }catch{
+      throw new Error("استجابة الخادم ليست JSON صالحًا");
+    }
+
+    if(!res.ok){
+      throw new Error(json.details || json.error || "HTTP "+res.status);
+    }
+
+    const items=Array.isArray(json)
+      ? json
+      : Array.isArray(json.results)
+        ? json.results
+        : Array.isArray(json.data)
+          ? json.data
+          : [];
+
+    if(!items.length){
+      showStatus(json.error || "لم تظهر نتائج. جرّب الاسم الإنجليزي.");
+      return;
+    }
+
+    const fragment=document.createDocumentFragment();
+
+    items.forEach(item=>{
+      fragment.appendChild(createCard(item));
+    });
+
+    results.appendChild(fragment);
+    status.style.display="none";
+
+  }catch(e){
+    if(e.name==="AbortError")return;
+
+    showStatus("تعذر البحث: "+(e.message||"تحقق من اتصال Worker."));
+  }
 }
-document.getElementById("searchForm").addEventListener("submit",e=>{e.preventDefault();search()});
-query.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(search,450)});
-</script></body></html>
+
+document.getElementById("searchForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  search();
+});
+
+query.addEventListener("input",()=>{
+  clearTimeout(timer);
+  timer=setTimeout(search,450);
+});
+</script>
+</body>
+</html>
