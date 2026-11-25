@@ -8,7 +8,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#ffffff;--card:rgba(255, 255, 255, 0.88);--text:#111827;--purple:#8b5cf6;--blue:#28b8ff;--muted:#6b7280;--green:#10b981;--red:#ef4444;--border:#e5e7eb;}
+:root{--bg:#ffffff;--card:rgba(255, 255, 255, 0.9);--text:#111827;--purple:#8b5cf6;--blue:#28b8ff;--muted:#6b7280;--green:#10b981;--red:#ef4444;--border:#e5e7eb;}
 body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;position:relative;min-height:100vh;}
 
 .bg-backdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;opacity:0.12;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding:20px;pointer-events:none;transform:rotate(-5deg) scale(1.2);}
@@ -36,8 +36,7 @@ button:active{opacity:.8}
 .badge{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.75);color:white;backdrop-filter:blur(5px);padding:4px 8px;border-radius:6px;font-size:10px;font-weight:bold}
 #status{text-align:center;padding:20px;color:var(--muted);font-size:14px}
 
-/* واجهات التنقل المستقلة (الرئيسية، الفصول، تحميلاتي، إلخ) */
-#chaptersContainer, #downloadsView, #favoritesView, #historyView { display: none; padding: 20px 5%; }
+#chaptersContainer, #downloadsView { display: none; padding: 20px 5%; }
 
 .chapter{background:var(--card);backdrop-filter:blur(8px);padding:14px;margin:8px 0;border-radius:10px;display:flex;flex-direction:column;gap:10px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,0.02);}
 .chapter-info{display:flex;justify-content:space-between;align-items:center}
@@ -46,18 +45,16 @@ button:active{opacity:.8}
 .btn-offline{background:var(--green)}
 .btn-pdf{background:var(--blue)}
 
-/* شريط التقدم المستقل لواجهة التحميلات */
 .download-progress-box{background:#f9fafb;border:1px solid var(--border);padding:15px;border-radius:12px;margin-bottom:20px;}
 .progress-bar-container{width:100%;height:10px;background:#e5e7eb;border-radius:5px;overflow:hidden;margin-top:8px;}
 .progress-bar-fill{height:100%;width:0%;background:var(--green);transition:width 0.2s ease;}
 
-/* قارئ الصور */
-#reader{position:fixed;inset:0;background:#050505;overflow:auto;z-index:200;display:none}
-#readerPages{max-width:800px;margin:0 auto}
-#readerPages img{display:block;width:100%;height:auto;background:#111}
-#readerHeader{position:sticky;top:0;background:#111827;padding:12px 20px;display:flex;justify-content:space-between;z-index:2;align-items:center;border-bottom:1px solid #202638}
+/* قارئ الفصول بتصميم متناسق ونقي */
+#reader{position:fixed;inset:0;background:#ffffff;overflow:auto;z-index:200;display:none}
+#readerPages{max-width:800px;margin:0 auto;padding-bottom:50px;}
+#readerPages img{display:block;width:100%;height:auto;background:#f3f4f6}
+#readerHeader{position:sticky;top:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);padding:12px 20px;display:flex;justify-content:space-between;z-index:2;align-items:center;border-bottom:1px solid var(--border)}
 
-/* النوافذ العادية للبقية */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(5px);z-index:400;display:none;justify-content:center;align-items:center;padding:20px}
 .modal-content{background:#ffffff;width:100%;max-width:550px;border-radius:16px;padding:25px;border:1px solid var(--border);max-height:85vh;overflow-y:auto;box-shadow:0 20px 40px rgba(0,0,0,0.15);}
 .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:10px}
@@ -82,7 +79,7 @@ footer{padding:30px 5%;border-top:1px solid var(--border);text-align:center;colo
   </div>
 </header>
 
-<!-- 1. واجهة الرئيسية -->
+<!-- واجهة الرئيسية -->
 <div class="container" id="mainView">
   <div class="hero-search">
     <div class="tabs">
@@ -100,7 +97,7 @@ footer{padding:30px 5%;border-top:1px solid var(--border);text-align:center;colo
   <div id="results" class="grid"></div>
 </div>
 
-<!-- 2. واجهة فصول العمل -->
+<!-- واجهة فصول العمل -->
 <div id="chaptersContainer">
   <button onclick="switchView('main')" style="margin-bottom:15px;background:#f3f4f6;color:var(--text);border:1px solid var(--border);">⬅ العودة للرئيسية</button>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:10px;">
@@ -117,12 +114,11 @@ footer{padding:30px 5%;border-top:1px solid var(--border);text-align:center;colo
   <div id="chaptersList"></div>
 </div>
 
-<!-- 3. واجهة "تحميلاتي" المستقلة بالكامل (وليست منبثقة) -->
+<!-- واجهة تحميلاتي المستقلة -->
 <div id="downloadsView">
   <button onclick="switchView('main')" style="margin-bottom:15px;background:#f3f4f6;color:var(--text);border:1px solid var(--border);">⬅ العودة للرئيسية</button>
   <h2 style="font-size:22px;margin-bottom:20px;color:var(--text);">📥 واجهة إدارة تحميلاتي</h2>
 
-  <!-- شريط التقدم المستقل من 1% إلى 100% -->
   <div id="downloadProgressWrapper" class="download-progress-box" style="display:none;">
     <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:bold;color:var(--text);">
       <span id="activeDownloadTitle">جاري التحميل...</span>
@@ -134,7 +130,6 @@ footer{padding:30px 5%;border-top:1px solid var(--border);text-align:center;colo
   </div>
 
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
-    <!-- قسم أوفلاين -->
     <div style="background:var(--card);border:1px solid var(--border);padding:20px;border-radius:16px;">
       <h3 style="font-size:16px;color:var(--purple);margin-bottom:15px;border-bottom:2px solid var(--purple);padding-bottom:8px;">📱 فصول أوفلاين (داخل التطبيق)</h3>
       <div id="offlineDownloadsList" style="display:flex;flex-direction:column;gap:10px;">
@@ -142,7 +137,6 @@ footer{padding:30px 5%;border-top:1px solid var(--border);text-align:center;colo
       </div>
     </div>
 
-    <!-- قسم PDF -->
     <div style="background:var(--card);border:1px solid var(--border);padding:20px;border-radius:16px;">
       <h3 style="font-size:16px;color:var(--blue);margin-bottom:15px;border-bottom:2px solid var(--blue);padding-bottom:8px;">📄 ملفات PDF (على الجهاز)</h3>
       <div id="pdfDownloadsList" style="display:flex;flex-direction:column;gap:10px;">
@@ -152,7 +146,7 @@ footer{padding:30px 5%;border-top:1px solid var(--border);text-align:center;colo
   </div>
 </div>
 
-<!-- نافذة المفضلة -->
+<!-- المفضلة -->
 <div id="favoritesModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -163,7 +157,7 @@ footer{padding:30px 5%;border-top:1px solid var(--border);text-align:center;colo
   </div>
 </div>
 
-<!-- نافذة السجل -->
+<!-- السجل -->
 <div id="historyModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -174,7 +168,7 @@ footer{padding:30px 5%;border-top:1px solid var(--border);text-align:center;colo
   </div>
 </div>
 
-<!-- نافذة الإعدادات -->
+<!-- الإعدادات -->
 <div id="settingsModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -188,7 +182,7 @@ footer{padding:30px 5%;border-top:1px solid var(--border);text-align:center;colo
       </div>
       <div style="background:#f3f4f6;padding:15px;border-radius:10px;">
         <strong style="color:var(--text);display:block;margin-bottom:5px;">إصدار التطبيق:</strong>
-        <span>KATRO Manga v6.0 (Independent Downloads)</span>
+        <span>KATRO Manga v7.0 (Fixed High-Speed Reader)</span>
       </div>
       <div style="background:#f3f4f6;padding:15px;border-radius:10px;">
         <strong style="color:var(--text);display:block;margin-bottom:5px;">حقوق المصدر:</strong>
@@ -202,7 +196,7 @@ footer{padding:30px 5%;border-top:1px solid var(--border);text-align:center;colo
 <div id="reader">
   <div id="readerHeader">
     <button onclick="closeReader()" style="background:var(--red);padding:8px 16px;">إغلاق</button>
-    <span id="readerTitle" style="font-weight:bold;font-size:14px;color:white;"></span>
+    <span id="readerTitle" style="font-weight:bold;font-size:14px;color:var(--text);"></span>
   </div>
   <div id="readerPages"></div>
 </div>
@@ -392,14 +386,20 @@ async function openManga(m) {
 
   switchView('chapters');
   $("mangaTitleHeader").textContent = getTitle(m);
-  $("chaptersList").innerHTML = "<div style='text-align:center;color:#6b7280;'>جاري جلب الفصول وترتيبها...</div>";
+  $("chaptersList").innerHTML = "<div style='text-align:center;color:#6b7280;'>جاري جلب الفصول وترتيبها بدقة...</div>";
 
   try {
     const res = await fetch(`${API}/manga/${m.id}/feed`);
     if (!res.ok) throw new Error();
     const data = await res.json();
     
-    allLoadedChapters = data.data || [];
+    // ترتيب الفصول رقمياً وتصاعدياً بشكل صحيح (من 1 إلى النهاية)
+    allLoadedChapters = (data.data || []).sort((a, b) => {
+      let numA = parseFloat(a.attributes?.chapter) || 0;
+      let numB = parseFloat(b.attributes?.chapter) || 0;
+      return numA - numB;
+    });
+
     renderChaptersList(allLoadedChapters);
   } catch (err) {
     $("chaptersList").innerHTML = "<div style='text-align:center;color:var(--red);'>تعذر تحميل الفصول.</div>";
@@ -446,7 +446,7 @@ function renderChaptersList(chapters) {
 
 function filterChaptersByLang() { renderChaptersList(allLoadedChapters); }
 
-const dbPromise = indexedDB.open("KatroMangaDB", 4);
+const dbPromise = indexedDB.open("KatroMangaDB", 5);
 dbPromise.onupgradeneeded = e => {
   const db = e.target.result;
   if(!db.objectStoreNames.contains("chapters")) db.createObjectStore("chapters", { keyPath: "id" });
@@ -535,7 +535,7 @@ async function renderDownloadsManager() {
   }
 }
 
-// دالة التحميل أوفلاين مع شريط تقدم مستقل من 1% إلى 100%
+// دالة التحميل أوفلاين بقوة اتصال عالية وتحديث حقيقي للواجهة
 async function downloadOffline(chapterId, chapterNum) {
   switchView('downloads');
   setDownloadProgress(1, `جاري بدء تحميل الفصل ${chapterNum}...`);
@@ -543,7 +543,7 @@ async function downloadOffline(chapterId, chapterNum) {
     const res = await fetch(`${API}/at-home/server/${chapterId}`);
     if(!res.ok) throw new Error();
     const data = await res.json();
-    setDownloadProgress(20, `جاري معالجة صفحات الفصل ${chapterNum}...`);
+    setDownloadProgress(20, `جاري جلب صفحات الفصل ${chapterNum}...`);
 
     const baseUrl = data.baseUrl;
     const hash = data.chapter?.hash;
@@ -564,7 +564,7 @@ async function downloadOffline(chapterId, chapterNum) {
   }
 }
 
-// دالة تحميل PDF مع عداد مستقل من 1% إلى 100%
+// دالة تصدير PDF مع عداد حقيقي وقوة اتصال قصوى
 async function downloadPDF(chapterId, chapterNum) {
   switchView('downloads');
   setDownloadProgress(1, `بدء تجهيز ملف PDF للفصل ${chapterNum}...`);
@@ -608,7 +608,7 @@ async function downloadPDF(chapterId, chapterNum) {
 async function readChapter(chapterId, chapterNum) {
   const token = ++chapterToken;
   $("reader").style.display = "block";
-  $("readerPages").innerHTML = "<div style='text-align:center;padding:50px;color:#9ca3af;'>جاري جلب صفحات الفصل...</div>";
+  $("readerPages").innerHTML = "<div style='text-align:center;padding:50px;color:#6b7280;'>جاري جلب وعرض صفحات الفصل...</div>";
   $("readerTitle").textContent = `الفصل ${chapterNum}`;
 
   try {
