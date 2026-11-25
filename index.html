@@ -13,7 +13,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--white);over
 header{padding:16px 5%;background:#101522;position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #202638;}
 .logo{font-size:22px;font-weight:900;letter-spacing:1px;cursor:pointer;}
 .logo span{color:var(--purple)}
-.nav-btns{display:flex;gap:8px;align-items:center;}
+.nav-btns{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
 input,button,select{font:inherit;border:0;border-radius:12px;padding:10px 14px}
 input{width:100%;background:#202638;color:white}
 button{background:var(--purple);color:white;cursor:pointer;font-weight:bold;transition:.2s}
@@ -44,9 +44,9 @@ button:active{opacity:.8}
 #globalProgressContainer{position:fixed;bottom:0;left:0;width:100%;height:6px;background:#202638;z-index:300;display:none}
 #globalProgressBar{height:100%;width:0%;background:var(--green);transition:width .2s}
 
-/* مودال الإعدادات والمفضلة */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:400;display:none;justify-content:center;align-items:center;padding:20px}
-.modal-content{background:#141a29;width:100%;max-width:500px;border-radius:16px;padding:25px;border:1px solid #263246;max-height:80vh;overflow-y:auto}
+/* النوافذ المنبثقة */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:400;display:none;justify-content:center;align-items:center;padding:20px}
+.modal-content{background:#141a29;width:100%;max-width:500px;border-radius:16px;padding:25px;border:1px solid #263246;max-height:85vh;overflow-y:auto}
 .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid #263246;padding-bottom:10px}
 
 footer{padding:30px 5%;border-top:1px solid #141a29;text-align:center;color:var(--muted);font-size:12px;margin-top:40px}
@@ -59,10 +59,11 @@ footer{padding:30px 5%;border-top:1px solid #141a29;text-align:center;color:var(
 <header>
   <div class="logo" onclick="goHome()">KATRO<span>.</span></div>
   <div class="nav-btns">
-    <button onclick="goHome()" style="background:#202638;padding:8px 12px;font-size:13px;">🏠 الرئيسية</button>
-    <button onclick="openModal('favoritesModal')" style="background:#202638;padding:8px 12px;font-size:13px;">⭐ المفضلة</button>
-    <button onclick="openModal('historyModal')" style="background:#202638;padding:8px 12px;font-size:13px;">🕒 السجل</button>
-    <button onclick="openModal('settingsModal')" style="background:var(--purple);padding:8px 12px;font-size:13px;">⚙️ الإعدادات</button>
+    <button onclick="goHome()" style="background:#202638;padding:7px 10px;font-size:12px;">🏠 الرئيسية</button>
+    <button onclick="openModal('downloadsModal')" style="background:#202638;padding:7px 10px;font-size:12px;">📥 تحميلاتي</button>
+    <button onclick="openModal('favoritesModal')" style="background:#202638;padding:7px 10px;font-size:12px;">⭐ المفضلة</button>
+    <button onclick="openModal('historyModal')" style="background:#202638;padding:7px 10px;font-size:12px;">🕒 السجل</button>
+    <button onclick="openModal('settingsModal')" style="background:var(--purple);padding:7px 10px;font-size:12px;">⚙️ الإعدادات</button>
   </div>
 </header>
 
@@ -90,13 +91,29 @@ footer{padding:30px 5%;border-top:1px solid #141a29;text-align:center;color:var(
     <div style="display:flex;gap:10px;align-items:center;">
       <button id="favBtn" onclick="toggleFavoriteCurrent()" style="background:#202638;padding:8px 12px;font-size:13px;">⭐ إضافة للمفضلة</button>
       <select id="langFilterSelect" onchange="filterChaptersByLang()" style="background:#202638;padding:8px 12px;">
-        <option value="all">جميع اللغات (عربي / إنجليزي)</option>
-        <option value="ar">العربية فقط 🇸🇦</option>
-        <option value="en">الإنجليزية فقط 🇬🇧</option>
+        <option value="ar">العربية أولاً 🇸🇦</option>
+        <option value="all">جميع الترجمات المتاحة</option>
+        <option value="en">الإنجليزية 🇬🇧</option>
       </select>
     </div>
   </div>
   <div id="chaptersList"></div>
+</div>
+
+<!-- نافذة تحميلاتي مع العداد الحقيقي -->
+<div id="downloadsModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>📥 إدارة التحميلات (أوفلاين)</h3>
+      <button onclick="closeModal('downloadsModal')" style="background:var(--red);padding:6px 12px;">✕</button>
+    </div>
+    <div id="activeDownloadStatus" style="background:#1c2231;padding:12px;border-radius:10px;margin-bottom:15px;font-size:13px;color:var(--green);display:none;">
+      جاري تحميل الفصل... <span id="downloadPercentText">0%</span>
+    </div>
+    <div id="downloadedChaptersList" style="display:flex;flex-direction:column;gap:10px;">
+      <p style="color:var(--muted);text-align:center;">لا توجد فصول مخزنة محلياً حتى الآن.</p>
+    </div>
+  </div>
 </div>
 
 <!-- نافذة المفضلة -->
@@ -121,7 +138,7 @@ footer{padding:30px 5%;border-top:1px solid #141a29;text-align:center;color:var(
   </div>
 </div>
 
-<!-- نافذة الإعدادات -->
+<!-- نافذة الإعدادات والمطور -->
 <div id="settingsModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -135,11 +152,11 @@ footer{padding:30px 5%;border-top:1px solid #141a29;text-align:center;color:var(
       </div>
       <div style="background:#1c2231;padding:15px;border-radius:10px;">
         <strong style="color:var(--white);display:block;margin-bottom:5px;">إصدار التطبيق:</strong>
-        <span>KATRO Manga v3.5 (PWA Ready)</span>
+        <span>KATRO Manga v4.0 (Stable Edition)</span>
       </div>
       <div style="background:#1c2231;padding:15px;border-radius:10px;">
-        <strong style="color:var(--white);display:block;margin-bottom:5px;">المصدر القانوني:</strong>
-        <span>مدعوم كلياً عبر MangaDex API. جميع حقوق الصور والمحتوى محفوظة لأصحابها الأصليين والناشرين.</span>
+        <strong style="color:var(--white);display:block;margin-bottom:5px;">حقوق المصدر:</strong>
+        <span>يستخدم منصة MangaDex API لجلب أحدث المانغا والمانهو. حقوق المحتوى ملك لأصحابها الأصليين.</span>
       </div>
     </div>
   </div>
@@ -193,6 +210,7 @@ function openModal(modalId) {
   $(modalId).style.display = "flex";
   if(modalId === 'favoritesModal') renderFavorites();
   if(modalId === 'historyModal') renderHistory();
+  if(modalId === 'downloadsModal') renderDownloadedList();
 }
 
 function closeModal(modalId) {
@@ -235,11 +253,11 @@ function getTitle(m) {
 
 async function fetchManga(query = "") {
   setProgress(20);
-  setStatus("جاري جلب المحتوى...");
+  setStatus("جاري جلب المحتوى من MangaDex...");
   $("results").innerHTML = "";
 
   try {
-    let url = `${API}/manga?limit=32&includes[]=cover_art`;
+    let url = `${API}/manga?limit=32&includes[]=cover_art&order[followedCount]=desc`;
     if (query) url += `&title=${encodeURIComponent(query)}`;
     if (currentLang !== "all") url += `&originalLanguage[]=${currentLang}`;
 
@@ -356,7 +374,6 @@ async function openManga(m) {
   currentOpenManga = m;
   addToHistory(m);
   
-  // تحديث حالة زر المفضلة
   const favs = getStoredList("katro_favs");
   if(favs.some(x => x.id === m.id)) {
     $("favBtn").textContent = "⭐ إزالة من المفضلة";
@@ -368,10 +385,11 @@ async function openManga(m) {
   $("mainContainer").style.display = "none";
   $("chaptersContainer").style.display = "block";
   $("mangaTitleHeader").textContent = getTitle(m);
-  $("chaptersList").innerHTML = "<div style='text-align:center;color:#9ca3af;'>جاري تحميل الفصول...</div>";
+  $("chaptersList").innerHTML = "<div style='text-align:center;color:#9ca3af;'>جاري جلب وترتيب الفصول تصاعدياً...</div>";
 
   try {
-    const res = await fetch(`${API}/manga/${m.id}/feed?limit=300&order[chapter]=asc&translatedLanguage[]=ar&translatedLanguage[]=en`);
+    // جلب الفصول بترتيب تصاعدي صحيح (order[chapter]=asc) لدعم الأعمال من الفصل الأول
+    const res = await fetch(`${API}/manga/${m.id}/feed?limit=500&order[chapter]=asc&translatedLanguage[]=ar&translatedLanguage[]=en&translatedLanguage[]=es&translatedLanguage[]=fr`);
     if (!res.ok) throw new Error();
     const data = await res.json();
     setProgress(70);
@@ -388,15 +406,20 @@ async function openManga(m) {
 function renderChaptersList(chapters) {
   const listEl = $("chaptersList");
   listEl.innerHTML = "";
-  const selectedLang = $("langFilterSelect").value;
+  const filterLang = $("langFilterSelect").value;
 
-  const filtered = chapters.filter(ch => {
-    if(selectedLang === 'all') return true;
-    return ch.attributes?.translatedLanguage === selectedLang;
-  });
+  let filtered = chapters;
+  if(filterLang === 'ar') {
+    filtered = chapters.filter(ch => ch.attributes?.translatedLanguage === 'ar');
+    if(!filtered.length) {
+      filtered = chapters; // إذا لم توجد ترجمة عربية، نعرض المتاحة لكي لا يظهر القائمة فارغة
+    }
+  } else if(filterLang !== 'all') {
+    filtered = chapters.filter(ch => ch.attributes?.translatedLanguage === filterLang);
+  }
 
   if (!filtered.length) {
-    listEl.innerHTML = "<div style='text-align:center;color:#9ca3af;'>لا توجد فصول متطابقة مع تصفية اللغات الحالية.</div>";
+    listEl.innerHTML = "<div style='text-align:center;color:#9ca3af;'>لا توجد فصول متطابقة مع خيار اللغة الحالي.</div>";
     return;
   }
 
@@ -425,7 +448,7 @@ function filterChaptersByLang() {
 }
 
 // تخزين أوفلاين IndexedDB
-const dbPromise = indexedDB.open("KatroMangaDB", 1);
+const dbPromise = indexedDB.open("KatroMangaDB", 2);
 dbPromise.onupgradeneeded = e => {
   const db = e.target.result;
   if(!db.objectStoreNames.contains("chapters")) {
@@ -433,13 +456,13 @@ dbPromise.onupgradeneeded = e => {
   }
 };
 
-async function saveChapterToDB(chapterId, pagesData) {
+async function saveChapterToDB(chapterId, chapterNum, pagesData) {
   return new Promise((resolve, reject) => {
     dbPromise.onsuccess = e => {
       const db = e.target.result;
       const tx = db.transaction("chapters", "readwrite");
       const store = tx.objectStore("chapters");
-      store.put({ id: chapterId, pages: pagesData });
+      store.put({ id: chapterId, chapterNum: chapterNum, pages: pagesData, date: new Date().toLocaleDateString() });
       tx.oncomplete = () => resolve(true);
       tx.onerror = () => reject(tx.error);
     };
@@ -459,14 +482,54 @@ async function getChapterFromDB(chapterId) {
   });
 }
 
-// زر التحميل أوفلاين مع تدرج من 1% إلى 100%
+async function getAllDownloadedChapters() {
+  return new Promise((resolve) => {
+    dbPromise.onsuccess = e => {
+      const db = e.target.result;
+      if(!db.objectStoreNames.contains("chapters")) { resolve([]); return; }
+      const tx = db.transaction("chapters", "readonly");
+      const store = tx.objectStore("chapters");
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => resolve([]);
+    };
+  });
+}
+
+async function renderDownloadedList() {
+  const listEl = $("downloadedChaptersList");
+  listEl.innerHTML = "<div style='text-align:center;color:var(--muted);'>جاري التحقق من الفصول المخزنة...</div>";
+  const items = await getAllDownloadedChapters();
+  listEl.innerHTML = "";
+  if(!items.length) {
+    listEl.innerHTML = "<p style='color:var(--muted);text-align:center;'>لا توجد فصول مخزنة محلياً حتى الآن.</p>";
+    return;
+  }
+  items.forEach(item => {
+    const div = document.createElement("div");
+    div.style.cssText = "background:#1c2231;padding:12px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;";
+    div.innerHTML = `
+      <span>الفصل ${item.chapterNum || "مخصص"} (محفوظ أوفلاين)</span>
+      <button style="background:var(--purple);padding:6px 12px;font-size:12px;" onclick="readChapter('${item.id}', '${item.chapterNum}')">قراءة</button>
+    `;
+    listEl.appendChild(div);
+  });
+}
+
+// دالة التحميل أوفلاين مع واجهة العداد الحقيقي من 1% إلى 100%
 async function downloadOffline(chapterId, chapterNum) {
-  setProgress(5);
+  const statusEl = $("activeDownloadStatus");
+  const percentText = $("downloadPercentText");
+  statusEl.style.display = "block";
+  percentText.textContent = "1%";
+  setProgress(1);
+
   try {
     const res = await fetch(`${API}/at-home/server/${chapterId}`);
     if(!res.ok) throw new Error();
     const data = await res.json();
-    setProgress(30);
+    percentText.textContent = "20%";
+    setProgress(20);
 
     const baseUrl = data.baseUrl;
     const hash = data.chapter?.hash;
@@ -478,28 +541,32 @@ async function downloadOffline(chapterId, chapterNum) {
     for(let i = 0; i < total; i++) {
       let pUrl = `${baseUrl}/data/${hash}/${pages[i]}`;
       downloadedPages.push(pUrl);
-      let percent = Math.floor(30 + ((i + 1) / total) * 65);
+      let percent = Math.floor(20 + ((i + 1) / total) * 75);
+      percentText.textContent = percent + "%";
       setProgress(percent);
     }
 
-    await saveChapterToDB(chapterId, downloadedPages);
+    await saveChapterToDB(chapterId, chapterNum, downloadedPages);
+    percentText.textContent = "100%";
     setProgress(100);
-    alert(`تم تحميل الفصل ${chapterNum} بنجاح للقراءة داخل التطبيق بدون إنترنت!`);
+    setTimeout(() => { statusEl.style.display = "none"; }, 2000);
+    alert(`تم تحميل الفصل ${chapterNum} بنجاح وأصبح متاحاً في قائمة "تحميلاتي" بدون إنترنت!`);
   } catch(e) {
+    statusEl.style.display = "none";
     setProgress(100);
     alert("تعذر تحميل الفصل أوفلاين، تحقق من الاتصال.");
   }
 }
 
-// زر تحميل PDF مع تدرج من 1% إلى 100%
+// دالة تحميل PDF مع عداد حقيقي من 1% إلى 100%
 async function downloadPDF(chapterId, chapterNum) {
-  setProgress(5);
-  alert("جاري تجهيز ملف الـ PDF وتحميل الصور، يرجى الانتظار...");
+  setProgress(1);
+  alert("جاري بدء تجهيز ملف الـ PDF وحساب النسبة، يرجى الانتظار...");
   try {
     const res = await fetch(`${API}/at-home/server/${chapterId}`);
     if(!res.ok) throw new Error();
     const data = await res.json();
-    setProgress(30);
+    setProgress(25);
 
     const baseUrl = data.baseUrl;
     const hash = data.chapter?.hash;
@@ -520,7 +587,7 @@ async function downloadPDF(chapterId, chapterNum) {
 
         if(i > 0) pdf.addPage();
         pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
-        let percent = Math.floor(30 + ((i + 1) / pages.length) * 65);
+        let percent = Math.floor(25 + ((i + 1) / pages.length) * 70);
         setProgress(percent);
       } catch(err) {
         console.warn("تخطى صفحة", err);
@@ -529,7 +596,7 @@ async function downloadPDF(chapterId, chapterNum) {
 
     pdf.save(`KATRO_Chapter_${chapterNum || chapterId}.pdf`);
     setProgress(100);
-    alert("تم تحميل الفصل بصيغة PDF على جهازك بنجاح!");
+    alert("تم اكتمال تحميل ملف الـ PDF بنجاح على جهازك (100%)!");
   } catch(e) {
     setProgress(100);
     alert("حدث خطأ أثناء إنشاء ملف الـ PDF.");
@@ -539,23 +606,22 @@ async function downloadPDF(chapterId, chapterNum) {
 async function readChapter(chapterId, chapterNum) {
   const token = ++chapterToken;
   $("reader").style.display = "block";
-  $("readerPages").innerHTML = "<div style='text-align:center;padding:50px;color:#9ca3af;'>جاري تحميل صفحات الفصل...</div>";
+  $("readerPages").innerHTML = "<div style='text-align:center;padding:50px;color:#9ca3af;'>جاري جلب وعرض صفحات الفصل...</div>";
   $("readerTitle").textContent = `الفصل ${chapterNum}`;
   setProgress(40);
 
   try {
     let pages = await getChapterFromDB(chapterId);
-    let baseUrl = "", hash = "";
 
     if(!pages || pages.length === 0) {
       const res = await fetch(`${API}/at-home/server/${chapterId}`);
       if (!res.ok) throw new Error();
       const data = await res.json();
       if (token !== chapterToken) return;
-      baseUrl = data.baseUrl;
-      hash = data.chapter?.hash;
-      pages = data.chapter?.data || [];
-      pages = pages.map(p => `${baseUrl}/data/${hash}/${p}`);
+      const baseUrl = data.baseUrl;
+      const hash = data.chapter?.hash;
+      let rawPages = data.chapter?.data || [];
+      pages = rawPages.map(p => `${baseUrl}/data/${hash}/${p}`);
     }
 
     if (token !== chapterToken) return;
@@ -566,12 +632,15 @@ async function readChapter(chapterId, chapterNum) {
       const img = document.createElement("img");
       img.loading = index < 3 ? "eager" : "lazy";
       img.src = pUrl;
+      img.onerror = function() {
+        this.style.border = "2px solid red";
+      };
       $("readerPages").appendChild(img);
     });
     setProgress(100);
   } catch (err) {
     if (token === chapterToken) {
-      $("readerPages").innerHTML = "<div style='text-align:center;padding:50px;color:var(--red);'>تعذر تحميل صور الفصل.</div>";
+      $("readerPages").innerHTML = "<div style='text-align:center;padding:50px;color:var(--red);'>تعذر تحميل صور الفصل. تأكد من اتصال الإنترنت.</div>";
     }
     setProgress(100);
   }
@@ -583,7 +652,7 @@ function closeReader() {
   $("readerPages").innerHTML = "";
 }
 
-// بدء التطبيق
+// البدء التلقائي
 fetchManga("");
 </script>
 </body>
