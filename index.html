@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -206,8 +205,7 @@ footer{padding:30px 5%;border-top:1px solid var(--border);text-align:center;colo
 <p style="margin-top:6px">Powered by MangaDex API. Not endorsed by MangaDex.</p>
 </footer>
 
-<script>
-'use strict';
+<script>'use strict';
 
 const API='https://katro-manga-api-v2.mmmzzz126038.workers.dev';
 const ARABIC_API='https://katro-arabic-manga.mmmzzz126038.workers.dev';
@@ -745,9 +743,8 @@ $('pdfDownloadsList').appendChild(row);
 console.error(e);
 $('offlineDownloadsList').textContent='تعذر قراءة التنزيلات.';
 }
-}
+}/* KATRO Arabic Worker - Advanced Search Engine */
 
-/* Arabic Worker integration: all three sources */
 let arabicInitialized=false;
 let arabicResultsCache=[];
 let currentArabicSeries=null;
@@ -755,323 +752,1062 @@ let arabicRequestToken=0;
 let arabicQuery='';
 let arabicSeen=new Set();
 let arabicMoreBusy=false;
-let arabicNextPages={azora:1,mangalek:1,teamx:1};
-let arabicMoreSources=[];
-const arabicSources=['azora','mangalek','teamx'];
-const sourceLabels={azora:'Azora Manga',mangalek:'Manga Lek',teamx:'Team X'};
 
-function arabicStatus(m){$('arabicStatus').textContent=m}
+let arabicNextPages={
+azora:1,
+mangalek:1,
+teamx:1
+};
+
+let arabicMoreSources=[];
+
+const arabicSources=['azora','mangalek','teamx'];
+
+const sourceLabels={
+azora:'Azora Manga',
+mangalek:'Manga Lek',
+teamx:'Team X'
+};
+
+function arabicStatus(message){
+$('arabicStatus').textContent=message;
+}
+
+/* Normalize Arabic and English titles */
+
+function normalizeArabicSearch(value){
+return String(value||'')
+.toLowerCase()
+.normalize('NFKC')
+.replace(/[\u064B-\u065F\u0670]/g,'')
+.replace(/ـ/g,'')
+.replace(/[أإآٱ]/g,'ا')
+.replace(/ى/g,'ي')
+.replace(/[ؤئ]/g,'ء')
+.replace(/[^\p{L}\p{N}\s]/gu,' ')
+.replace(/\s+/g,' ')
+.trim();
+}
+
+/* Extract title from different API formats */
+
+function getArabicTitle(item){
+let title=
+item?.title||
+item?.name||
+item?.seriesTitle||
+item?.mangaTitle||
+item?.slug||
+'';
+
+if(typeof title==='object'&&title!==null){
+title=
+title.ar||
+title.en||
+title.ko||
+title.ja||
+Object.values(title)[0]||
+'';
+}
+
+return String(title||'').trim();
+}
+
+/* Extract a stable URL */
+
+function getArabicUrl(item){
+return String(
+item?.url||
+item?.link||
+item?.seriesUrl||
+item?.href||
+item?.slug||
+''
+).trim();
+}
+
+/* Search relevance scoring */
+
+function arabicSearchScore(title,query){
+const t=normalizeArabicSearch(title);
+const q=normalizeArabicSearch(query);
+
+if(!t||!q)return 0;
+
+if(t===q)return 1000;
+
+if(t.startsWith(q))return 850;
+
+if(t.includes(q))return 700;
+
+const words=q.split(' ').filter(Boolean);
+
+if(words.length>1){
+const matched=words.filter(word=>t.includes(word));
+
+if(matched.length===words.length){
+return 550+(matched.length*10);
+}
+
+return 0;
+}
+
+return 0;
+}
+
+/* Generate duplicate identity */
+
+function arabicItemIdentity(item){
+const title=normalizeArabicSearch(getArabicTitle(item));
+const url=getArabicUrl(item);
+const source=item.source||'unknown';
+
+if(title)return 'title:'+title;
+
+if(url)return 'url:'+normalizeArabicSearch(url);
+
+return source+':'+String(item.id||'');
+}
+
+/* Merge duplicate results */
+
+function mergeArabicItems(items){
+const map=new Map();
+
+for(const original of items||[]){
+if(!original)continue;
+
+const item={...original};
+const title=getArabicTitle(item);
+
+if(!title)continue;
+
+const identity=arabicItemIdentity(item);
+const previous=map.get(identity);
+
+if(!previous){
+map.set(identity,item);
+continue;
+}
+
+const oldScore=arabicSearchScore(previous.title,arabicQuery);
+const newScore=arabicSearchScore(item.title,arabicQuery);
+
+if(newScore>oldScore){
+map.set(identity,item);
+}
+}
+
+return Array.from(map.values());
+}
+
+/* Filter and rank results */
+
+function rankArabicResults(items,query){
+let list=(items||[]).map(item=>({...item}));
+
+if(!query)return mergeArabicItems(list);
+
+list=list.map(item=>{
+const title=getArabicTitle(item);
+return{
+...item,
+__score:arabicSearchScore(title,query)
+};
+});
+
+list=list.filter(item=>item.__score>0);
+
+list.sort((a,b)=>{
+if(b.__score!==a.__score)return b.__score-a.__score;
+
+return getArabicTitle(a).localeCompare(
+getArabicTitle(b),
+'ar'
+);
+});
+
+return mergeArabicItems(list);
+}
+
+/* Worker request */
 
 async function arabicRequest(endpoint){
-let r=await fetch(ARABIC_API+endpoint,{headers:{Accept:'application/json'}});
-let raw=await r.text(),d;
-try{d=JSON.parse(raw)}catch{throw Error('استجابة Worker غير صالحة')}
-if(!r.ok||d.error)throw Error(d.message||d.error||'API Error');
-return d;
+const controller=new AbortController();
+
+const timer=setTimeout(()=>controller.abort(),25000);
+
+try{
+const response=await fetch(ARABIC_API+endpoint,{
+headers:{Accept:'application/json'},
+signal:controller.signal
+});
+
+const raw=await response.text();
+
+let data;
+
+try{
+data=JSON.parse(raw);
+}catch{
+throw Error('استجابة Worker غير صالحة');
 }
 
-function getArabicItems(d){
-return d.results||d.items||d.manga||d.data||[];
+if(!response.ok||data.error){
+throw Error(
+data.message||
+data.error||
+'خطأ في الاتصال بالمصدر'
+);
 }
 
-function arabicItemKey(x){
-return x.source+':'+(x.url||x.id||x.link||x.slug||x.title);
+return data;
+
+}finally{
+clearTimeout(timer);
 }
+}
+
+/* Extract results from different response formats */
+
+function getArabicItems(data){
+const candidates=[
+data?.results,
+data?.items,
+data?.manga,
+data?.data
+];
+
+for(const value of candidates){
+if(Array.isArray(value))return value;
+}
+
+return[];
+}
+
+/* Build source endpoint */
 
 function arabicEndpoint(type,source,page=1,query=''){
-let params=new URLSearchParams();
+const params=new URLSearchParams();
+
 params.set('source',source);
 params.set('page',String(page));
 params.set('limit','100');
-if(type==='search')params.set('q',query);
+
+if(type==='search'&&query){
+params.set('q',query);
+}
+
 return'/'+type+'?'+params.toString();
 }
+
+/* Request all three sources simultaneously */
 
 async function requestAllArabic(type,query='',pageMap=null){
 const jobs=arabicSources.map(async source=>{
 const page=pageMap?.[source]||1;
-const endpoint=arabicEndpoint(type,source,page,query);
+
+const endpoint=arabicEndpoint(
+type,
+source,
+page,
+query
+);
+
 const data=await arabicRequest(endpoint);
-return{source,data,items:getArabicItems(data)};
+
+return{
+source,
+data,
+items:getArabicItems(data)
+};
 });
+
 return Promise.allSettled(jobs);
 }
 
-function renderArabicCards(items,append=false){
-let c=$('arabicResults');
-if(!append)c.innerHTML='';
-if(!append)arabicResultsCache=[];
-let fresh=[];
-for(let x of items||[]){
-if(!x.source)x.source='azora';
-let key=arabicItemKey(x);
-if(!key||arabicSeen.has(String(key)))continue;
-arabicSeen.add(String(key));
-fresh.push(x);
-arabicResultsCache.push(x);
+/* Update pagination for each source */
+
+function updateArabicPagination(source,data){
+const next=Number(data?.nextPage);
+
+arabicNextPages[source]=
+Number.isFinite(next)&&next>0
+?next
+:(arabicNextPages[source]||1)+1;
+
+if(data?.hasMore===false){
+arabicMoreSources=arabicMoreSources.filter(
+item=>item!==source
+);
+}else if(!arabicMoreSources.includes(source)){
+arabicMoreSources.push(source);
 }
-if(!append&&fresh.length===0){
-arabicStatus('لم يتم العثور على نتائج في المصادر الثلاثة.');
-$('arabicMore').style.display='none';
-return;
 }
-fresh.forEach(item=>{
-let card=document.createElement('div');
-card.className='card';
-let img=document.createElement('img');
-img.loading='lazy';
-img.alt=item.title||'مانهو';
-img.src=item.cover||item.image||item.thumbnail||'';
-img.onerror=()=>{
-img.onerror=null;
-img.style.display='none';
-};
-let badge=document.createElement('div');
-badge.className='badge';
-badge.textContent=sourceLabels[item.source]||item.source;
-let h=document.createElement('h3');
-h.textContent=item.title||'بدون عنوان';
-card.append(img,badge,h);
-card.onclick=()=>openArabicSeries(item);
-c.appendChild(card);
-});
-arabicStatus('عدد النتائج: '+arabicResultsCache.length);
-$('arabicMore').style.display=arabicMoreSources.length?'block':'none';
-$('arabicMore').disabled=false;
-if(fresh.length)updateBackdrop(fresh.map(x=>({cover:x.cover||x.image})).filter(x=>x.cover));
-}
+
+/* Reset results */
 
 function resetArabicResults(){
 arabicSeen.clear();
 arabicResultsCache=[];
-arabicNextPages={azora:1,mangalek:1,teamx:1};
+
+arabicNextPages={
+azora:1,
+mangalek:1,
+teamx:1
+};
+
 arabicMoreSources=[];
 }
 
+/* Render result cards */
+
+function renderArabicCards(items,append=false){
+const container=$('arabicResults');
+
+if(!append){
+container.innerHTML='';
+arabicResultsCache=[];
+arabicSeen.clear();
+}
+
+let incoming=rankArabicResults(items,arabicQuery);
+
+const fresh=[];
+
+for(const original of incoming){
+const item={...original};
+
+if(!item.source){
+item.source='azora';
+}
+
+const identity=arabicItemIdentity(item);
+
+if(arabicSeen.has(identity))continue;
+
+arabicSeen.add(identity);
+
+fresh.push(item);
+arabicResultsCache.push(item);
+}
+
+fresh.forEach(item=>{
+const card=document.createElement('div');
+card.className='card';
+
+const image=document.createElement('img');
+
+image.loading='lazy';
+image.alt=getArabicTitle(item);
+
+image.src=
+item.cover||
+item.image||
+item.thumbnail||
+item.coverUrl||
+'';
+
+image.onerror=()=>{
+image.onerror=null;
+image.style.display='none';
+};
+
+const badge=document.createElement('div');
+
+badge.className='badge';
+badge.textContent=
+sourceLabels[item.source]||
+item.source||
+'مانهو عربية';
+
+const heading=document.createElement('h3');
+
+heading.textContent=getArabicTitle(item)||'بدون عنوان';
+
+card.append(image,badge,heading);
+
+card.onclick=()=>openArabicSeries(item);
+
+container.appendChild(card);
+});
+
+$('arabicMore').style.display=
+arabicMoreSources.length?'block':'none';
+
+$('arabicMore').disabled=false;
+
+if(arabicQuery){
+arabicStatus(
+'تم العثور على '+arabicResultsCache.length+
+' نتيجة مطابقة للبحث.'
+);
+}else{
+arabicStatus(
+'عدد الأعمال المعروضة: '+arabicResultsCache.length
+);
+}
+
+if(fresh.length){
+updateBackdrop(
+fresh.map(item=>({
+cover:item.cover||item.image||item.thumbnail
+})).filter(item=>item.cover)
+);
+}
+}
+
+/* Load popular works */
+
 async function loadArabicPopular(){
-let token=++arabicRequestToken;
+const token=++arabicRequestToken;
+
 arabicQuery='';
+
 resetArabicResults();
+
 $('arabicDetails').style.display='none';
 $('arabicReader').style.display='none';
 $('arabicResults').style.display='grid';
 $('arabicMore').style.display='none';
-arabicStatus('جاري تحميل الأعمال الشائعة من Azora وManga Lek وTeam X...');
+
+arabicStatus(
+'جاري تحميل الأعمال من Azora وManga Lek وTeam X...'
+);
+
 try{
-let settled=await requestAllArabic('popular');
+const settled=await requestAllArabic('popular');
+
 if(token!==arabicRequestToken)return;
-let merged=[],errors=[];
+
+let merged=[];
+let errors=[];
+
 settled.forEach((result,index)=>{
-let source=arabicSources[index];
+const source=arabicSources[index];
+
 if(result.status==='fulfilled'){
-let data=result.value.data;
-merged.push(...result.value.items.map(item=>({...item,source:item.source||source})));
-arabicNextPages[source]=Number(data.nextPage)||2;
-if(data.hasMore!==false)arabicMoreSources.push(source);
+const data=result.value.data;
+
+merged.push(
+...result.value.items.map(item=>({
+...item,
+source:item.source||source
+}))
+);
+
+updateArabicPagination(source,data);
+
 }else{
-errors.push(sourceLabels[source]+': '+result.reason.message);
+errors.push(
+sourceLabels[source]+': '+
+(result.reason?.message||'تعذر الاتصال')
+);
 }
 });
+
 renderArabicCards(merged);
-if(errors.length)arabicStatus('عدد النتائج: '+arabicResultsCache.length+'\nتعذر جلب بعض المصادر: '+errors.join(' | '));
-}catch(e){
-if(token===arabicRequestToken)arabicStatus('تعذر تحميل الأعمال: '+e.message);
+
+if(errors.length){
+arabicStatus(
+'عدد الأعمال: '+arabicResultsCache.length+
+'\nبعض المصادر لم تستجب: '+errors.join(' | ')
+);
+}
+
+if(!merged.length&&errors.length===3){
+arabicStatus(
+'تعذر الاتصال بالمصادر الثلاثة. تحقق من الإنترنت وحاول مجدداً.'
+);
+}
+
+}catch(error){
+if(token===arabicRequestToken){
+arabicStatus('تعذر تحميل الأعمال: '+error.message);
 }
 }
+}
+
+/* Search all Arabic sources */
 
 async function searchArabic(){
-let q=$('arabicSearch').value.trim();
-if(!q){loadArabicPopular();return}
-let token=++arabicRequestToken;
-arabicQuery=q;
+const query=$('arabicSearch').value.trim();
+
+if(!query){
+loadArabicPopular();
+return;
+}
+
+const token=++arabicRequestToken;
+
+arabicQuery=query;
+
 resetArabicResults();
+
 $('arabicDetails').style.display='none';
 $('arabicReader').style.display='none';
 $('arabicResults').style.display='grid';
 $('arabicMore').style.display='none';
-arabicStatus('جاري البحث عن "'+q+'" في المصادر الثلاثة...');
+
+arabicStatus(
+'جاري البحث عن "'+query+'" في المصادر الثلاثة...'
+);
+
 try{
-let settled=await requestAllArabic('search',q);
+const settled=await requestAllArabic(
+'search',
+query
+);
+
 if(token!==arabicRequestToken)return;
-let merged=[],errors=[];
+
+let merged=[];
+let errors=[];
+
 settled.forEach((result,index)=>{
-let source=arabicSources[index];
+const source=arabicSources[index];
+
 if(result.status==='fulfilled'){
-let data=result.value.data;
-merged.push(...result.value.items.map(item=>({...item,source:item.source||source})));
-arabicNextPages[source]=Number(data.nextPage)||2;
-if(source==='azora'&&data.hasMore!==false)arabicMoreSources.push(source);
+const data=result.value.data;
+
+merged.push(
+...result.value.items.map(item=>({
+...item,
+source:item.source||source
+}))
+);
+
+updateArabicPagination(source,data);
+
 }else{
-errors.push(sourceLabels[source]+': '+result.reason.message);
+errors.push(
+sourceLabels[source]+': '+
+(result.reason?.message||'فشل البحث')
+);
 }
 });
-renderArabicCards(merged);
-if(errors.length)arabicStatus('نتائج البحث: '+arabicResultsCache.length+'\nتعذر البحث في بعض المصادر: '+errors.join(' | '));
-}catch(e){
-if(token===arabicRequestToken)arabicStatus('فشل البحث: '+e.message);
+
+const ranked=rankArabicResults(merged,query);
+
+renderArabicCards(ranked);
+
+if(!ranked.length){
+arabicStatus(
+'لم يتم العثور على عنوان مطابق لعبارة "'+
+query+'". جرب كتابة اسم العمل بشكل أقصر.'
+);
+}
+
+if(errors.length){
+arabicStatus(
+'نتائج مطابقة: '+arabicResultsCache.length+
+'\nتعذر البحث في بعض المصادر: '+errors.join(' | ')
+);
+}
+
+}catch(error){
+if(token===arabicRequestToken){
+arabicStatus('فشل البحث: '+error.message);
+}
 }
 }
 
-$('arabicSearch').addEventListener('keydown',e=>{
-if(e.key==='Enter')searchArabic();
+/* Search when pressing Enter */
+
+$('arabicSearch').addEventListener('keydown',event=>{
+if(event.key==='Enter'){
+event.preventDefault();
+searchArabic();
+}
 });
+
+/* Load more from all available sources */
 
 async function loadArabicMore(){
 if(arabicMoreBusy||!arabicMoreSources.length)return;
+
 arabicMoreBusy=true;
+
 $('arabicMore').disabled=true;
-let token=arabicRequestToken;
-arabicStatus('جاري تحميل أعمال إضافية من المصادر...');
+
+const token=arabicRequestToken;
+
+arabicStatus('جاري تحميل المزيد من المصادر الثلاثة...');
+
 try{
-let sources=[...arabicMoreSources];
-let results=await Promise.allSettled(sources.map(async source=>{
-let type=arabicQuery?'search':'catalog';
-let endpoint=arabicEndpoint(type,source,arabicNextPages[source]||2,arabicQuery);
-let data=await arabicRequest(endpoint);
-return{source,data,items:getArabicItems(data)};
-}));
+const sources=[...arabicMoreSources];
+
+const results=await Promise.allSettled(
+sources.map(async source=>{
+const type=arabicQuery?'search':'catalog';
+
+const page=arabicNextPages[source]||2;
+
+const endpoint=arabicEndpoint(
+type,
+source,
+page,
+arabicQuery
+);
+
+const data=await arabicRequest(endpoint);
+
+return{
+source,
+data,
+items:getArabicItems(data)
+};
+})
+);
+
 if(token!==arabicRequestToken)return;
-let merged=[],errors=[];
+
+let merged=[];
+let errors=[];
+
 results.forEach((result,index)=>{
-let source=sources[index];
+const source=sources[index];
+
 if(result.status==='fulfilled'){
-let data=result.value.data;
-merged.push(...result.value.items.map(item=>({...item,source:item.source||source})));
-arabicNextPages[source]=Number(data.nextPage)||((arabicNextPages[source]||2)+1);
-if(data.hasMore===false||!result.value.items.length){
-arabicMoreSources=arabicMoreSources.filter(x=>x!==source);
+const data=result.value.data;
+const items=result.value.items;
+
+merged.push(
+...items.map(item=>({
+...item,
+source:item.source||source
+}))
+);
+
+updateArabicPagination(source,data);
+
+if(!items.length){
+arabicMoreSources=arabicMoreSources.filter(
+item=>item!==source
+);
 }
+
 }else{
-errors.push(sourceLabels[source]+': '+result.reason.message);
+errors.push(
+sourceLabels[source]+': '+
+(result.reason?.message||'فشل التحميل')
+);
 }
 });
-let before=arabicResultsCache.length;
+
+const before=arabicResultsCache.length;
+
 renderArabicCards(merged,true);
-let added=arabicResultsCache.length-before;
-if(!added&&!errors.length){
-arabicMoreSources=[];
+
+const added=arabicResultsCache.length-before;
+
+if(!added&&!errors.length&&arabicMoreSources.length){
+arabicStatus(
+'لم تظهر نتائج جديدة في هذه الصفحة. يمكنك المحاولة مرة أخرى.'
+);
+}else if(!arabicMoreSources.length){
 $('arabicMore').style.display='none';
-arabicStatus('لا توجد أعمال إضافية حالياً.');
+
+arabicStatus(
+'تم عرض '+arabicResultsCache.length+
+' عملاً. لا توجد صفحات إضافية متاحة حالياً.'
+);
 }else{
-arabicStatus('تمت إضافة '+added+' عمل جديد.'+(errors.length?'\nبعض المصادر لم تستجب: '+errors.join(' | '):''));
+arabicStatus(
+'تمت إضافة '+added+
+' عمل جديد. إجمالي النتائج: '+
+arabicResultsCache.length+
+(errors.length?'\nبعض المصادر لم تستجب: '+errors.join(' | '):'')
+);
 }
-}catch(e){
-if(token===arabicRequestToken)arabicStatus('تعذر تحميل المزيد: '+e.message);
+
+}catch(error){
+if(token===arabicRequestToken){
+arabicStatus('تعذر تحميل المزيد: '+error.message);
+}
 }finally{
 arabicMoreBusy=false;
+
+if(token===arabicRequestToken){
 $('arabicMore').disabled=false;
 }
 }
+  }/* ==========================================
+   KATRO ARABIC MANGA - SERIES AND READER
+========================================== */
+
+/* Open Arabic series */
 
 async function openArabicSeries(item){
-if(!item?.url)return;
-let source=item.source||'azora';
-currentArabicSeries={...item,source};
-let token=++arabicRequestToken;
-$('arabicResults').style.display='none';
-$('arabicReader').style.display='none';
-$('arabicDetails').style.display='block';
-$('arabicTitle').textContent=item.title||'تفاصيل المانهو';
-$('arabicDescription').textContent='جاري تحميل التفاصيل والفصول...';
-$('arabicChapters').innerHTML='';
-window.scrollTo(0,0);
-try{
-let d=await arabicRequest('/series?source='+encodeURIComponent(source)+'&url='+encodeURIComponent(item.url));
-if(token!==arabicRequestToken)return;
-currentArabicSeries={...d,...item,source};
-$('arabicTitle').textContent=d.title||item.title;
-$('arabicDescription').textContent=d.description||'لا يوجد وصف متاح.';
-let c=$('arabicChapters');
-c.innerHTML='';
-if(!d.chapters?.length){
-c.textContent='لم يتم العثور على فصول.';
+if(!item)return;
+
+const source=item.source||'azora';
+const url=getArabicUrl(item);
+
+if(!url){
+arabicStatus('رابط العمل غير متوفر.');
 return;
 }
-d.chapters.forEach((ch,i)=>{
-let row=document.createElement('div');
-row.className='chapter';
-let name=document.createElement('strong');
-name.textContent=ch.title||'الفصل '+(i+1);
-let acts=document.createElement('div');
-acts.className='chapter-actions';
-let read=document.createElement('button');
-read.textContent='📖 قراءة';
-read.onclick=()=>openArabicChapter(ch.url,ch.title||'الفصل '+(i+1));
-let off=document.createElement('button');
-off.className='btn-offline';
-off.textContent='📥 أوفلاين';
-off.onclick=()=>downloadArabicOffline(ch.url,ch.title||'الفصل '+(i+1));
-let pdf=document.createElement('button');
-pdf.className='btn-pdf';
-pdf.textContent='📄 PDF';
-pdf.onclick=()=>downloadArabicPDF(ch.url,ch.title||'الفصل '+(i+1));
-acts.append(read,off,pdf);
-row.append(name,acts);
-c.appendChild(row);
+
+const token=++arabicRequestToken;
+
+currentArabicSeries={
+...item,
+source,
+url,
+title:getArabicTitle(item)
+};
+
+$('arabicResults').style.display='none';
+$('arabicDetails').style.display='block';
+$('arabicReader').style.display='none';
+
+$('arabicTitle').textContent=currentArabicSeries.title;
+$('arabicDescription').textContent='جاري تحميل تفاصيل العمل...';
+$('arabicChapters').innerHTML='';
+
+arabicStatus('جاري تحميل تفاصيل العمل...');
+
+window.scrollTo(0,0);
+
+try{
+const params=new URLSearchParams({
+source,
+url
 });
-}catch(e){
-if(token===arabicRequestToken)$('arabicDescription').textContent='تعذر جلب التفاصيل: '+e.message;
+
+const data=await arabicRequest('/series?'+params.toString());
+
+if(token!==arabicRequestToken)return;
+
+const series=data.series||data.data||data;
+
+currentArabicSeries={
+...currentArabicSeries,
+...series,
+source,
+url,
+title:getArabicTitle(series)||currentArabicSeries.title
+};
+
+$('arabicTitle').textContent=currentArabicSeries.title;
+
+$('arabicDescription').textContent=
+series.description||
+series.summary||
+series.synopsis||
+'لا يوجد وصف متاح لهذا العمل.';
+
+const chapters=
+series.chapters||
+series.episodes||
+series.items||
+[];
+
+renderArabicChapters(chapters);
+
+arabicStatus(
+'تم تحميل '+chapters.length+' فصلاً من '+
+(sourceLabels[source]||source)
+);
+
+}catch(error){
+if(token!==arabicRequestToken)return;
+
+$('arabicDescription').textContent=
+'تعذر تحميل تفاصيل العمل: '+error.message;
+
+arabicStatus('فشل تحميل تفاصيل العمل.');
 }
 }
+
+/* Render Arabic chapters */
+
+function renderArabicChapters(chapters){
+const container=$('arabicChapters');
+
+container.innerHTML='';
+
+if(!Array.isArray(chapters)||!chapters.length){
+container.textContent='لا توجد فصول متاحة حالياً.';
+return;
+}
+
+chapters.forEach((chapter,index)=>{
+const url=
+typeof chapter==='string'
+?chapter
+:chapter.url||chapter.link||chapter.href||chapter.chapterUrl||'';
+
+const title=
+typeof chapter==='string'
+?'الفصل '+(index+1)
+:chapter.title||
+chapter.name||
+chapter.chapter||
+'الفصل '+(index+1);
+
+if(!url)return;
+
+const row=document.createElement('div');
+row.className='chapter-item';
+
+const heading=document.createElement('div');
+heading.className='chapter-title';
+heading.textContent=title;
+
+const actions=document.createElement('div');
+actions.className='chapter-actions';
+
+const read=document.createElement('button');
+read.textContent='قراءة';
+read.onclick=()=>openArabicChapter(url,title);
+
+const offline=document.createElement('button');
+offline.textContent='تحميل';
+offline.onclick=()=>downloadArabicOffline(url,title);
+
+const pdf=document.createElement('button');
+pdf.textContent='PDF';
+pdf.onclick=()=>downloadArabicPDF(url,title);
+
+actions.append(read,offline,pdf);
+row.append(heading,actions);
+
+container.appendChild(row);
+});
+}
+
+/* Convert chapter page data to image URL */
+
+function arabicPageImage(page){
+if(typeof page==='string')return page;
+
+if(!page||typeof page!=='object')return'';
+
+return page.image||
+page.url||
+page.src||
+page.original||
+page.content||
+'';
+}
+
+/* Get chapter pages from Worker */
 
 async function fetchArabicChapter(url){
-let source=currentArabicSeries?.source||'azora';
-return arabicRequest('/chapter?source='+encodeURIComponent(source)+'&url='+encodeURIComponent(url));
+if(!currentArabicSeries){
+throw Error('لم يتم تحديد العمل.');
 }
 
-function arabicPageImage(p){
-return typeof p==='string'?p:p.image||p.url||p.src||'';
+const params=new URLSearchParams({
+source:currentArabicSeries.source,
+url
+});
+
+const data=await arabicRequest('/chapter?'+params.toString());
+
+const chapter=data.chapter||data.data||data;
+
+let pages=
+chapter.pages||
+chapter.images||
+chapter.content||
+data.pages||
+[];
+
+if(!Array.isArray(pages))pages=[];
+
+return pages.map(arabicPageImage).filter(Boolean);
 }
 
-async function openArabicChapter(url,title='الفصل'){
-if(!url)return;
-let token=++arabicRequestToken;
+/* Open chapter reader */
+
+async function openArabicChapter(url,title='قراءة الفصل'){
+const token=++arabicRequestToken;
+
 $('arabicDetails').style.display='none';
 $('arabicReader').style.display='block';
-$('arabicPages').textContent='جاري تحميل صفحات الفصل...';
+
+$('arabicPages').innerHTML='';
+
+const heading=$('arabicReader').querySelector('h2');
+
+if(heading)heading.textContent=title;
+
+arabicStatus('جاري تحميل صفحات الفصل...');
+
 window.scrollTo(0,0);
+
 try{
-let d=await fetchArabicChapter(url);
+const pages=await fetchArabicChapter(url);
+
 if(token!==arabicRequestToken)return;
-let c=$('arabicPages');
-c.innerHTML='';
-if(!d.pages?.length){
-c.textContent='لم يتم العثور على صفحات.';
+
+if(!pages.length){
+arabicStatus('لم يتم العثور على صفحات لهذا الفصل.');
 return;
 }
-d.pages.forEach((p,i)=>{
-let im=document.createElement('img');
-im.src=arabicPageImage(p);
-im.loading='lazy';
-im.alt='صفحة '+(p.number||i+1);
-im.onerror=()=>{
-im.alt='تعذر تحميل الصفحة '+(p.number||i+1);
-im.style.minHeight='100px';
+
+const container=$('arabicPages');
+
+pages.forEach((src,index)=>{
+const image=document.createElement('img');
+
+image.src=src;
+image.alt='صفحة '+(index+1);
+image.loading='lazy';
+image.decoding='async';
+
+image.onerror=()=>{
+image.alt='تعذر تحميل الصفحة '+(index+1);
 };
-c.appendChild(im);
+
+container.appendChild(image);
 });
-}catch(e){
-if(token===arabicRequestToken)$('arabicPages').textContent='تعذر تحميل الفصل: '+e.message;
+
+arabicStatus('تم تحميل '+pages.length+' صفحة.');
+
+}catch(error){
+if(token!==arabicRequestToken)return;
+
+arabicStatus('تعذر فتح الفصل: '+error.message);
 }
 }
 
-async function downloadArabicOffline(url,chapterTitle){
-let series=currentArabicSeries;
-if(!series?.source)return;
-switchView('downloads');
-setProgress(1,'بدء تنزيل '+chapterTitle);
-try{
-let d=await fetchArabicChapter(url),pages=[];
-if(!d.pages?.length)throw Error('لم يتم العثور على صفحات');
-for(let i=0;i<d.pages.length;i++){
-let p=d.pages[i],src=arabicPageImage(p);
-if(!src)throw Error('رابط صورة غير موجود للصفحة '+(i+1));
-let blob=await fetchImageBlob(src);
-pages.push({name:String(i+1),blob,type:blob.type,originalUrl:src});
-setProgress(Math.floor((i+1)/d.pages.length*95),`حفظ الصفحة ${i+1}/${d.pages.length}`);
+/* ==========================================
+   ARABIC OFFLINE STORAGE
+========================================== */
+
+const ARABIC_DB_NAME='KATRO_MANGA_DB';
+const ARABIC_DB_VERSION=1;
+
+function openArabicDatabase(){
+return new Promise((resolve,reject)=>{
+const request=indexedDB.open(
+ARABIC_DB_NAME,
+ARABIC_DB_VERSION
+);
+
+request.onupgradeneeded=()=>{
+const database=request.result;
+
+if(!database.objectStoreNames.contains('chapters')){
+database.createObjectStore(
+'chapters',
+{id:'id'}
+);
 }
-let id='arabic:'+series.source+':'+url;
-await storePut('chapters',{
+
+if(!database.objectStoreNames.contains('pdf_logs')){
+database.createObjectStore(
+'pdf_logs',
+{id:'id'}
+);
+}
+};
+
+request.onsuccess=()=>resolve(request.result);
+request.onerror=()=>reject(request.error);
+});
+}
+
+async function saveArabicOfflineRecord(storeName,record){
+const database=await openArabicDatabase();
+
+return new Promise((resolve,reject)=>{
+const transaction=database.transaction(
+storeName,
+'readwrite'
+);
+
+transaction.objectStore(storeName).put(record);
+
+transaction.oncomplete=()=>{
+database.close();
+resolve(true);
+};
+
+transaction.onerror=()=>{
+database.close();
+reject(transaction.error);
+};
+});
+}
+
+async function getArabicOfflineRecord(storeName,id){
+const database=await openArabicDatabase();
+
+return new Promise((resolve,reject)=>{
+const transaction=database.transaction(
+storeName,
+'readonly'
+);
+
+const request=transaction.objectStore(storeName).get(id);
+
+request.onsuccess=()=>{
+database.close();
+resolve(request.result||null);
+};
+
+request.onerror=()=>{
+database.close();
+reject(request.error);
+};
+});
+
+/* Download image as Blob */
+
+async function arabicImageToBlob(url){
+const response=await fetch(url);
+
+if(!response.ok){
+throw Error('تعذر تحميل إحدى الصفحات.');
+}
+
+return await response.blob();
+}
+
+/* Download chapter for offline reading */
+
+async function downloadArabicOffline(url,chapterTitle='فصل'){
+if(!currentArabicSeries){
+arabicStatus('افتح العمل أولاً.');
+return;
+}
+
+const series=currentArabicSeries;
+
+const id='arabic:'+series.source+':'+url;
+
+arabicStatus('جاري تجهيز الفصل للقراءة دون إنترنت...');
+
+try{
+const urls=await fetchArabicChapter(url);
+
+if(!urls.length){
+throw Error('لا توجد صفحات للتحميل.');
+}
+
+const pages=[];
+
+for(let i=0;i<urls.length;i++){
+const blob=await arabicImageToBlob(urls[i]);
+
+pages.push({
+name:'page-'+(i+1),
+blob,
+type:blob.type,
+originalUrl:urls[i]
+});
+
+arabicStatus(
+'تحميل الصفحة '+(i+1)+' من '+urls.length
+);
+}
+
+const record={
 id,
 contentType:'arabic-manhwa',
 source:series.source,
@@ -1080,86 +1816,191 @@ chapterNum:chapterTitle,
 chapterUrl:url,
 pages,
 savedAt:Date.now()
-});
-setProgress(100,'تم حفظ الفصل أوفلاين');
-renderDownloadsManager();
-}catch(e){
-console.error(e);
-setProgress(100,'تعذر حفظ الفصل: '+e.message);
+};
+
+await saveArabicOfflineRecord('chapters',record);
+
+arabicStatus(
+'تم حفظ '+chapterTitle+' بنجاح للقراءة دون إنترنت.'
+);
+
+}catch(error){
+arabicStatus('فشل تحميل الفصل: '+error.message);
 }
 }
+
+/* Read saved Arabic chapter offline */
 
 async function readArabicOffline(id){
-let saved=await storeGet('chapters',id);
-if(!saved?.pages?.length)return alert('الفصل المحفوظ غير موجود أو فارغ');
-chapterToken++;
-activeObjectUrls.forEach(URL.revokeObjectURL);
-activeObjectUrls=[];
-$('reader').style.display='block';
-$('readerTitle').textContent=saved.title+' — '+saved.chapterNum;
-$('readerPages').innerHTML='';
-saved.pages.forEach((p,i)=>{
-let im=document.createElement('img');
-im.loading=i<3?'eager':'lazy';
-im.alt='صفحة '+(i+1);
-let u=URL.createObjectURL(p.blob);
-activeObjectUrls.push(u);
-im.src=u;
-$('readerPages').appendChild(im);
-});
+try{
+const record=await getArabicOfflineRecord('chapters',id);
+
+if(!record||!record.pages){
+throw Error('الفصل المحفوظ غير موجود.');
 }
 
-async function downloadArabicPDF(url,title){
-let series=currentArabicSeries;
-if(!series?.source)return;
-switchView('downloads');
-setProgress(1,'إعداد PDF: '+title);
+$('reader').style.display='block';
+$('arabicView').style.display='none';
+
+$('readerTitle').textContent=
+record.title+' - '+record.chapterNum;
+
+const container=$('readerPages');
+container.innerHTML='';
+
+record.pages.forEach((page,index)=>{
+const image=document.createElement('img');
+
+const blob=page.blob instanceof Blob
+?page.blob
+:new Blob([page.blob],{type:page.type||'image/jpeg'});
+
+image.src=URL.createObjectURL(blob);
+image.alt='صفحة '+(index+1);
+image.loading='lazy';
+
+container.appendChild(image);
+});
+
+window.scrollTo(0,0);
+
+}catch(error){
+alert('تعذر فتح الفصل المحفوظ: '+error.message);
+}
+}
+
+/* ==========================================
+   ARABIC PDF EXPORT
+========================================== */
+
+async function downloadArabicPDF(url,chapterTitle='فصل'){
+if(!currentArabicSeries){
+arabicStatus('افتح العمل أولاً.');
+return;
+}
+
+if(typeof window.jspdf==='undefined'){
+arabicStatus('مكتبة PDF غير متاحة.');
+return;
+}
+
+arabicStatus('جاري تجهيز ملف PDF...');
+
 try{
-if(!window.jspdf?.jsPDF)throw Error('مكتبة PDF غير متاحة');
-let d=await fetchArabicChapter(url);
-if(!d.pages?.length)throw Error('لا توجد صفحات');
-let {jsPDF}=window.jspdf,pdf=null;
-for(let i=0;i<d.pages.length;i++){
-let src=arabicPageImage(d.pages[i]);
-if(!src)throw Error('رابط صورة مفقود');
-let b=await fetchImageBlob(src);
-let conv=await blobToJpegDataURL(b);
-let ori=conv.width>conv.height?'landscape':'portrait';
-if(!pdf)pdf=new jsPDF({orientation:ori,unit:'mm',format:'a4',compress:true});
-else pdf.addPage('a4',ori);
-let pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
-let ratio=Math.min(pw/conv.width,ph/conv.height);
-let w=conv.width*ratio,h=conv.height*ratio;
-pdf.addImage(conv.data,'JPEG',(pw-w)/2,(ph-h)/2,w,h);
-setProgress(Math.floor((i+1)/d.pages.length*95),`تجهيز PDF ${i+1}/${d.pages.length}`);
+const urls=await fetchArabicChapter(url);
+
+if(!urls.length){
+throw Error('لا توجد صفحات لإنشاء PDF.');
 }
-let fname='KATRO_'+String(title).replace(/[^\w.-]/g,'_')+'.pdf';
-pdf.save(fname);
-await storePut('pdf_logs',{id:'arabic:'+series.source+':'+url,name:fname,savedAt:Date.now()});
-setProgress(100,'تم إنشاء PDF');
-renderDownloadsManager();
-}catch(e){
-console.error(e);
-setProgress(100,'فشل PDF: '+e.message);
+
+const {jsPDF}=window.jspdf;
+
+const pdf=new jsPDF({
+orientation:'portrait',
+unit:'px',
+format:'a4',
+compress:true
+});
+
+for(let i=0;i<urls.length;i++){
+const blob=await arabicImageToBlob(urls[i]);
+
+const dataUrl=await new Promise((resolve,reject)=>{
+const reader=new FileReader();
+
+reader.onload=()=>resolve(reader.result);
+reader.onerror=()=>reject(reader.error);
+
+reader.readAsDataURL(blob);
+});
+
+const image=new Image();
+
+await new Promise((resolve,reject)=>{
+image.onload=resolve;
+image.onerror=reject;
+image.src=dataUrl;
+});
+
+const pageWidth=pdf.internal.pageSize.getWidth();
+const pageHeight=pdf.internal.pageSize.getHeight();
+
+const ratio=Math.min(
+pageWidth/image.width,
+pageHeight/image.height
+);
+
+const width=image.width*ratio;
+const height=image.height*ratio;
+
+if(i>0)pdf.addPage();
+
+pdf.addImage(
+dataUrl,
+blob.type.includes('png')?'PNG':'JPEG',
+(pageWidth-width)/2,
+(pageHeight-height)/2,
+width,
+height,
+undefined,
+'FAST'
+);
+
+arabicStatus(
+'إنشاء PDF: '+(i+1)+' من '+urls.length
+);
+}
+
+const safeName=String(chapterTitle)
+.replace(/[\\/:*?"<>|]/g,'_');
+
+const fileName=safeName+'.pdf';
+
+pdf.save(fileName);
+
+await saveArabicOfflineRecord('pdf_logs',{
+id:'arabic-pdf:'+currentArabicSeries.source+':'+url,
+title:currentArabicSeries.title,
+chapter:chapterTitle,
+fileName,
+savedAt:Date.now(),
+source:currentArabicSeries.source
+});
+
+arabicStatus('تم إنشاء ملف PDF بنجاح.');
+
+}catch(error){
+arabicStatus('فشل إنشاء PDF: '+error.message);
 }
 }
+
+/* ==========================================
+   NAVIGATION
+========================================== */
 
 function backArabicResults(){
 arabicRequestToken++;
-$('arabicDetails').style.display='none';
+
 $('arabicReader').style.display='none';
+$('arabicDetails').style.display='none';
 $('arabicResults').style.display='grid';
+
 window.scrollTo(0,0);
 }
 
 function closeArabicReader(){
 arabicRequestToken++;
+
 $('arabicReader').style.display='none';
 $('arabicDetails').style.display='block';
+
 window.scrollTo(0,0);
 }
 
+/* Start KATRO Manga */
+
 fetchManga('');
+
 </script>
 </body>
 </html>
