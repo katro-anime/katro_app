@@ -168,8 +168,8 @@ header{align-items:flex-start;flex-direction:column}
 <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:15px">
 <h2 id="mangaTitleHeader" style="font-size:18px"></h2>
 <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-<button id="favBtn" onclick="toggleFavoriteCurrent()" style="background:#f3f4f06;color:#111827">⭐ إضافة للمفضلة</button>
-<select id="langFilterSelect" onchange="renderChaptersList()" style="background:#f3f4f06;border:1px solid #ddd">
+<button id="favBtn" onclick="toggleFavoriteCurrent()" style="background:#f3f4f6;color:#111827">⭐ إضافة للمفضلة</button>
+<select id="langFilterSelect" onchange="renderChaptersList()" style="background:#f3f4f6;border:1px solid #ddd">
 <option value="all">جميع الترجمات</option>
 <option value="ar">العربية</option><option value="en">الإنجليزية</option>
 <option value="ja">اليابانية</option><option value="ko">الكورية</option>
@@ -268,10 +268,35 @@ zh:'مانهوا صينية 🇨🇳',
    GENERAL UI
 ========================= */
 
+
 function updateBackdrop(items){
-const strips=[$('artStrip1'),$('artStrip2'),$('artStrip3')];
-const covers=(items||[]).map(x=>x.cover||x.image).filter(Boolean);
-if(!covers.length)return;
+  const strips = [
+    $('artStrip1'),
+    $('artStrip2'),
+    $('artStrip3')
+  ];
+
+  const covers = (items || [])
+    .map(x => x.cover || x.image)
+    .filter(Boolean);
+
+  if (!covers.length) return;
+
+  strips.forEach((s, n) => {
+    s.innerHTML = '';
+
+    for (let i = 0; i < 12; i++) {
+      let im = document.createElement('img');
+      im.loading = 'lazy';
+      im.src = covers[(i + n * 4) % covers.length];
+      im.alt = 'KATRO artwork';
+      im.onerror = () => im.remove();
+
+      s.appendChild(im);
+    }
+  });
+}
+
 
 strips.forEach((s,n)=>{
 s.innerHTML='';
