@@ -205,7 +205,8 @@ footer{padding:30px 5%;border-top:1px solid var(--border);text-align:center;colo
 <p style="margin-top:6px">Powered by MangaDex API. Not endorsed by MangaDex.</p>
 </footer>
 
-<script>'use strict';
+<script>
+  'use strict';
 
 const API='https://katro-manga-api-v2.mmmzzz126038.workers.dev';
 const ARABIC_API='https://katro-arabic-manga.mmmzzz126038.workers.dev';
@@ -743,7 +744,8 @@ $('pdfDownloadsList').appendChild(row);
 console.error(e);
 $('offlineDownloadsList').textContent='تعذر قراءة التنزيلات.';
 }
-}/* KATRO Arabic Worker - Advanced Search Engine */
+  }
+  /* KATRO Arabic Worker - Advanced Search Engine */
 
 let arabicInitialized=false;
 let arabicResultsCache=[];
@@ -1432,7 +1434,8 @@ if(token===arabicRequestToken){
 $('arabicMore').disabled=false;
 }
 }
-  }/* ==========================================
+  }
+  /* ==========================================
    KATRO ARABIC MANGA - SERIES AND READER
 ========================================== */
 
