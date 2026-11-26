@@ -1,21 +1,21 @@
 {
-  "name": "KATRO APP",
+  "name": "KATRO Manga",
   "short_name": "KATRO",
-  "description": "عالم الأنمي بين يديك",
+  "description": "KATRO Manga - عالم المانغا والمانهوا",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#080912",
-  "theme_color": "#8855ff",
+  "background_color": "#ffffff",
+  "theme_color": "#8b5cf6",
   "lang": "ar",
   "dir": "rtl",
   "icons": [
     {
-      "src": "./icon.png",
+      "src": "./app/icon.jpg",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/jpeg",
+      "purpose": "any"
     }
   ]
 }
