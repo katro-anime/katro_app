@@ -1,3 +1,4 @@
+
 name: Build KATRO APK
 
 on:
@@ -25,12 +26,6 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Verify Android SDK
-        run: |
-          echo "ANDROID_HOME=$ANDROID_HOME"
-          test -d "$ANDROID_HOME"
-          ls "$ANDROID_HOME"
-
       - name: Install dependencies
         run: npm install
 
@@ -39,48 +34,74 @@ jobs:
 
       - name: Sync KATRO
         run: npx cap sync android
-      - name: Generate Android launcher icons
+
+      - name: Generate KATRO launcher icons
         run: |
           sudo apt-get update
           sudo apt-get install -y imagemagick
 
-          RES="android/app/src/main/res"
-          mkdir -p "$RES/drawable-nodpi" "$RES/mipmap-anydpi-v26" "$RES/values"
+          test -f app/icon.jpg
 
-          convert icon.jpg -resize 324x324 -gravity center -background none -extent 432x432 "$RES/drawable-nodpi/ic_launcher_foreground.png"
+          RES="android/app/src/main/res"
+
+          mkdir -p "$RES/drawable"
+          mkdir -p "$RES/drawable-nodpi"
+          mkdir -p "$RES/mipmap-mdpi"
+          mkdir -p "$RES/mipmap-hdpi"
+          mkdir -p "$RES/mipmap-xhdpi"
+          mkdir -p "$RES/mipmap-xxhdpi"
+          mkdir -p "$RES/mipmap-xxxhdpi"
+          mkdir -p "$RES/mipmap-anydpi-v26"
+          mkdir -p "$RES/values"
+
+          convert app/icon.jpg -strip -resize 48x48! "$RES/mipmap-mdpi/ic_launcher.png"
+          convert app/icon.jpg -strip -resize 72x72! "$RES/mipmap-hdpi/ic_launcher.png"
+          convert app/icon.jpg -strip -resize 96x96! "$RES/mipmap-xhdpi/ic_launcher.png"
+          convert app/icon.jpg -strip -resize 144x144! "$RES/mipmap-xxhdpi/ic_launcher.png"
+          convert app/icon.jpg -strip -resize 192x192! "$RES/mipmap-xxxhdpi/ic_launcher.png"
+
+          for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+            cp "$RES/mipmap-$density/ic_launcher.png" "$RES/mipmap-$density/ic_launcher_round.png"
+          done
+
+          convert app/icon.jpg -strip -resize 432x432 \
+            "$RES/drawable-nodpi/ic_launcher_foreground.png"
 
           cat > "$RES/values/ic_launcher_background.xml" <<'EOF'
           <resources>
-            <color name="ic_launcher_background">#111018</color>
+              <color name="ic_launcher_background">#FFFFFF</color>
           </resources>
           EOF
 
           cat > "$RES/mipmap-anydpi-v26/ic_launcher.xml" <<'EOF'
           <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-            <background android:drawable="@color/ic_launcher_background"/>
-            <foreground android:drawable="@drawable/ic_launcher_foreground"/>
+              <background android:drawable="@color/ic_launcher_background"/>
+              <foreground android:drawable="@drawable/ic_launcher_foreground"/>
           </adaptive-icon>
           EOF
 
           cat > "$RES/mipmap-anydpi-v26/ic_launcher_round.xml" <<'EOF'
           <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-            <background android:drawable="@color/ic_launcher_background"/>
-            <foreground android:drawable="@drawable/ic_launcher_foreground"/>
+              <background android:drawable="@color/ic_launcher_background"/>
+              <foreground android:drawable="@drawable/ic_launcher_foreground"/>
           </adaptive-icon>
           EOF
 
-          for entry in "mdpi 48" "hdpi 72" "xhdpi 96" "xxhdpi 144" "xxxhdpi 192"; do
-            set -- $entry
-            mkdir -p "$RES/mipmap-$1"
-            convert icon.jpg -resize "$2x$2!" "$RES/mipmap-$1/ic_launcher.png"
-            cp "$RES/mipmap-$1/ic_launcher.png" "$RES/mipmap-$1/ic_launcher_round.png"
-          done
+          cat > "$RES/values/strings.xml" <<'EOF'
+          <resources>
+              <string name="app_name">KATRO Manga</string>
+              <string name="title_activity_main">KATRO Manga</string>
+              <string name="package_name">com.katro.anime</string>
+              <string name="custom_url_scheme">com.katro.anime</string>
+          </resources>
+          EOF
+
       - name: Build APK
         run: cd android && ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: KATRO-APK
+          name: KATRO-Manga-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 7
