@@ -4,10 +4,26 @@ set -euo pipefail
 
 ICON="app/icon.jpg"
 RES="android/app/src/main/res"
+MANIFEST="android/app/src/main/AndroidManifest.xml"
 
-# Check source icon
-if [ ! -f "$ICON" ]; then
-  echo "ERROR: app/icon.jpg not found"
+# Detect ImageMagick
+if command -v magick >/dev/null 2>&1; then
+  IM_CMD="magick"
+elif command -v convert >/dev/null 2>&1; then
+  IM_CMD="convert"
+else
+  echo "ERROR: ImageMagick is not installed!"
+  exit 1
+fi
+
+# Check required files
+if [ ! -s "$ICON" ]; then
+  echo "ERROR: app/icon.jpg is missing or empty"
+  exit 1
+fi
+
+if [ ! -f "$MANIFEST" ]; then
+  echo "ERROR: AndroidManifest.xml not found"
   exit 1
 fi
 
@@ -24,19 +40,19 @@ mkdir -p "$RES/values"
 echo "Generating KATRO launcher icons..."
 
 # Generate standard launcher icons
-convert "$ICON" -strip -resize 48x48! \
+"$IM_CMD" "$ICON" -strip -resize 48x48! \
   "$RES/mipmap-mdpi/ic_launcher.png"
 
-convert "$ICON" -strip -resize 72x72! \
+"$IM_CMD" "$ICON" -strip -resize 72x72! \
   "$RES/mipmap-hdpi/ic_launcher.png"
 
-convert "$ICON" -strip -resize 96x96! \
+"$IM_CMD" "$ICON" -strip -resize 96x96! \
   "$RES/mipmap-xhdpi/ic_launcher.png"
 
-convert "$ICON" -strip -resize 144x144! \
+"$IM_CMD" "$ICON" -strip -resize 144x144! \
   "$RES/mipmap-xxhdpi/ic_launcher.png"
 
-convert "$ICON" -strip -resize 192x192! \
+"$IM_CMD" "$ICON" -strip -resize 192x192! \
   "$RES/mipmap-xxxhdpi/ic_launcher.png"
 
 # Generate round launcher icons
@@ -46,14 +62,14 @@ for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
 done
 
 # Generate adaptive icon foreground
-convert "$ICON" -strip \
+"$IM_CMD" "$ICON" -strip \
   -resize 324x324 \
   -gravity center \
   -background none \
   -extent 432x432 \
   "$RES/drawable-nodpi/ic_launcher_foreground.png"
 
-# Use a unique KATRO background color resource
+# Set KATRO background color
 cat > "$RES/values/katro_icon_colors.xml" <<'EOF'
 <resources>
     <color name="katro_icon_background">#FFFFFF</color>
@@ -69,6 +85,7 @@ cat > "$RES/mipmap-anydpi-v26/ic_launcher.xml" <<'EOF'
 </adaptive-icon>
 EOF
 
+# Adaptive round launcher icon
 cat > "$RES/mipmap-anydpi-v26/ic_launcher_round.xml" <<'EOF'
 <?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
@@ -83,21 +100,17 @@ from pathlib import Path
 import re
 
 manifest = Path("android/app/src/main/AndroidManifest.xml")
-
-if not manifest.exists():
-    raise SystemExit("ERROR: AndroidManifest.xml not found")
-
 content = manifest.read_text(encoding="utf-8")
 
-match = re.search(r"<application\b[^>]*>", content)
+match = re.search(r"<application\b[^>]*>", content, flags=re.DOTALL)
 
 if not match:
     raise SystemExit("ERROR: application tag not found")
 
 tag = match.group(0)
 
-tag = re.sub(r'\s+android:icon="[^"]*"', '', tag)
-tag = re.sub(r'\s+android:roundIcon="[^"]*"', '', tag)
+tag = re.sub(r'\s+android:icon\s*=\s*"[^"]*"', '', tag)
+tag = re.sub(r'\s+android:roundIcon\s*=\s*"[^"]*"', '', tag)
 
 tag = tag[:-1] + (
     ' android:icon="@mipmap/ic_launcher"'
@@ -108,18 +121,28 @@ content = content[:match.start()] + tag + content[match.end():]
 
 manifest.write_text(content, encoding="utf-8")
 
-print("KATRO launcher icons linked successfully")
+print("KATRO icon linked successfully!")
 PY
 
 # Verify generated files
-test -f "$RES/mipmap-mdpi/ic_launcher.png"
-test -f "$RES/mipmap-hdpi/ic_launcher.png"
-test -f "$RES/mipmap-xhdpi/ic_launcher.png"
-test -f "$RES/mipmap-xxhdpi/ic_launcher.png"
-test -f "$RES/mipmap-xxxhdpi/ic_launcher.png"
-test -f "$RES/mipmap-anydpi-v26/ic_launcher.xml"
-test -f "$RES/mipmap-anydpi-v26/ic_launcher_round.xml"
-test -f "$RES/drawable-nodpi/ic_launcher_foreground.png"
-test -f "$RES/values/katro_icon_colors.xml"
+for file in \
+  "$RES/mipmap-mdpi/ic_launcher.png" \
+  "$RES/mipmap-hdpi/ic_launcher.png" \
+  "$RES/mipmap-xhdpi/ic_launcher.png" \
+  "$RES/mipmap-xxhdpi/ic_launcher.png" \
+  "$RES/mipmap-xxxhdpi/ic_launcher.png" \
+  "$RES/mipmap-anydpi-v26/ic_launcher.xml" \
+  "$RES/mipmap-anydpi-v26/ic_launcher_round.xml" \
+  "$RES/drawable-nodpi/ic_launcher_foreground.png" \
+  "$RES/values/katro_icon_colors.xml"; do
 
-echo "SUCCESS: KATRO icons generated and verified!"
+  if [ ! -s "$file" ]; then
+    echo "ERROR: Missing resource: $file"
+    exit 1
+  fi
+
+done
+
+echo "=================================="
+echo "KATRO ICON GENERATED SUCCESSFULLY"
+echo "=================================="
