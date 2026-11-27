@@ -3,7 +3,7 @@ workflows:
   katro-android:
     name: KATRO Manga APK
     max_build_duration: 60
-    instance_type: linux
+    instance_type: windows
 
     environment:
       java: 21
