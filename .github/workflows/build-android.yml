@@ -20,7 +20,7 @@ jobs:
           node-version: 22
 
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
@@ -34,110 +34,20 @@ jobs:
       - name: Sync KATRO
         run: npx cap sync android
 
-      - name: Generate KATRO launcher icons
+      - name: Install ImageMagick
         run: |
           sudo apt-get update
           sudo apt-get install -y imagemagick
 
-          test -f app/icon.jpg
+      - name: Generate and link KATRO icons
+        run: bash scripts/create-android-icons.sh
 
-          RES="android/app/src/main/res"
-
-          mkdir -p "$RES/drawable"
-          mkdir -p "$RES/drawable-nodpi"
-          mkdir -p "$RES/mipmap-mdpi"
-          mkdir -p "$RES/mipmap-hdpi"
-          mkdir -p "$RES/mipmap-xhdpi"
-          mkdir -p "$RES/mipmap-xxhdpi"
-          mkdir -p "$RES/mipmap-xxxhdpi"
-          mkdir -p "$RES/mipmap-anydpi-v26"
-          mkdir -p "$RES/values"
-
-          # Generate launcher icons
-          convert app/icon.jpg -strip -resize 48x48! "$RES/mipmap-mdpi/ic_launcher.png"
-          convert app/icon.jpg -strip -resize 72x72! "$RES/mipmap-hdpi/ic_launcher.png"
-          convert app/icon.jpg -strip -resize 96x96! "$RES/mipmap-xhdpi/ic_launcher.png"
-          convert app/icon.jpg -strip -resize 144x144! "$RES/mipmap-xxhdpi/ic_launcher.png"
-          convert app/icon.jpg -strip -resize 192x192! "$RES/mipmap-xxxhdpi/ic_launcher.png"
-
-          # Round icons
-          for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
-            cp "$RES/mipmap-$density/ic_launcher.png" "$RES/mipmap-$density/ic_launcher_round.png"
-          done
-
-          # Adaptive icon foreground
-          convert app/icon.jpg -strip -resize 324x324 \
-            -gravity center -background none -extent 432x432 \
-            "$RES/drawable-nodpi/ic_launcher_foreground.png"
-
-          # Icon background
-          cat > "$RES/values/ic_launcher_background.xml" <<'EOF'
-          <resources>
-              <color name="ic_launcher_background">#FFFFFF</color>
-          </resources>
-          EOF
-
-          # Adaptive icon
-          cat > "$RES/mipmap-anydpi-v26/ic_launcher.xml" <<'EOF'
-          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-              <background android:drawable="@color/ic_launcher_background"/>
-              <foreground android:drawable="@drawable/ic_launcher_foreground"/>
-          </adaptive-icon>
-          EOF
-
-          cat > "$RES/mipmap-anydpi-v26/ic_launcher_round.xml" <<'EOF'
-          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-              <background android:drawable="@color/ic_launcher_background"/>
-              <foreground android:drawable="@drawable/ic_launcher_foreground"/>
-          </adaptive-icon>
-          EOF
-
-          # App strings
-          cat > "$RES/values/strings.xml" <<'EOF'
-          <resources>
-              <string name="app_name">KATRO Manga</string>
-              <string name="title_activity_main">KATRO Manga</string>
-              <string name="package_name">com.katro.anime</string>
-              <string name="custom_url_scheme">com.katro.anime</string>
-          </resources>
-          EOF
-
-          # Force AndroidManifest to use KATRO icons
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-
-          p = Path("android/app/src/main/AndroidManifest.xml")
-          s = p.read_text(encoding="utf-8")
-
-          match = re.search(r"<application\b[^>]*>", s)
-          if not match:
-              raise SystemExit("Application tag not found")
-
-          tag = match.group(0)
-
-          tag = re.sub(r'\s+android:icon="[^"]*"', '', tag)
-          tag = re.sub(r'\s+android:roundIcon="[^"]*"', '', tag)
-
-          tag = tag[:-1] + ' android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round">'
-
-          s = s[:match.start()] + tag + s[match.end():]
-
-          p.write_text(s, encoding="utf-8")
-
-          print("KATRO icons applied successfully")
-          PY
-
-          # Verify icons
-          test -f "$RES/mipmap-mdpi/ic_launcher.png"
-          test -f "$RES/mipmap-hdpi/ic_launcher.png"
-          test -f "$RES/mipmap-xhdpi/ic_launcher.png"
-          test -f "$RES/mipmap-xxhdpi/ic_launcher.png"
-          test -f "$RES/mipmap-xxxhdpi/ic_launcher.png"
-          test -f "$RES/mipmap-anydpi-v26/ic_launcher.xml"
-          test -f "$RES/drawable-nodpi/ic_launcher_foreground.png"
-
-          echo "KATRO launcher icons are ready."
+      - name: Verify Android icon configuration
+        run: |
+          grep -q 'android:icon="@mipmap/ic_launcher"' android/app/src/main/AndroidManifest.xml
+          test -f android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+          test -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+          echo "KATRO icon configuration verified."
 
       - name: Build APK
         run: cd android && ./gradlew assembleDebug --stacktrace
