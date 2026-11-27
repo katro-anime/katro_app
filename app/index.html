@@ -1,44 +1,1501 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><meta name="description" content="KATRO Manga - عالم المانغا والمانهوا"><title>KATRO Manga | عالم المانغا والمانهوا</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="KATRO Manga - عالم المانغا والمانهوا">
+<title>KATRO Manga | عالم المانغا والمانهوا</title>
+
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');*{box-sizing:border-box;margin:0;padding:0}:root{--bg:#f7f5fc;--card:#ffffff;--text:#111827;--purple:#8b5cf6;--blue:#28b8ff;--muted:#6b7280;--green:#10b981;--red:#ef4444;--border:#e5e7eb}html{background:var(--bg)}body{font-family:'Cairo',sans-serif;background:transparent;color:var(--text);overflow-x:hidden;min-height:100vh}button,input,select{font:inherit;border:0;border-radius:12px;padding:10px 14px}input{width:100%;background:#f3f4f6;color:var(--text);border:1px solid var(--border)}button{background:var(--purple);color:white;cursor:pointer;font-weight:bold}button:disabled{opacity:.5;cursor:not-allowed}#artBackdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:radial-gradient(circle at 15% 15%,#d9c5ff 0,transparent 35%),radial-gradient(circle at 85% 65%,#c5e7ff 0,transparent 40%),linear-gradient(135deg,#f4edff,#fff,#eee8ff)}.art-strip{position:absolute;display:flex;gap:12px;width:160%;left:-25%;transform:rotate(-12deg);opacity:.17}.art-strip.two{transform:rotate(12deg);left:-10%}.art-strip img{width:125px;height:190px;object-fit:cover;border-radius:12px;border:4px solid white;box-shadow:0 5px 20px #0002}.art-strip.one{top:5%}.art-strip.two{top:42%}.art-strip.three{top:83%}header{padding:14px 5%;background:#ffffffed;backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid var(--border)}.logo{font-size:22px;font-weight:900;color:var(--text);cursor:pointer}.logo span{color:var(--purple)}.nav-btns{display:flex;gap:6px;flex-wrap:wrap}.nav-btns button{padding:7px 10px;font-size:12px;background:#f3f4f6;color:var(--text)}.container,#chaptersContainer,#downloadsView,#arabicView{position:relative;padding:20px 5%}.hero-search{background:#ffffffed;backdrop-filter:blur(10px);padding:18px;border-radius:16px;margin-bottom:20px;border:1px solid var(--border);box-shadow:0 8px 20px #00000008}.tabs{display:flex;gap:8px;margin-bottom:15px;overflow-x:auto;padding-bottom:5px}.tabs button{background:#f3f4f6;color:var(--muted);white-space:nowrap}.tabs button.active{background:var(--purple);color:white}.search-row{display:flex;gap:8px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:#ffffffed;backdrop-filter:blur(8px);border-radius:14px;overflow:hidden;cursor:pointer;border:1px solid var(--border);position:relative;box-shadow:0 4px 12px #00000008;min-width:0}.card img{width:100%;aspect-ratio:2/3;object-fit:cover;background:#f3f4f6;display:block}.card h3{font-size:13px;padding:10px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.badge{position:absolute;top:8px;right:8px;background:#000b;color:white;padding:4px 8px;border-radius:6px;font-size:10px}#status,#arabicStatus{text-align:center;padding:20px;color:var(--muted);font-size:14px;white-space:pre-wrap}#chaptersContainer,#downloadsView,#arabicView{display:none}.chapter{background:#ffffffed;backdrop-filter:blur(8px);padding:14px;margin:8px 0;border-radius:10px;display:flex;flex-direction:column;gap:10px;border:1px solid var(--border)}.chapter-info{display:flex;justify-content:space-between;align-items:center;gap:8px}.chapter-actions{display:flex;gap:8px;flex-wrap:wrap}.chapter-actions button{padding:7px 10px;font-size:12px}.btn-offline{background:var(--green)}.btn-pdf{background:var(--blue)}.progress-box{background:#f9fafb;border:1px solid var(--border);padding:15px;border-radius:12px;margin-bottom:20px}.progress-track{width:100%;height:10px;background:#e5e7eb;border-radius:5px;overflow:hidden;margin-top:8px}.progress-fill{height:100%;width:0;background:var(--green);transition:width .2s}#reader{position:fixed;inset:0;background:white;overflow:auto;z-index:200;display:none}#readerPages{max-width:800px;margin:auto;padding-bottom:50px}#readerPages img{display:block;width:100%;height:auto;background:#f3f4f6}#readerHeader{position:sticky;top:0;background:#fffffff2;padding:12px 20px;display:flex;justify-content:space-between;z-index:2;align-items:center;border-bottom:1px solid var(--border)}.modal{position:fixed;inset:0;background:#0008;z-index:400;display:none;justify-content:center;align-items:center;padding:20px}.modal-content{background:white;width:100%;max-width:550px;border-radius:16px;padding:22px;max-height:85vh;overflow:auto}.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:10px}#arabicDetails,#arabicReader{display:none}#arabicPages img{display:block;width:100%;max-width:850px;height:auto;margin:auto;background:#eee}footer{padding:30px 5%;border-top:1px solid var(--border);text-align:center;color:var(--muted);font-size:12px;margin-top:40px;background:#ffffffd9}@media(min-width:768px){.grid{grid-template-columns:repeat(4,minmax(0,1fr)}}@media(max-width:480px){header{align-items:flex-start;flex-direction:column}.nav-btns{width:100%}.nav-btns button{font-size:11px}.search-row input{min-width:0}.art-strip img{width:95px;height:145px}}
-</style><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script></head><body>
-<div id="artBackdrop"><div class="art-strip one" id="artStrip1"></div><div class="art-strip two" id="artStrip2"></div><div class="art-strip three" id="artStrip3"></div></div>
-<header><div class="logo" onclick="switchView('main')">KATRO<span>.</span></div><div class="nav-btns"><button onclick="switchView('main')">🏠 الرئيسية</button><button onclick="switchView('arabic')">📚 مانهو عربية</button><button onclick="switchView('downloads')">📥 تحميلاتي</button><button onclick="openModal('favoritesModal')">⭐ المفضلة</button><button onclick="openModal('historyModal')">🕒 السجل</button><button onclick="openModal('settingsModal')">⚙️ الإعدادات</button></div></header>
-<div class="container" id="mainView"><div class="hero-search"><div class="tabs"><button id="tabAll" class="active" onclick="setCategory('all')">🌐 الكل</button><button id="tabJa" onclick="setCategory('ja')">🇯🇵 مانغا يابانية</button><button id="tabKo" onclick="setCategory('ko')">🇰🇷 مانهوا كورية</button><button id="tabZh" onclick="setCategory('zh')">🇨🇳 مانهوا صينية</button></div><div class="search-row"><input id="search" placeholder="ابحث عن اسم المانغا أو المانهوا..." autocomplete="off"><button onclick="triggerSearch()">بحث</button></div></div><div id="status">جاري استعراض الأعمال...</div><div id="results" class="grid"></div></div>
-<div id="arabicView"><button onclick="switchView('main')" style="background:#f3f4f6;color:#111;margin-bottom:15px">⬅ الرئيسية</button><h2 style="margin-bottom:8px">📚 المانهو العربية</h2><p style="color:#777;font-size:13px;margin-bottom:15px">اكتشف واقرأ المانهو العربية</p><div class="hero-search"><div class="tabs" id="arabicSourceTabs"><button class="active" id="srcAzora" onclick="setArabicSource('azora')">Azora</button><button id="srcMangalek" onclick="setArabicSource('mangalek')">Manga Lek</button><button id="srcTeamx" onclick="setArabicSource('teamx')">Team X</button></div><div class="search-row"><input id="arabicSearch" placeholder="ابحث عن اسم المانهو..." autocomplete="off"><button onclick="searchArabic()">بحث</button></div><button onclick="loadArabicPopular()" style="margin-top:12px;background:#eee;color:#222">🔥 الأعمال الشائعة</button></div><div id="arabicStatus">جاري الاتصال بالمصدر...</div><div id="arabicResults" class="grid"></div><button id="arabicMore" onclick="loadArabicMore()" style="display:none;margin:18px auto">⬇ تحميل 100 عمل إضافي</button><div id="arabicDetails"><button onclick="backArabicResults()" style="background:#eee;color:#222;margin:15px 0">⬅ العودة للنتائج</button><h2 id="arabicTitle"></h2><p id="arabicDescription" style="margin:12px 0;color:#777"></p><div id="arabicChapters"></div></div><div id="arabicReader"><button onclick="closeArabicReader()" style="background:#ef4444;margin:15px 0">إغلاق القراءة</button><div id="arabicPages"></div></div></div>
-<div id="chaptersContainer"><button onclick="switchView('main')" style="margin-bottom:15px;background:#f3f4f06;color:#111827">⬅ العودة</button><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:15px"><h2 id="mangaTitleHeader" style="font-size:18px"></h2><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button id="favBtn" onclick="toggleFavoriteCurrent()" style="background:#f3f4f6;color:#111827">⭐ إضافة للمفضلة</button><select id="langFilterSelect" onchange="renderChaptersList()" style="background:#f3f4f06;border:1px solid #ddd"><option value="all">جميع الترجمات</option><option value="ar">العربية</option><option value="en">الإنجليزية</option><option value="ja">اليابانية</option><option value="ko">الكورية</option><option value="zh">الصينية</option><option value="fr">الفرنسية</option><option value="es">الإسبانية</option><option value="pt-br">البرتغالية</option><option value="ru">الروسية</option><option value="id">الإندونيسية</option><option value="th">التايلاندية</option></select></div></div><div id="chaptersList"></div></div>
-<div id="downloadsView"><button onclick="switchView('main')" style="margin-bottom:15px;background:#f3f4f06;color:#111827">⬅ العودة</button><h2 style="margin-bottom:20px">📥 تحميلاتي</h2><div id="progressWrapper" class="progress-box" style="display:none"><div style="display:flex;justify-content:space-between"><span id="progressTitle">جاري التحميل...</span><strong id="progressText">0%</strong></div><div class="progress-track"><div id="progressBar" class="progress-fill"></div></div></div><h3 style="margin-bottom:10px">📱 الفصول المحفوظة أوفلاين</h3><div id="offlineDownloadsList"></div><h3 style="margin:20px 0 10px">📄 ملفات PDF التي تم إنشاؤها</h3><div id="pdfDownloadsList"></div></div>
-<div id="favoritesModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>⭐ المفضلة</h3><button onclick="closeModal('favoritesModal')" style="background:var(--red)">✕</button></div><div id="favoritesList" class="grid"></div></div></div><div id="historyModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>🕒 سجل المشاهدات</h3><button onclick="closeModal('historyModal')" style="background:var(--red)">✕</button></div><div id="historyList" class="grid"></div></div></div><div id="settingsModal" class="modal"><div class="modal-content"><div class="modal-header"><h3>⚙️ الإعدادات</h3><button onclick="closeModal('settingsModal')" style="background:var(--red)">✕</button></div><p>المطور: <strong style="color:var(--purple)">Katro 10k</strong></p><p style="margin-top:12px">KATRO Manga v12.0</p><p style="margin-top:12px;color:var(--muted)">المصدر الأساسي: MangaDex API.</p><p style="margin-top:8px;color:var(--muted)">مصادر المانهو العربية: Azora Manga، Manga Lek، Team X عبر Worker.</p></div></div>
-<div id="reader"><div id="readerHeader"><button onclick="closeReader()" style="background:var(--red)">إغلاق</button><span id="readerTitle"></span></div><div id="readerPages"></div></div><footer><div class="logo">KATRO<span>.</span></div><p>© 2026 KATRO Manga — Katro 10k</p><p style="margin-top:6px">Powered by MangaDex API. Not endorsed by MangaDex.</p></footer>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+--bg:#f7f5fc;--card:#fff;--text:#111827;
+--purple:#8b5cf6;--blue:#28b8ff;--muted:#6b7280;
+--green:#10b981;--red:#ef4444;--border:#e5e7eb
+}
+
+html{background:var(--bg)}
+body{
+font-family:'Cairo',sans-serif;background:transparent;
+color:var(--text);overflow-x:hidden;min-height:100vh
+}
+button,input,select{font:inherit;border:0;border-radius:12px;padding:10px 14px}
+input{width:100%;background:#f3f4f6;color:var(--text);border:1px solid var(--border)}
+button{background:var(--purple);color:white;cursor:pointer;font-weight:bold}
+button:disabled{opacity:.5;cursor:not-allowed}
+
+#artBackdrop{
+position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;
+background:radial-gradient(circle at 15% 15%,#d9c5ff 0,transparent 35%),
+radial-gradient(circle at 85% 65%,#c5e7ff 0,transparent 40%),
+linear-gradient(135deg,#f4edff,#fff,#eee8ff)
+}
+.art-strip{position:absolute;display:flex;gap:12px;width:160%;left:-25%;transform:rotate(-12deg);opacity:.17}
+.art-strip.two{transform:rotate(12deg);left:-10%}
+.art-strip img{width:125px;height:190px;object-fit:cover;border-radius:12px;border:4px solid white;box-shadow:0 5px 20px #0002}
+.art-strip.one{top:5%}.art-strip.two{top:42%}.art-strip.three{top:83%}
+
+header{
+padding:14px 5%;background:#ffffffed;backdrop-filter:blur(12px);
+position:sticky;top:0;z-index:100;display:flex;
+justify-content:space-between;align-items:center;gap:10px;
+border-bottom:1px solid var(--border)
+}
+.logo{font-size:22px;font-weight:900;color:var(--text);cursor:pointer}
+.logo span{color:var(--purple)}
+.nav-btns{display:flex;gap:6px;flex-wrap:wrap}
+.nav-btns button{padding:7px 10px;font-size:12px;background:#f3f4f6;color:var(--text)}
+.container,#chaptersContainer,#downloadsView,#arabicView{position:relative;padding:20px 5%}
+.hero-search{background:#ffffffed;backdrop-filter:blur(10px);padding:18px;border-radius:16px;margin-bottom:20px;border:1px solid var(--border);box-shadow:0 8px 20px #00000008}
+.tabs{display:flex;gap:8px;margin-bottom:15px;overflow-x:auto;padding-bottom:5px}
+.tabs button{background:#f3f4f6;color:var(--muted);white-space:nowrap}
+.tabs button.active{background:var(--purple);color:white}
+.search-row{display:flex;gap:8px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{background:#ffffffed;backdrop-filter:blur(8px);border-radius:14px;overflow:hidden;cursor:pointer;border:1px solid var(--border);position:relative;box-shadow:0 4px 12px #00000008;min-width:0}
+.card img{width:100%;aspect-ratio:2/3;object-fit:cover;background:#f3f4f6;display:block}
+.card h3{font-size:13px;padding:10px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.badge{position:absolute;top:8px;right:8px;background:#000b;color:white;padding:4px 8px;border-radius:6px;font-size:10px}
+#status,#arabicStatus{text-align:center;padding:20px;color:var(--muted);font-size:14px;white-space:pre-wrap}
+#chaptersContainer,#downloadsView,#arabicView{display:none}
+.chapter{background:#ffffffed;backdrop-filter:blur(8px);padding:14px;margin:8px 0;border-radius:10px;display:flex;flex-direction:column;gap:10px;border:1px solid var(--border)}
+.chapter-info{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.chapter-actions{display:flex;gap:8px;flex-wrap:wrap}
+.chapter-actions button{padding:7px 10px;font-size:12px}
+.btn-offline{background:var(--green)}
+.btn-pdf{background:var(--blue)}
+.progress-box{background:#f9fafb;border:1px solid var(--border);padding:15px;border-radius:12px;margin-bottom:20px}
+.progress-track{width:100%;height:10px;background:#e5e7eb;border-radius:5px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;width:0;background:var(--green);transition:width .2s}
+#reader{position:fixed;inset:0;background:white;overflow:auto;z-index:200;display:none}
+#readerPages{max-width:800px;margin:auto;padding-bottom:50px}
+#readerPages img{display:block;width:100%;height:auto;background:#f3f4f6}
+#readerHeader{position:sticky;top:0;background:#fffffff2;padding:12px 20px;display:flex;justify-content:space-between;z-index:2;align-items:center;border-bottom:1px solid var(--border)}
+.modal{position:fixed;inset:0;background:#0008;z-index:400;display:none;justify-content:center;align-items:center;padding:20px}
+.modal-content{background:white;width:100%;max-width:550px;border-radius:16px;padding:22px;max-height:85vh;overflow:auto}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:10px}
+#arabicDetails,#arabicReader{display:none}
+#arabicPages img{display:block;width:100%;max-width:850px;height:auto;margin:auto;background:#eee}
+footer{padding:30px 5%;border-top:1px solid var(--border);text-align:center;color:var(--muted);font-size:12px;margin-top:40px;background:#ffffffd9}
+
+@media(min-width:768px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:480px){
+header{align-items:flex-start;flex-direction:column}
+.nav-btns{width:100%}
+.nav-btns button{font-size:11px}
+.search-row input{min-width:0}
+.art-strip img{width:95px;height:145px}
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+
+<div id="artBackdrop">
+<div class="art-strip one" id="artStrip1"></div>
+<div class="art-strip two" id="artStrip2"></div>
+<div class="art-strip three" id="artStrip3"></div>
+</div>
+
+<header>
+<div class="logo" onclick="switchView('main')">KATRO<span>.</span></div>
+<div class="nav-btns">
+<button onclick="switchView('main')">🏠 الرئيسية</button>
+<button onclick="switchView('arabic')">📚 مانهو عربية</button>
+<button onclick="switchView('downloads')">📥 تحميلاتي</button>
+<button onclick="openModal('favoritesModal')">⭐ المفضلة</button>
+<button onclick="openModal('historyModal')">🕒 السجل</button>
+<button onclick="openModal('settingsModal')">⚙️ الإعدادات</button>
+</div>
+</header>
+
+<div class="container" id="mainView">
+<div class="hero-search">
+<div class="tabs">
+<button id="tabAll" class="active" onclick="setCategory('all')">🌐 الكل</button>
+<button id="tabJa" onclick="setCategory('ja')">🇯🇵 مانغا يابانية</button>
+<button id="tabKo" onclick="setCategory('ko')">🇰🇷 مانهوا كورية</button>
+<button id="tabZh" onclick="setCategory('zh')">🇨🇳 مانهوا صينية</button>
+</div>
+<div class="search-row">
+<input id="search" placeholder="ابحث عن اسم المانغا أو المانهوا..." autocomplete="off">
+<button onclick="triggerSearch()">بحث</button>
+</div>
+</div>
+<div id="status">جاري استعراض الأعمال...</div>
+<div id="results" class="grid"></div>
+</div>
+
+<div id="arabicView">
+<button onclick="switchView('main')" style="background:#f3f4f6;color:#111;margin-bottom:15px">⬅ الرئيسية</button>
+<h2 style="margin-bottom:8px">📚 المانهو العربية</h2>
+<p style="color:#777;font-size:13px;margin-bottom:15px">اكتشف واقرأ المانهو العربية من ثلاثة مصادر في مكان واحد</p>
+
+<div class="hero-search">
+<div class="search-row">
+<input id="arabicSearch" placeholder="ابحث عن اسم المانهو في جميع المصادر..." autocomplete="off">
+<button onclick="searchArabic()">بحث</button>
+</div>
+<button onclick="loadArabicPopular()" style="margin-top:12px;background:#eee;color:#222">🔥 الأعمال الشائعة</button>
+</div>
+
+<div id="arabicStatus">جاري الاتصال بالمصادر...</div>
+<div id="arabicResults" class="grid"></div>
+<button id="arabicMore" onclick="loadArabicMore()" style="display:none;margin:18px auto">⬇ تحميل المزيد</button>
+
+<div id="arabicDetails">
+<button onclick="backArabicResults()" style="background:#eee;color:#222;margin:15px 0">⬅ العودة للنتائج</button>
+<h2 id="arabicTitle"></h2>
+<p id="arabicDescription" style="margin:12px 0;color:#777"></p>
+<div id="arabicChapters"></div>
+</div>
+
+<div id="arabicReader">
+<button onclick="closeArabicReader()" style="background:#ef4444;margin:15px 0">إغلاق القراءة</button>
+<div id="arabicPages"></div>
+</div>
+</div>
+
+<div id="chaptersContainer">
+<button onclick="switchView('main')" style="margin-bottom:15px;background:#f3f4f6;color:#111827">⬅ العودة</button>
+
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:15px">
+<h2 id="mangaTitleHeader" style="font-size:18px"></h2>
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+<button id="favBtn" onclick="toggleFavoriteCurrent()" style="background:#f3f4f06;color:#111827">⭐ إضافة للمفضلة</button>
+<select id="langFilterSelect" onchange="renderChaptersList()" style="background:#f3f4f06;border:1px solid #ddd">
+<option value="all">جميع الترجمات</option>
+<option value="ar">العربية</option><option value="en">الإنجليزية</option>
+<option value="ja">اليابانية</option><option value="ko">الكورية</option>
+<option value="zh">الصينية</option><option value="fr">الفرنسية</option>
+<option value="es">الإسبانية</option><option value="pt-br">البرتغالية</option>
+<option value="ru">الروسية</option><option value="id">الإندونيسية</option>
+<option value="th">التايلاندية</option>
+</select>
+</div>
+</div>
+<div id="chaptersList"></div>
+</div>
+
+<div id="downloadsView">
+<button onclick="switchView('main')" style="margin-bottom:15px;background:#f3f4f06;color:#111827">⬅ العودة</button>
+<h2 style="margin-bottom:20px">📥 تحميلاتي</h2>
+<div id="progressWrapper" class="progress-box" style="display:none">
+<div style="display:flex;justify-content:space-between">
+<span id="progressTitle">جاري التحميل...</span>
+<strong id="progressText">0%</strong>
+</div>
+<div class="progress-track"><div id="progressBar" class="progress-fill"></div></div>
+</div>
+<h3 style="margin-bottom:10px">📱 الفصول المحفوظة أوفلاين</h3>
+<div id="offlineDownloadsList"></div>
+<h3 style="margin:20px 0 10px">📄 ملفات PDF التي تم إنشاؤها</h3>
+<div id="pdfDownloadsList"></div>
+</div>
+
+<div id="favoritesModal" class="modal">
+<div class="modal-content">
+<div class="modal-header"><h3>⭐ المفضلة</h3><button onclick="closeModal('favoritesModal')" style="background:var(--red)">✕</button></div>
+<div id="favoritesList" class="grid"></div>
+</div>
+</div>
+
+<div id="historyModal" class="modal">
+<div class="modal-content">
+<div class="modal-header"><h3>🕒 سجل المشاهدات</h3><button onclick="closeModal('historyModal')" style="background:var(--red)">✕</button></div>
+<div id="historyList" class="grid"></div>
+</div>
+</div>
+
+<div id="settingsModal" class="modal">
+<div class="modal-content">
+<div class="modal-header"><h3>⚙️ الإعدادات</h3><button onclick="closeModal('settingsModal')" style="background:var(--red)">✕</button></div>
+<p>المطور: <strong style="color:var(--purple)">Katro 10kمحمد خالد</strong></p>
+<p style="margin-top:12px">KATRO Manga v12.0</p>
+<p style="margin-top:12px;color:var(--muted)">المصدر الأساسي: MangaDex API.</p>
+<p style="margin-top:8px;color:var(--muted)">مصادر المانهو العربية: Azora Manga، Manga Lek، Team X عبر Worker.</p>
+</div>
+</div>
+
+<div id="reader">
+<div id="readerHeader">
+<button onclick="closeReader()" style="background:var(--red)">إغلاق</button>
+<span id="readerTitle"></span>
+</div>
+<div id="readerPages"></div>
+</div>
+
+<footer>
+<div class="logo">KATRO<span>.</span></div>
+<p>© 2026 KATRO Manga — Katro 10k</p>
+<p style="margin-top:6px">Powered by MangaDex API. Not endorsed by MangaDex.</p>
+</footer>
+
 <script>
-'use strict';const API='https://katro-manga-api-v2.mmmzzz126038.workers.dev',ARABIC_API='https://katro-arabic-manga.mmmzzz126038.workers.dev';const $=id=>document.getElementById(id);let currentCategory='all',searchTimer=null,chapterToken=0,mangaToken=0,allLoadedChapters=[],currentOpenManga=null,activeObjectUrls=[];const languageNames={ja:'مانغا يابانية 🇯🇵',ko:'مانهوا كورية 🇰🇷',zh:'مانهوا صينية 🇨🇳','zh-hk':'مانهوا صينية 🇨🇳'};
-function updateBackdrop(items){const strips=[$('artStrip1'),$('artStrip2'),$('artStrip3')],covers=(items||[]).map(x=>x.cover||x.image).filter(Boolean);if(!covers.length)return;strips.forEach((s,n)=>{s.innerHTML='';for(let i=0;i<12;i++){let im=document.createElement('img');im.loading='lazy';im.src=covers[(i+n*4)%covers.length];im.alt='KATRO artwork';im.onerror=()=>im.remove();s.appendChild(im)}})}
-function switchView(v){$('mainView').style.display=v==='main'?'block':'none';$('chaptersContainer').style.display=v==='chapters'?'block':'none';$('downloadsView').style.display=v==='downloads'?'block':'none';$('arabicView').style.display=v==='arabic'?'block':'none';window.scrollTo(0,0);if(v==='downloads')renderDownloadsManager();if(v==='arabic'&&!arabicInitialized){arabicInitialized=true;loadArabicPopular()}}
-function openModal(id){$(id).style.display='flex';if(id==='favoritesModal')renderStoredCards('katro_favs','favoritesList');if(id==='historyModal')renderStoredCards('katro_history','historyList')}function closeModal(id){$(id).style.display='none'}function setStatus(m){$('status').textContent=m}function setProgress(p,t){p=Math.max(0,Math.min(100,p));$('progressWrapper').style.display='block';$('progressBar').style.width=p+'%';$('progressText').textContent=p+'%';$('progressTitle').textContent=t;if(p>=100)setTimeout(()=>$('progressWrapper').style.display='none',3500)}
-function setCategory(c){currentCategory=c;document.querySelectorAll('#mainView .tabs button').forEach(b=>b.classList.remove('active'));const ids={all:'tabAll',ja:'tabJa',ko:'tabKo',zh:'tabZh'};$(ids[c]).classList.add('active');fetchManga($('search').value.trim())}function getTitle(m){const t=m.attributes?.title||{};return t.ar||t.en||t.ja||t.ko||Object.values(t)[0]||'بدون عنوان'}function getCoverUrl(m){const r=m.relationships?.find(x=>x.type==='cover_art'),f=r?.attributes?.fileName;return f?`${API}/covers/${m.id}/${encodeURIComponent(f)}.256.jpg`:''}function getCategoryLabel(l){return languageNames[l]||'عمل مصور'}function getCategoryLanguages(){return currentCategory==='ja'?['ja']:currentCategory==='ko'?['ko']:currentCategory==='zh'?['zh','zh-hk']:[]}function buildMangaUrl(q){let u=new URL(API+'/manga');u.searchParams.set('limit','32');u.searchParams.set('order[relevance]','desc');u.searchParams.set('includes[]','cover_art');if(q)u.searchParams.set('title',q);getCategoryLanguages().forEach(l=>u.searchParams.append('originalLanguage[]',l));return u.toString()}
-async function fetchManga(q=''){const token=++mangaToken;setStatus('جاري جلب الأعمال...');$('results').innerHTML='';try{let r=await fetch(buildMangaUrl(q));if(!r.ok)throw Error('HTTP '+r.status);let d=await r.json();if(token!==mangaToken)return;if(d.errors?.length)throw Error(d.errors[0].detail||'MangaDex API error');let items=Array.isArray(d.data)?d.data:[];if(!items.length){setStatus('لم يتم العثور على نتائج.');return}setStatus('');let backs=[];items.forEach(m=>{let card=document.createElement('div');card.className='card';let im=document.createElement('img');im.loading='lazy';im.alt=getTitle(m);im.src=getCoverUrl(m);im.onerror=()=>{im.onerror=null;im.src='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="300"%3E%3Crect width="100%25" height="100%25" fill="%23eee"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" fill="%23666"%3EKATRO%3C/text%3E%3C/svg%3E'};let cover=getCoverUrl(m);if(cover)backs.push({cover});let badge=document.createElement('div');badge.className='badge';badge.textContent=getCategoryLabel(m.attributes?.originalLanguage);let h=document.createElement('h3');h.textContent=getTitle(m);card.append(im,badge,h);card.onclick=()=>openManga(m);$('results').appendChild(card)});updateBackdrop(backs)}catch(e){console.error(e);if(token===mangaToken)setStatus('تعذر جلب الأعمال. تحقق من الاتصال وحاول مجدداً.')}}function triggerSearch(){fetchManga($('search').value.trim())}$('search').addEventListener('input',e=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>fetchManga(e.target.value.trim()),450)});
-function getStoredList(k){try{let x=JSON.parse(localStorage.getItem(k)||'[]');return Array.isArray(x)?x:[]}catch{return []}}function saveStoredList(k,v){localStorage.setItem(k,JSON.stringify(v))}function mangaRecord(m){return{id:m.id,title:getTitle(m),cover:getCoverUrl(m),lang:m.attributes?.originalLanguage||''}}function toggleFavoriteCurrent(){if(!currentOpenManga)return;let l=getStoredList('katro_favs'),i=l.findIndex(x=>x.id===currentOpenManga.id);if(i>=0){l.splice(i,1);$('favBtn').textContent='⭐ إضافة للمفضلة'}else{l.push(mangaRecord(currentOpenManga));$('favBtn').textContent='⭐ إزالة من المفضلة'}saveStoredList('katro_favs',l)}function addToHistory(m){let l=getStoredList('katro_history');l=l.filter(x=>x.id!==m.id);l.unshift(mangaRecord(m));saveStoredList('katro_history',l.slice(0,30))}function renderStoredCards(k,cid){let l=getStoredList(k),c=$(cid);c.innerHTML='';if(!l.length){c.textContent='لا توجد أعمال محفوظة.';return}l.forEach(x=>{let card=document.createElement('div');card.className='card';let im=document.createElement('img');im.src=x.cover||'';im.alt=x.title||'';let h=document.createElement('h3');h.textContent=x.title||'بدون عنوان';card.append(im,h);card.onclick=()=>{closeModal(k==='katro_favs'?'favoritesModal':'historyModal');openManga({id:x.id,attributes:{title:{en:x.title},originalLanguage:x.lang},relationships:[]})};c.appendChild(card)})}
-const dbPromise=new Promise((resolve,reject)=>{let req=indexedDB.open('KatroMangaDB',7);req.onupgradeneeded=e=>{let db=e.target.result;if(!db.objectStoreNames.contains('chapters'))db.createObjectStore('chapters',{keyPath:'id'});if(!db.objectStoreNames.contains('pdf_logs'))db.createObjectStore('pdf_logs',{keyPath:'id'})};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});async function storePut(sn,v){let db=await dbPromise;return new Promise((res,rej)=>{let tx=db.transaction(sn,'readwrite');tx.objectStore(sn).put(v);tx.oncomplete=()=>res(true);tx.onerror=()=>rej(tx.error);tx.onabort=()=>rej(tx.error)})}async function storeGet(sn,id){let db=await dbPromise;return new Promise((res,rej)=>{let tx=db.transaction(sn,'readonly'),r=tx.objectStore(sn).get(id);r.onsuccess=()=>res(r.result||null);r.onerror=()=>rej(r.error)})}async function storeGetAll(sn){let db=await dbPromise;return new Promise((res,rej)=>{let tx=db.transaction(sn,'readonly'),r=tx.objectStore(sn).getAll();r.onsuccess=()=>res(r.result||[]);r.onerror=()=>rej(r.error)})}async function storeDelete(sn,id){let db=await dbPromise;return new Promise((res,rej)=>{let tx=db.transaction(sn,'readwrite');tx.objectStore(sn).delete(id);tx.oncomplete=()=>res(true);tx.onerror=()=>rej(tx.error);tx.onabort=()=>rej(tx.error)})}
-async function fetchAllChapters(id){let chapters=[],seen=new Set(),limit=500,offset=0,total=Infinity,pages=0;while(offset<total&&pages<30){let u=new URL(`${API}/manga/${encodeURIComponent(id)}/feed`);u.searchParams.set('limit',limit);u.searchParams.set('offset',offset);u.searchParams.set('order[chapter]','asc');u.searchParams.set('includes[]','scanlation_group');let r=await fetch(u),raw=await r.text(),d;try{d=JSON.parse(raw)}catch{throw Error('استجابة غير صالحة من الخادم')}if(!r.ok)throw Error(d?.errors?.[0]?.detail||`HTTP ${r.status}`);if(d.errors?.length)throw Error(d.errors[0].detail||'API error');let batch=Array.isArray(d.data)?d.data:[];total=Number.isFinite(Number(d.total))?Number(d.total):offset+batch.length;batch.forEach(ch=>{if(ch?.id&&!seen.has(ch.id)){seen.add(ch.id);chapters.push(ch)}});if(!batch.length)break;offset+=batch.length;pages++;if(batch.length<limit)break}return chapters}
-async function openManga(m){if(!m?.id)return;currentOpenManga=m;addToHistory(m);let token=++chapterToken;allLoadedChapters=[];$('favBtn').textContent=getStoredList('katro_favs').some(x=>x.id===m.id)?'⭐ إزالة من المفضلة':'⭐ إضافة للمفضلة';$('langFilterSelect').value='all';switchView('chapters');$('mangaTitleHeader').textContent=getTitle(m);$('chaptersList').textContent='جاري جلب جميع الفصول والترجمات...';try{let ch=await fetchAllChapters(m.id);if(token!==chapterToken)return;allLoadedChapters=ch;allLoadedChapters.sort((a,b)=>{let x=parseFloat(a.attributes?.chapter),y=parseFloat(b.attributes?.chapter);if(!Number.isFinite(x)&&!Number.isFinite(y))return 0;if(!Number.isFinite(x))return 1;if(!Number.isFinite(y))return-1;return x-y});renderChaptersList()}catch(e){console.error(e);if(token===chapterToken){let retry=document.createElement('button');retry.textContent='إعادة المحاولة';retry.style.marginTop='12px';retry.onclick=()=>openManga(m);$('chaptersList').innerHTML='';$('chaptersList').append('تعذر جلب الفصول: '+e.message,retry)}}}
-function renderChaptersList(){let c=$('chaptersList');c.innerHTML='';let f=$('langFilterSelect').value,ch=allLoadedChapters;if(f!=='all')ch=ch.filter(x=>x.attributes?.translatedLanguage===f);if(!ch.length){let p=document.createElement('p');p.style.cssText='padding:15px;background:#f9fafb;border:1px solid #eee;border-radius:10px';p.textContent=f==='all'?'لم يعثر MangaDex على فصول لهذا العمل.':`لا توجد فصول بلغة ${f.toUpperCase()}.`;c.appendChild(p);return}let count=document.createElement('p');count.style.cssText='color:#6b7280;font-size:12px;margin:8px 0';count.textContent='عدد الفصول المعروضة: '+ch.length;c.appendChild(count);ch.forEach(x=>{let a=x.attributes||{},n=a.chapter||'خاص',lang=a.translatedLanguage||'غير معروف',div=document.createElement('div');div.className='chapter';let info=document.createElement('div');info.className='chapter-info';let title=document.createElement('strong');title.textContent=`الفصل ${n}${a.title?' - '+a.title:''}`;let badge=document.createElement('span');badge.style.cssText='font-size:11px;background:#eee;padding:4px 8px;border-radius:6px';badge.textContent=lang.toUpperCase();info.append(title,badge);let actions=document.createElement('div');actions.className='chapter-actions';let read=document.createElement('button');read.textContent='📖 قراءة';read.onclick=()=>readChapter(x.id,n);let off=document.createElement('button');off.className='btn-offline';off.textContent='📥 أوفلاين';off.onclick=()=>downloadOffline(x.id,n);let pdf=document.createElement('button');pdf.className='btn-pdf';pdf.textContent='📄 PDF';pdf.onclick=()=>downloadPDF(x.id,n);actions.append(read,off,pdf);div.append(info,actions);c.appendChild(div)})}
-async function getChapterManifest(id){let r=await fetch(`${API}/at-home/server/${id}`),raw=await r.text(),d;try{d=JSON.parse(raw)}catch{throw Error('استجابة خادم الصور غير صالحة')}if(!r.ok)throw Error(d?.message||`Image server HTTP ${r.status}`);if(!d.baseUrl||!d.chapter?.hash||!Array.isArray(d.chapter.data))throw Error('بيانات صور الفصل غير مكتملة');return{baseUrl:d.baseUrl,hash:d.chapter.hash,pages:d.chapter.data,fallbackPages:d.chapter.dataSaver||[]}}function pageUrl(m,f){return`${m.baseUrl}/data/${m.hash}/${encodeURIComponent(f)}`}async function fetchImageBlob(u){let r=await fetch(u);if(!r.ok)throw Error(`Image HTTP ${r.status}`);let b=await r.blob();if(!b.type.startsWith('image/')||!b.size)throw Error('Invalid image response');return b}
-async function downloadOffline(id,num){switchView('downloads');setProgress(1,`بدء تحميل الفصل ${num}`);try{let m=await getChapterManifest(id),pages=[];if(!m.pages.length)throw Error('No pages');for(let i=0;i<m.pages.length;i++){let b=await fetchImageBlob(pageUrl(m,m.pages[i]));pages.push({name:m.pages[i],blob:b,type:b.type});setProgress(Math.max(1,Math.floor((i+1)/m.pages.length*95)),`تحميل الصفحة ${i+1} من ${m.pages.length}`)}await storePut('chapters',{id,chapterNum:String(num),pages,savedAt:Date.now()});setProgress(100,`تم حفظ الفصل ${num} بنجاح`);renderDownloadsManager()}catch(e){console.error(e);setProgress(100,'فشل التحميل: '+e.message)}}
-async function blobToJpegDataURL(blob){let u=URL.createObjectURL(blob);try{let im=new Image();await new Promise((res,rej)=>{im.onload=res;im.onerror=()=>rej(Error('تعذر قراءة صورة الصفحة'));im.src=u});let cv=document.createElement('canvas');cv.width=im.naturalWidth;cv.height=im.naturalHeight;let ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);ctx.drawImage(im,0,0);return{data:cv.toDataURL('image/jpeg',.88),width:cv.width,height:cv.height}}finally{URL.revokeObjectURL(u)}}
-async function downloadPDF(id,num){switchView('downloads');setProgress(1,`إعداد PDF للفصل ${num}`);try{if(!window.jspdf?.jsPDF)throw Error('مكتبة PDF غير متاحة');let m=await getChapterManifest(id),pages=m.pages;if(!pages.length)throw Error('لا توجد صفحات');let {jsPDF}=window.jspdf,pdf=null;for(let i=0;i<pages.length;i++){let b=await fetchImageBlob(pageUrl(m,pages[i])),conv=await blobToJpegDataURL(b),ori=conv.width>conv.height?'landscape':'portrait';if(!pdf)pdf=new jsPDF({orientation:ori,unit:'mm',format:'a4',compress:true});else pdf.addPage('a4',ori);let pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight(),ratio=Math.min(pw/conv.width,ph/conv.height),w=conv.width*ratio,h=conv.height*ratio;pdf.addImage(conv.data,'JPEG',(pw-w)/2,(ph-h)/2,w,h);setProgress(Math.max(1,Math.floor((i+1)/pages.length*95)),`تجهيز PDF ${i+1}/${pages.length}`)}let name=`KATRO_Chapter_${String(num).replace(/[^\w.-]/g,'_')}.pdf`;pdf.save(name);await storePut('pdf_logs',{id:'mangadex:'+id,name,savedAt:Date.now()});setProgress(100,'تم إنشاء ملف PDF');renderDownloadsManager()}catch(e){console.error(e);setProgress(100,'فشل إنشاء PDF: '+e.message)}}
-async function readChapter(id,num){let token=++chapterToken;activeObjectUrls.forEach(URL.revokeObjectURL);activeObjectUrls=[];$('reader').style.display='block';$('readerTitle').textContent='الفصل '+num;$('readerPages').textContent='جاري تحميل الصفحات...';try{let saved=await storeGet('chapters',id),sources=[];if(saved?.pages?.length&&saved.pages[0]?.blob)sources=saved.pages.map(p=>({blob:p.blob}));else{let m=await getChapterManifest(id);sources=m.pages.map(f=>({url:pageUrl(m,f)}))}if(token!==chapterToken)return;$('readerPages').innerHTML='';sources.forEach((s,i)=>{let im=document.createElement('img');im.loading=i<3?'eager':'lazy';im.alt='صفحة '+(i+1);if(s.blob){let u=URL.createObjectURL(s.blob);activeObjectUrls.push(u);im.src=u}else im.src=s.url;im.onerror=()=>{im.alt='تعذر تحميل الصفحة';im.style.minHeight='120px'};$('readerPages').appendChild(im)})}catch(e){console.error(e);if(token===chapterToken)$('readerPages').textContent='تعذر تحميل صور الفصل: '+e.message}}function closeReader(){chapterToken++;$('reader').style.display='none';$('readerPages').innerHTML='';activeObjectUrls.forEach(URL.revokeObjectURL);activeObjectUrls=[]}
-async function renderDownloadsManager(){try{let offline=await storeGetAll('chapters'),pdfs=await storeGetAll('pdf_logs');$('offlineDownloadsList').innerHTML='';$('pdfDownloadsList').innerHTML='';if(!offline.length)$('offlineDownloadsList').textContent='لا توجد فصول محفوظة.';else offline.forEach(item=>{let row=document.createElement('div');row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px;border:1px solid #eee;border-radius:9px;margin-bottom:8px;gap:8px';let title=document.createElement('span');title.textContent=`${item.contentType==='arabic-manhwa'?(item.title||'مانهو عربية')+' — ':''}الفصل ${item.chapterNum} (${item.pages?.length||0} صفحة)`;let bs=document.createElement('div');bs.style.cssText='display:flex;gap:5px';let read=document.createElement('button');read.textContent='قراءة';read.style.padding='6px 9px';read.onclick=()=>item.contentType==='arabic-manhwa'?readArabicOffline(item.id):readChapter(item.id,item.chapterNum);let del=document.createElement('button');del.textContent='حذف';del.style.cssText='background:var(--red);padding:6px 9px';del.onclick=async()=>{if(confirm('هل تريد حذف الفصل المحفوظ؟')){await storeDelete('chapters',item.id);renderDownloadsManager()}};bs.append(read,del);row.append(title,bs);$('offlineDownloadsList').appendChild(row)});if(!pdfs.length)$('pdfDownloadsList').textContent='لا توجد ملفات PDF مسجلة.';else pdfs.forEach(x=>{let row=document.createElement('div');row.style.cssText='padding:10px;border:1px solid #eee;border-radius:9px;margin-bottom:8px';row.textContent=x.name+' — تم إنشاؤه';$('pdfDownloadsList').appendChild(row)})}catch(e){console.error(e);$('offlineDownloadsList').textContent='تعذر قراءة التنزيلات.'}}
-/* Arabic Worker integration: 3 sources */
-let arabicInitialized=false,arabicResultsCache=[],currentArabicSeries=null,arabicRequestToken=0,arabicSource='azora',arabicPage=1,arabicQuery='',arabicSeen=new Set(),arabicMoreBusy=false;const sourceLabels={azora:'Azora Manga',mangalek:'Manga Lek',teamx:'Team X'};function setArabicSource(s){arabicSource=s;document.querySelectorAll('#arabicSourceTabs button').forEach(b=>b.classList.remove('active'));$('src'+({azora:'Azora',mangalek:'Mangalek',teamx:'Teamx'}[s])).classList.add('active');arabicPage=1;arabicSeen.clear();arabicQuery='';$('arabicSearch').value='';loadArabicPopular()}async function arabicRequest(endpoint){let r=await fetch(ARABIC_API+endpoint,{headers:{Accept:'application/json'}}),raw=await r.text(),d;try{d=JSON.parse(raw)}catch{throw Error('استجابة Worker غير صالحة')}if(!r.ok||d.error)throw Error(d.message||d.error||'API Error');return d}function arabicStatus(m){$('arabicStatus').textContent=m}function getArabicItems(d){return d.results||d.items||d.manga||d.data||[]}function arabicItemKey(x){return x.id||x.url||x.link||x.slug||x.title}function renderArabicCards(items,append=false){let c=$('arabicResults');if(!append)c.innerHTML='';if(!append)arabicResultsCache=[];let fresh=[];for(let x of items||[]){let key=arabicItemKey(x);if(!key||arabicSeen.has(String(key)))continue;arabicSeen.add(String(key));fresh.push(x);arabicResultsCache.push(x)}if(!append&&fresh.length===0){arabicStatus('لم يتم العثور على نتائج.');$('arabicMore').style.display='none';return}fresh.forEach(item=>{let card=document.createElement('div');card.className='card';let img=document.createElement('img');img.loading='lazy';img.alt=item.title||'مانهو';img.src=item.cover||item.image||item.thumbnail||'';img.onerror=()=>{img.onerror=null;img.style.display='none'};let badge=document.createElement('div');badge.className='badge';badge.textContent=sourceLabels[arabicSource];let h=document.createElement('h3');h.textContent=item.title||'بدون عنوان';card.append(img,badge,h);card.onclick=()=>openArabicSeries(item);c.appendChild(card)});arabicStatus('عدد النتائج: '+arabicResultsCache.length);$('arabicMore').style.display=fresh.length?'block':'none';$('arabicMore').disabled=false;if(fresh.length)updateBackdrop(fresh.map(x=>({cover:x.cover||x.image})).filter(x=>x.cover))}
-async function loadArabicPopular(){let token=++arabicRequestToken;arabicPage=1;arabicQuery='';arabicSeen.clear();$('arabicDetails').style.display='none';$('arabicReader').style.display='none';$('arabicResults').style.display='grid';$('arabicMore').style.display='none';arabicStatus('جاري تحميل الأعمال الشائعة من '+sourceLabels[arabicSource]+'...');try{let d=await arabicRequest('/popular?source='+encodeURIComponent(arabicSource));if(token!==arabicRequestToken)return;renderArabicCards(getArabicItems(d))}catch(e){if(token===arabicRequestToken)arabicStatus('تعذر تحميل الأعمال: '+e.message)}}async function searchArabic(){let q=$('arabicSearch').value.trim();if(!q){loadArabicPopular();return}let token=++arabicRequestToken;arabicPage=1;arabicQuery=q;arabicSeen.clear();$('arabicDetails').style.display='none';$('arabicReader').style.display='none';$('arabicResults').style.display='grid';$('arabicMore').style.display='none';arabicStatus('جاري البحث عن '+q+'...');try{let d=await arabicRequest('/search?source='+encodeURIComponent(arabicSource)+'&q='+encodeURIComponent(q));if(token!==arabicRequestToken)return;renderArabicCards(getArabicItems(d))}catch(e){if(token===arabicRequestToken)arabicStatus('فشل البحث: '+e.message)}}$('arabicSearch').addEventListener('keydown',e=>{if(e.key==='Enter')searchArabic()});async function loadArabicMore(){if(arabicMoreBusy)return;arabicMoreBusy=true;$('arabicMore').disabled=true;let token=arabicRequestToken;arabicStatus('جاري تحميل 100 عمل إضافي...');try{let d=await arabicRequest('/catalog?source='+encodeURIComponent(arabicSource)+'&page='+encodeURIComponent(arabicPage+1)+'&limit=100');if(token!==arabicRequestToken)return;let items=getArabicItems(d);if(!items.length){arabicStatus('لا توجد أعمال إضافية في هذه الصفحة.');$('arabicMore').style.display='none';return}arabicPage++;renderArabicCards(items,true);if(items.length<100)$('arabicMore').style.display='none'}catch(e){if(token===arabicRequestToken)arabicStatus('تعذر تحميل المزيد: '+e.message)}finally{arabicMoreBusy=false;$('arabicMore').disabled=false}}
-async function openArabicSeries(item){if(!item?.url)return;currentArabicSeries=item;let token=++arabicRequestToken;$('arabicResults').style.display='none';$('arabicReader').style.display='none';$('arabicDetails').style.display='block';$('arabicTitle').textContent=item.title||'تفاصيل المانهو';$('arabicDescription').textContent='جاري تحميل التفاصيل والفصول...';$('arabicChapters').innerHTML='';window.scrollTo(0,0);try{let d=await arabicRequest('/series?source='+encodeURIComponent(arabicSource)+'&url='+encodeURIComponent(item.url));if(token!==arabicRequestToken)return;currentArabicSeries={...d,...item,source:arabicSource};$('arabicTitle').textContent=d.title||item.title;$('arabicDescription').textContent=d.description||'لا يوجد وصف متاح.';let c=$('arabicChapters');c.innerHTML='';if(!d.chapters?.length){c.textContent='لم يتم العثور على فصول.';return}d.chapters.forEach((ch,i)=>{let row=document.createElement('div');row.className='chapter';let name=document.createElement('strong');name.textContent=ch.title||'الفصل '+(i+1);let acts=document.createElement('div');acts.className='chapter-actions';let read=document.createElement('button');read.textContent='📖 قراءة';read.onclick=()=>openArabicChapter(ch.url,ch.title||'الفصل '+(i+1));let off=document.createElement('button');off.className='btn-offline';off.textContent='📥 أوفلاين';off.onclick=()=>downloadArabicOffline(ch.url,ch.title||'الفصل '+(i+1));let pdf=document.createElement('button');pdf.className='btn-pdf';pdf.textContent='📄 PDF';pdf.onclick=()=>downloadArabicPDF(ch.url,ch.title||'الفصل '+(i+1));acts.append(read,off,pdf);row.append(name,acts);c.appendChild(row)})}catch(e){if(token===arabicRequestToken)$('arabicDescription').textContent='تعذر جلب التفاصيل: '+e.message}}
-async function fetchArabicChapter(url){return arabicRequest('/chapter?source='+encodeURIComponent(currentArabicSeries?.source||arabicSource)+'&url='+encodeURIComponent(url))}function arabicPageImage(p){return typeof p==='string'?p:p.image||p.url||p.src||''}async function openArabicChapter(url,title='الفصل'){if(!url)return;let token=++arabicRequestToken;$('arabicDetails').style.display='none';$('arabicReader').style.display='block';$('arabicPages').textContent='جاري تحميل صفحات الفصل...';window.scrollTo(0,0);try{let d=await fetchArabicChapter(url);if(token!==arabicRequestToken)return;let c=$('arabicPages');c.innerHTML='';if(!d.pages?.length){c.textContent='لم يتم العثور على صفحات.';return}d.pages.forEach((p,i)=>{let im=document.createElement('img');im.src=arabicPageImage(p);im.loading='lazy';im.alt='صفحة '+(p.number||i+1);im.onerror=()=>{im.alt='تعذر تحميل الصفحة '+(p.number||i+1);im.style.minHeight='100px'};c.appendChild(im)})}catch(e){if(token===arabicRequestToken)$('arabicPages').textContent='تعذر تحميل الفصل: '+e.message}}
-async function downloadArabicOffline(url,chapterTitle){switchView('downloads');setProgress(1,'بدء تنزيل '+chapterTitle);try{let d=await fetchArabicChapter(url),pages=[];if(!d.pages?.length)throw Error('لم يتم العثور على صفحات');for(let i=0;i<d.pages.length;i++){let p=d.pages[i],src=arabicPageImage(p);if(!src)throw Error('رابط صورة غير موجود للصفحة '+(i+1));let blob=await fetchImageBlob(src);pages.push({name:String(i+1),blob,type:blob.type,originalUrl:src});setProgress(Math.floor((i+1)/d.pages.length*95),`حفظ الصفحة ${i+1}/${d.pages.length}`)}let id='arabic:'+currentArabicSeries.source+':'+url;await storePut('chapters',{id,contentType:'arabic-manhwa',source:currentArabicSeries.source,title:currentArabicSeries.title,chapterNum:chapterTitle,chapterUrl:url,pages,savedAt:Date.now()});setProgress(100,'تم حفظ الفصل أوفلاين');renderDownloadsManager()}catch(e){console.error(e);setProgress(100,'تعذر حفظ الفصل: '+e.message)}}
-async function readArabicOffline(id){let saved=await storeGet('chapters',id);if(!saved?.pages?.length)return alert('الفصل المحفوظ غير موجود أو فارغ');chapterToken++;activeObjectUrls.forEach(URL.revokeObjectURL);activeObjectUrls=[];$('reader').style.display='block';$('readerTitle').textContent=saved.title+' — '+saved.chapterNum;$('readerPages').innerHTML='';saved.pages.forEach((p,i)=>{let im=document.createElement('img');im.loading=i<3?'eager':'lazy';im.alt='صفحة '+(i+1);let u=URL.createObjectURL(p.blob);activeObjectUrls.push(u);im.src=u;$('readerPages').appendChild(im)})}
-async function downloadArabicPDF(url,title){switchView('downloads');setProgress(1,'إعداد PDF: '+title);try{if(!window.jspdf?.jsPDF)throw Error('مكتبة PDF غير متاحة');let d=await fetchArabicChapter(url);if(!d.pages?.length)throw Error('لا توجد صفحات');let {jsPDF}=window.jspdf,pdf=null;for(let i=0;i<d.pages.length;i++){let src=arabicPageImage(d.pages[i]);if(!src)throw Error('رابط صورة مفقود');let b=await fetchImageBlob(src),conv=await blobToJpegDataURL(b),ori=conv.width>conv.height?'landscape':'portrait';if(!pdf)pdf=new jsPDF({orientation:ori,unit:'mm',format:'a4',compress:true});else pdf.addPage('a4',ori);let pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight(),ratio=Math.min(pw/conv.width,ph/conv.height),w=conv.width*ratio,h=conv.height*ratio;pdf.addImage(conv.data,'JPEG',(pw-w)/2,(ph-h)/2,w,h);setProgress(Math.floor((i+1)/d.pages.length*95),`تجهيز PDF ${i+1}/${d.pages.length}`)}let fname='KATRO_'+String(title).replace(/[^\w.-]/g,'_')+'.pdf';pdf.save(fname);await storePut('pdf_logs',{id:'arabic:'+arabicSource+':'+url,name:fname,savedAt:Date.now()});setProgress(100,'تم إنشاء PDF');renderDownloadsManager()}catch(e){console.error(e);setProgress(100,'فشل PDF: '+e.message)}}
-function backArabicResults(){arabicRequestToken++;$('arabicDetails').style.display='none';$('arabicReader').style.display='none';$('arabicResults').style.display='grid';window.scrollTo(0,0)}function closeArabicReader(){arabicRequestToken++;$('arabicReader').style.display='none';$('arabicDetails').style.display='block';window.scrollTo(0,0)}
+'use strict';
+
+/* =========================
+   CONFIGURATION
+========================= */
+
+const API='https://katro-manga-api-v2.mmmzzz126038.workers.dev';
+const ARABIC_API='https://katro-arabic-manga.mmmzzz126038.workers.dev';
+
+const $=id=>document.getElementById(id);
+
+let currentCategory='all';
+let searchTimer=null;
+let chapterToken=0;
+let mangaToken=0;
+let allLoadedChapters=[];
+let currentOpenManga=null;
+let activeObjectUrls=[];
+
+const languageNames={
+ja:'مانغا يابانية 🇯🇵',
+ko:'مانهوا كورية 🇰🇷',
+zh:'مانهوا صينية 🇨🇳',
+'zh-hk':'مانهوا صينية 🇨🇳'
+};
+
+/* =========================
+   GENERAL UI
+========================= */
+
+function updateBackdrop(items){
+const strips=[$('artStrip1'),$('artStrip2'),$('artStrip3')];
+const covers=(items||[]).map(x=>x.cover||x.image).filter(Boolean);
+if(!covers.length)return;
+
+strips.forEach((s,n)=>{
+s.innerHTML='';
+for(let i=0;i<12;i++){
+let im=document.createElement('img');
+im.loading='lazy';
+im.src=covers[(i+n*4)%covers.length];
+im.alt='KATRO artwork';
+im.onerror=()=>im.remove();
+s.appendChild(im);
+}
+});
+}
+
+function switchView(v){
+$('mainView').style.display=v==='main'?'block':'none';
+$('chaptersContainer').style.display=v==='chapters'?'block':'none';
+$('downloadsView').style.display=v==='downloads'?'block':'none';
+$('arabicView').style.display=v==='arabic'?'block':'none';
+window.scrollTo(0,0);
+
+if(v==='downloads')renderDownloadsManager();
+
+if(v==='arabic'&&!arabicInitialized){
+arabicInitialized=true;
+loadArabicPopular();
+}
+}
+
+function openModal(id){
+$(id).style.display='flex';
+if(id==='favoritesModal')renderStoredCards('katro_favs','favoritesList');
+if(id==='historyModal')renderStoredCards('katro_history','historyList');
+}
+
+function closeModal(id){$(id).style.display='none'}
+function setStatus(m){$('status').textContent=m}
+
+function setProgress(p,t){
+p=Math.max(0,Math.min(100,p));
+$('progressWrapper').style.display='block';
+$('progressBar').style.width=p+'%';
+$('progressText').textContent=p+'%';
+$('progressTitle').textContent=t;
+if(p>=100)setTimeout(()=>$('progressWrapper').style.display='none',3500);
+}
+
+function setCategory(c){
+currentCategory=c;
+document.querySelectorAll('#mainView .tabs button').forEach(b=>b.classList.remove('active'));
+const ids={all:'tabAll',ja:'tabJa',ko:'tabKo',zh:'tabZh'};
+$(ids[c]).classList.add('active');
+fetchManga($('search').value.trim());
+}
+
+/* =========================
+   MANGADEX
+========================= */
+
+function getTitle(m){
+const t=m.attributes?.title||{};
+return t.ar||t.en||t.ja||t.ko||Object.values(t)[0]||'بدون عنوان';
+}
+
+function getCoverUrl(m){
+const r=m.relationships?.find(x=>x.type==='cover_art');
+const f=r?.attributes?.fileName;
+return f?`${API}/covers/${m.id}/${encodeURIComponent(f)}.256.jpg`:'';
+}
+
+function getCategoryLabel(l){return languageNames[l]||'عمل مصور'}
+
+function getCategoryLanguages(){
+return currentCategory==='ja'?['ja']:
+currentCategory==='ko'?['ko']:
+currentCategory==='zh'?['zh','zh-hk']:[];
+}
+
+function buildMangaUrl(q){
+let u=new URL(API+'/manga');
+u.searchParams.set('limit','32');
+u.searchParams.set('order[relevance]','desc');
+u.searchParams.set('includes[]','cover_art');
+if(q)u.searchParams.set('title',q);
+getCategoryLanguages().forEach(l=>u.searchParams.append('originalLanguage[]',l));
+return u.toString();
+}
+
+async function fetchManga(q=''){
+const token=++mangaToken;
+setStatus('جاري جلب الأعمال...');
+$('results').innerHTML='';
+
+try{
+let r=await fetch(buildMangaUrl(q));
+if(!r.ok)throw Error('HTTP '+r.status);
+let d=await r.json();
+if(token!==mangaToken)return;
+if(d.errors?.length)throw Error(d.errors[0].detail||'MangaDex API error');
+
+let items=Array.isArray(d.data)?d.data:[];
+if(!items.length){setStatus('لم يتم العثور على نتائج.');return}
+
+setStatus('');
+let backs=[];
+
+items.forEach(m=>{
+let card=document.createElement('div');
+card.className='card';
+
+let im=document.createElement('img');
+im.loading='lazy';
+im.alt=getTitle(m);
+im.src=getCoverUrl(m);
+im.onerror=()=>{
+im.onerror=null;
+im.src='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="300"%3E%3Crect width="100%25" height="100%25" fill="%23eee"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" fill="%23666"%3EKATRO%3C/text%3E%3C/svg%3E';
+};
+
+let cover=getCoverUrl(m);
+if(cover)backs.push({cover});
+
+let badge=document.createElement('div');
+badge.className='badge';
+badge.textContent=getCategoryLabel(m.attributes?.originalLanguage);
+
+let h=document.createElement('h3');
+h.textContent=getTitle(m);
+
+card.append(im,badge,h);
+card.onclick=()=>openManga(m);
+$('results').appendChild(card);
+});
+
+updateBackdrop(backs);
+}catch(e){
+console.error(e);
+if(token===mangaToken)setStatus('تعذر جلب الأعمال. تحقق من الاتصال وحاول مجدداً.');
+}
+}
+
+function triggerSearch(){fetchManga($('search').value.trim())}
+
+$('search').addEventListener('input',e=>{
+clearTimeout(searchTimer);
+searchTimer=setTimeout(()=>fetchManga(e.target.value.trim()),450);
+});
+
+/* =========================
+   FAVORITES & HISTORY
+========================= */
+
+function getStoredList(k){
+try{
+let x=JSON.parse(localStorage.getItem(k)||'[]');
+return Array.isArray(x)?x:[];
+}catch{return []}
+}
+
+function saveStoredList(k,v){localStorage.setItem(k,JSON.stringify(v))}
+
+function mangaRecord(m){
+return{id:m.id,title:getTitle(m),cover:getCoverUrl(m),lang:m.attributes?.originalLanguage||''};
+}
+
+function toggleFavoriteCurrent(){
+if(!currentOpenManga)return;
+let l=getStoredList('katro_favs');
+let i=l.findIndex(x=>x.id===currentOpenManga.id);
+
+if(i>=0){
+l.splice(i,1);
+$('favBtn').textContent='⭐ إضافة للمفضلة';
+}else{
+l.push(mangaRecord(currentOpenManga));
+$('favBtn').textContent='⭐ إزالة من المفضلة';
+}
+
+saveStoredList('katro_favs',l);
+}
+
+function addToHistory(m){
+let l=getStoredList('katro_history');
+l=l.filter(x=>x.id!==m.id);
+l.unshift(mangaRecord(m));
+saveStoredList('katro_history',l.slice(0,30));
+}
+
+function renderStoredCards(k,cid){
+let l=getStoredList(k),c=$(cid);
+c.innerHTML='';
+
+if(!l.length){c.textContent='لا توجد أعمال محفوظة.';return}
+
+l.forEach(x=>{
+let card=document.createElement('div');
+card.className='card';
+
+let im=document.createElement('img');
+im.src=x.cover||'';
+im.alt=x.title||'';
+
+let h=document.createElement('h3');
+h.textContent=x.title||'بدون عنوان';
+
+card.append(im,h);
+card.onclick=()=>{
+closeModal(k==='katro_favs'?'favoritesModal':'historyModal');
+openManga({id:x.id,attributes:{title:{en:x.title},originalLanguage:x.lang},relationships:[]});
+};
+c.appendChild(card);
+});
+}
+
+/* =========================
+   INDEXEDDB
+========================= */
+
+const dbPromise=new Promise((resolve,reject)=>{
+let req=indexedDB.open('KatroMangaDB',7);
+
+req.onupgradeneeded=e=>{
+let db=e.target.result;
+if(!db.objectStoreNames.contains('chapters'))db.createObjectStore('chapters',{keyPath:'id'});
+if(!db.objectStoreNames.contains('pdf_logs'))db.createObjectStore('pdf_logs',{keyPath:'id'});
+};
+
+req.onsuccess=()=>resolve(req.result);
+req.onerror=()=>reject(req.error);
+});
+
+async function storePut(sn,v){
+let db=await dbPromise;
+return new Promise((res,rej)=>{
+let tx=db.transaction(sn,'readwrite');
+tx.objectStore(sn).put(v);
+tx.oncomplete=()=>res(true);
+tx.onerror=()=>rej(tx.error);
+tx.onabort=()=>rej(tx.error);
+});
+}
+
+async function storeGet(sn,id){
+let db=await dbPromise;
+return new Promise((res,rej)=>{
+let tx=db.transaction(sn,'readonly');
+let r=tx.objectStore(sn).get(id);
+r.onsuccess=()=>res(r.result||null);
+r.onerror=()=>rej(r.error);
+});
+}
+
+async function storeGetAll(sn){
+let db=await dbPromise;
+return new Promise((res,rej)=>{
+let tx=db.transaction(sn,'readonly');
+let r=tx.objectStore(sn).getAll();
+r.onsuccess=()=>res(r.result||[]);
+r.onerror=()=>rej(r.error);
+});
+}
+
+async function storeDelete(sn,id){
+let db=await dbPromise;
+return new Promise((res,rej)=>{
+let tx=db.transaction(sn,'readwrite');
+tx.objectStore(sn).delete(id);
+tx.oncomplete=()=>res(true);
+tx.onerror=()=>rej(tx.error);
+tx.onabort=()=>rej(tx.error);
+});
+}
+
+/* =========================
+   CHAPTERS
+========================= */
+
+async function fetchAllChapters(id){
+let chapters=[],seen=new Set(),limit=500,offset=0,total=Infinity,pages=0;
+
+while(offset<total&&pages<30){
+let u=new URL(`${API}/manga/${encodeURIComponent(id)}/feed`);
+u.searchParams.set('limit',limit);
+u.searchParams.set('offset',offset);
+u.searchParams.set('order[chapter]','asc');
+u.searchParams.set('includes[]','scanlation_group');
+
+let r=await fetch(u),raw=await r.text(),d;
+try{d=JSON.parse(raw)}catch{throw Error('استجابة غير صالحة من الخادم')}
+
+if(!r.ok)throw Error(d?.errors?.[0]?.detail||`HTTP ${r.status}`);
+if(d.errors?.length)throw Error(d.errors[0].detail||'API error');
+
+let batch=Array.isArray(d.data)?d.data:[];
+total=Number.isFinite(Number(d.total))?Number(d.total):offset+batch.length;
+
+batch.forEach(ch=>{
+if(ch?.id&&!seen.has(ch.id)){seen.add(ch.id);chapters.push(ch)}
+});
+
+if(!batch.length)break;
+offset+=batch.length;
+pages++;
+if(batch.length<limit)break;
+}
+
+return chapters;
+}
+
+async function openManga(m){
+if(!m?.id)return;
+
+currentOpenManga=m;
+addToHistory(m);
+
+let token=++chapterToken;
+allLoadedChapters=[];
+
+$('favBtn').textContent=getStoredList('katro_favs').some(x=>x.id===m.id)
+?'⭐ إزالة من المفضلة':'⭐ إضافة للمفضلة';
+
+$('langFilterSelect').value='all';
+switchView('chapters');
+$('mangaTitleHeader').textContent=getTitle(m);
+$('chaptersList').textContent='جاري جلب جميع الفصول والترجمات...';
+
+try{
+let ch=await fetchAllChapters(m.id);
+if(token!==chapterToken)return;
+
+allLoadedChapters=ch;
+allLoadedChapters.sort((a,b)=>{
+let x=parseFloat(a.attributes?.chapter),y=parseFloat(b.attributes?.chapter);
+if(!Number.isFinite(x)&&!Number.isFinite(y))return 0;
+if(!Number.isFinite(x))return 1;
+if(!Number.isFinite(y))return-1;
+return x-y;
+});
+
+renderChaptersList();
+}catch(e){
+console.error(e);
+if(token===chapterToken){
+let retry=document.createElement('button');
+retry.textContent='إعادة المحاولة';
+retry.style.marginTop='12px';
+retry.onclick=()=>openManga(m);
+$('chaptersList').innerHTML='';
+$('chaptersList').append('تعذر جلب الفصول: '+e.message,retry);
+}
+}
+}
+
+function renderChaptersList(){
+let c=$('chaptersList');
+c.innerHTML='';
+
+let f=$('langFilterSelect').value,ch=allLoadedChapters;
+if(f!=='all')ch=ch.filter(x=>x.attributes?.translatedLanguage===f);
+
+if(!ch.length){
+let p=document.createElement('p');
+p.style.cssText='padding:15px;background:#f9fafb;border:1px solid #eee;border-radius:10px';
+p.textContent=f==='all'?'لم يعثر MangaDex على فصول لهذا العمل.':`لا توجد فصول بلغة ${f.toUpperCase()}.`;
+c.appendChild(p);
+return;
+}
+
+let count=document.createElement('p');
+count.style.cssText='color:#6b7280;font-size:12px;margin:8px 0';
+count.textContent='عدد الفصول المعروضة: '+ch.length;
+c.appendChild(count);
+
+ch.forEach(x=>{
+let a=x.attributes||{},n=a.chapter||'خاص',lang=a.translatedLanguage||'غير معروف';
+
+let div=document.createElement('div');
+div.className='chapter';
+
+let info=document.createElement('div');
+info.className='chapter-info';
+
+let title=document.createElement('strong');
+title.textContent=`الفصل ${n}${a.title?' - '+a.title:''}`;
+
+let badge=document.createElement('span');
+badge.style.cssText='font-size:11px;background:#eee;padding:4px 8px;border-radius:6px';
+badge.textContent=lang.toUpperCase();
+
+info.append(title,badge);
+
+let actions=document.createElement('div');
+actions.className='chapter-actions';
+
+let read=document.createElement('button');
+read.textContent='📖 قراءة';
+read.onclick=()=>readChapter(x.id,n);
+
+let off=document.createElement('button');
+off.className='btn-offline';
+off.textContent='📥 أوفلاين';
+off.onclick=()=>downloadOffline(x.id,n);
+
+let pdf=document.createElement('button');
+pdf.className='btn-pdf';
+pdf.textContent='📄 PDF';
+pdf.onclick=()=>downloadPDF(x.id,n);
+
+actions.append(read,off,pdf);
+div.append(info,actions);
+c.appendChild(div);
+});
+}
+
+/* =========================
+   MANGADEX READER
+========================= */
+
+async function getChapterManifest(id){
+let r=await fetch(`${API}/at-home/server/${id}`);
+let raw=await r.text(),d;
+
+try{d=JSON.parse(raw)}catch{throw Error('استجابة خادم الصور غير صالحة')}
+
+if(!r.ok)throw Error(d?.message||`Image server HTTP ${r.status}`);
+if(!d.baseUrl||!d.chapter?.hash||!Array.isArray(d.chapter.data))throw Error('بيانات صور الفصل غير مكتملة');
+
+return{baseUrl:d.baseUrl,hash:d.chapter.hash,pages:d.chapter.data,fallbackPages:d.chapter.dataSaver||[]};
+}
+
+function pageUrl(m,f){return`${m.baseUrl}/data/${m.hash}/${encodeURIComponent(f)}`}
+
+async function fetchImageBlob(u){
+let r=await fetch(u);
+if(!r.ok)throw Error(`Image HTTP ${r.status}`);
+let b=await r.blob();
+if(!b.type.startsWith('image/')||!b.size)throw Error('Invalid image response');
+return b;
+}
+
+async function downloadOffline(id,num){
+switchView('downloads');
+setProgress(1,`بدء تحميل الفصل ${num}`);
+
+try{
+let m=await getChapterManifest(id),pages=[];
+if(!m.pages.length)throw Error('No pages');
+
+for(let i=0;i<m.pages.length;i++){
+let b=await fetchImageBlob(pageUrl(m,m.pages[i]));
+pages.push({name:m.pages[i],blob:b,type:b.type});
+setProgress(Math.max(1,Math.floor((i+1)/m.pages.length*95)),`تحميل الصفحة ${i+1} من ${m.pages.length}`);
+}
+
+await storePut('chapters',{id,chapterNum:String(num),pages,savedAt:Date.now()});
+setProgress(100,`تم حفظ الفصل ${num} بنجاح`);
+renderDownloadsManager();
+}catch(e){
+console.error(e);
+setProgress(100,'فشل التحميل: '+e.message);
+}
+}
+
+async function blobToJpegDataURL(blob){
+let u=URL.createObjectURL(blob);
+try{
+let im=new Image();
+await new Promise((res,rej)=>{
+im.onload=res;
+im.onerror=()=>rej(Error('تعذر قراءة صورة الصفحة'));
+im.src=u;
+});
+
+let cv=document.createElement('canvas');
+cv.width=im.naturalWidth;
+cv.height=im.naturalHeight;
+let ctx=cv.getContext('2d');
+ctx.fillStyle='#fff';
+ctx.fillRect(0,0,cv.width,cv.height);
+ctx.drawImage(im,0,0);
+
+return{data:cv.toDataURL('image/jpeg',.88),width:cv.width,height:cv.height};
+}finally{
+URL.revokeObjectURL(u);
+}
+}
+
+async function downloadPDF(id,num){
+switchView('downloads');
+setProgress(1,`إعداد PDF للفصل ${num}`);
+
+try{
+if(!window.jspdf?.jsPDF)throw Error('مكتبة PDF غير متاحة');
+
+let m=await getChapterManifest(id),pages=m.pages;
+if(!pages.length)throw Error('لا توجد صفحات');
+
+let {jsPDF}=window.jspdf,pdf=null;
+
+for(let i=0;i<pages.length;i++){
+let b=await fetchImageBlob(pageUrl(m,pages[i]));
+let conv=await blobToJpegDataURL(b);
+let ori=conv.width>conv.height?'landscape':'portrait';
+
+if(!pdf)pdf=new jsPDF({orientation:ori,unit:'mm',format:'a4',compress:true});
+else pdf.addPage('a4',ori);
+
+let pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
+let ratio=Math.min(pw/conv.width,ph/conv.height);
+let w=conv.width*ratio,h=conv.height*ratio;
+
+pdf.addImage(conv.data,'JPEG',(pw-w)/2,(ph-h)/2,w,h);
+setProgress(Math.max(1,Math.floor((i+1)/pages.length*95)),`تجهيز PDF ${i+1}/${pages.length}`);
+}
+
+let name=`KATRO_Chapter_${String(num).replace(/[^\w.-]/g,'_')}.pdf`;
+pdf.save(name);
+await storePut('pdf_logs',{id:'mangadex:'+id,name,savedAt:Date.now()});
+setProgress(100,'تم إنشاء ملف PDF');
+renderDownloadsManager();
+}catch(e){
+console.error(e);
+setProgress(100,'فشل إنشاء PDF: '+e.message);
+}
+}
+
+async function readChapter(id,num){
+let token=++chapterToken;
+
+activeObjectUrls.forEach(URL.revokeObjectURL);
+activeObjectUrls=[];
+
+$('reader').style.display='block';
+$('readerTitle').textContent='الفصل '+num;
+$('readerPages').textContent='جاري تحميل الصفحات...';
+
+try{
+let saved=await storeGet('chapters',id),sources=[];
+
+if(saved?.pages?.length&&saved.pages[0]?.blob)
+sources=saved.pages.map(p=>({blob:p.blob}));
+else{
+let m=await getChapterManifest(id);
+sources=m.pages.map(f=>({url:pageUrl(m,f)}));
+}
+
+if(token!==chapterToken)return;
+$('readerPages').innerHTML='';
+
+sources.forEach((s,i)=>{
+let im=document.createElement('img');
+im.loading=i<3?'eager':'lazy';
+im.alt='صفحة '+(i+1);
+
+if(s.blob){
+let u=URL.createObjectURL(s.blob);
+activeObjectUrls.push(u);
+im.src=u;
+}else im.src=s.url;
+
+im.onerror=()=>{
+im.alt='تعذر تحميل الصفحة';
+im.style.minHeight='120px';
+};
+
+$('readerPages').appendChild(im);
+});
+}catch(e){
+console.error(e);
+if(token===chapterToken)$('readerPages').textContent='تعذر تحميل صور الفصل: '+e.message;
+}
+}
+
+function closeReader(){
+chapterToken++;
+$('reader').style.display='none';
+$('readerPages').innerHTML='';
+activeObjectUrls.forEach(URL.revokeObjectURL);
+activeObjectUrls=[];
+}
+
+/* =========================
+   DOWNLOAD MANAGER
+========================= */
+
+async function renderDownloadsManager(){
+try{
+let offline=await storeGetAll('chapters');
+let pdfs=await storeGetAll('pdf_logs');
+
+$('offlineDownloadsList').innerHTML='';
+$('pdfDownloadsList').innerHTML='';
+
+if(!offline.length)$('offlineDownloadsList').textContent='لا توجد فصول محفوظة.';
+else offline.forEach(item=>{
+let row=document.createElement('div');
+row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:10px;border:1px solid #eee;border-radius:9px;margin-bottom:8px;gap:8px';
+
+let title=document.createElement('span');
+title.textContent=`${item.contentType==='arabic-manhwa'?(item.title||'مانهو عربية')+' — ':''}الفصل ${item.chapterNum} (${item.pages?.length||0} صفحة)`;
+
+let bs=document.createElement('div');
+bs.style.cssText='display:flex;gap:5px';
+
+let read=document.createElement('button');
+read.textContent='قراءة';
+read.style.padding='6px 9px';
+read.onclick=()=>item.contentType==='arabic-manhwa'?readArabicOffline(item.id):readChapter(item.id,item.chapterNum);
+
+let del=document.createElement('button');
+del.textContent='حذف';
+del.style.cssText='background:var(--red);padding:6px 9px';
+del.onclick=async()=>{
+if(confirm('هل تريد حذف الفصل المحفوظ؟')){
+await storeDelete('chapters',item.id);
+renderDownloadsManager();
+}
+};
+
+bs.append(read,del);
+row.append(title,bs);
+$('offlineDownloadsList').appendChild(row);
+});
+
+if(!pdfs.length)$('pdfDownloadsList').textContent='لا توجد ملفات PDF مسجلة.';
+else pdfs.forEach(x=>{
+let row=document.createElement('div');
+row.style.cssText='padding:10px;border:1px solid #eee;border-radius:9px;margin-bottom:8px';
+row.textContent=x.name+' — تم إنشاؤه';
+$('pdfDownloadsList').appendChild(row);
+});
+}catch(e){
+console.error(e);
+$('offlineDownloadsList').textContent='تعذر قراءة التنزيلات.';
+}
+}
+
+/* =====================================================
+   ARABIC MANGA WORKER - IMPROVED SEARCH AND MERGE
+===================================================== */
+
+let arabicInitialized=false;
+let arabicResultsCache=[];
+let currentArabicSeries=null;
+let arabicRequestToken=0;
+let arabicQuery='';
+let arabicSeen=new Set();
+let arabicMoreBusy=false;
+let arabicNextPages={azora:1,mangalek:1,teamx:1};
+let arabicMoreSources=[];
+
+const arabicSources=['azora','mangalek','teamx'];
+const sourceLabels={
+azora:'Azora Manga',
+mangalek:'Manga Lek',
+teamx:'Team X'
+};
+
+function arabicStatus(m){
+$('arabicStatus').textContent=m;
+}
+
+async function arabicRequest(endpoint){
+let r=await fetch(ARABIC_API+endpoint,{headers:{Accept:'application/json'}});
+let raw=await r.text(),d;
+try{d=JSON.parse(raw)}catch{throw Error('استجابة Worker غير صالحة')}
+if(!r.ok||d.error)throw Error(d.message||d.error||'API Error');
+return d;
+}
+
+function getArabicItems(d){
+return d.results||d.items||d.manga||d.data||[];
+}
+
+function normalizeArabicSearch(value){
+return String(value||'')
+.normalize('NFKC')
+.replace(/[أإآ]/g,'ا')
+.replace(/ى/g,'ي')
+.replace(/ة/g,'ه')
+.replace(/[ًٌٍَُِّْـ]/g,'')
+.replace(/[^\p{L}\p{N}]+/gu,' ')
+.trim()
+.toLowerCase();
+}
+
+function getArabicTitle(item){
+return String(item?.title||item?.name||item?.altTitle||'').trim();
+}
+
+function arabicItemUrl(item){
+return item?.url||item?.link||item?.href||item?.slug||'';
+}
+
+function arabicItemKey(item){
+const url=arabicItemUrl(item);
+if(url)return String(item.source||'')+':url:'+url.trim().toLowerCase();
+return String(item.source||'')+':title:'+normalizeArabicSearch(getArabicTitle(item));
+}
+
+function arabicSearchScore(title,query){
+const t=normalizeArabicSearch(title);
+const q=normalizeArabicSearch(query);
+
+if(!q||!t)return 0;
+if(t===q)return 1000;
+if(t.startsWith(q))return 800;
+if(t.includes(q))return 600;
+
+const words=q.split(' ').filter(Boolean);
+if(!words.length)return 0;
+
+let matched=words.filter(w=>t.includes(w)).length;
+return Math.floor(matched/words.length*400);
+}
+
+function rankArabicResults(items,query){
+return items.map((item,index)=>({
+item,
+score:query?arabicSearchScore(getArabicTitle(item),query):0,
+index
+})).sort((a,b)=>b.score-a.score||a.index-b.index).map(x=>x.item);
+}
+
+function arabicEndpoint(type,source,page=1,query=''){
+let params=new URLSearchParams();
+params.set('source',source);
+params.set('page',String(page));
+params.set('limit','100');
+if(type==='search')params.set('q',query);
+return'/'+type+'?'+params.toString();
+}
+
+async function requestAllArabic(type,query='',pageMap=null){
+return Promise.allSettled(arabicSources.map(async source=>{
+let page=pageMap?.[source]||1;
+let endpoint=arabicEndpoint(type,source,page,query);
+let data=await arabicRequest(endpoint);
+return{source,data,items:getArabicItems(data)};
+}));
+}
+
+function resetArabicResults(){
+arabicSeen.clear();
+arabicResultsCache=[];
+arabicNextPages={azora:1,mangalek:1,teamx:1};
+arabicMoreSources=[];
+}
+
+function renderArabicCards(items,append=false){
+let c=$('arabicResults');
+if(!append)c.innerHTML='';
+if(!append)arabicResultsCache=[];
+
+let fresh=[];
+for(let x of items||[]){
+if(!x.source)x.source='azora';
+let key=arabicItemKey(x);
+if(!key||arabicSeen.has(key))continue;
+arabicSeen.add(key);
+fresh.push(x);
+arabicResultsCache.push(x);
+}
+
+if(!append&&!fresh.length){
+arabicStatus('لم يتم العثور على نتائج في المصادر الثلاثة.');
+$('arabicMore').style.display='none';
+return;
+}
+
+fresh.forEach(item=>{
+let card=document.createElement('div');
+card.className='card';
+
+let img=document.createElement('img');
+img.loading='lazy';
+img.alt=getArabicTitle(item)||'مانهو';
+img.src=item.cover||item.image||item.thumbnail||'';
+img.onerror=()=>{img.onerror=null;img.style.display='none'};
+
+let badge=document.createElement('div');
+badge.className='badge';
+badge.textContent=sourceLabels[item.source]||item.source;
+
+let h=document.createElement('h3');
+h.textContent=getArabicTitle(item)||'بدون عنوان';
+
+card.append(img,badge,h);
+card.onclick=()=>openArabicSeries(item);
+c.appendChild(card);
+});
+
+arabicStatus('عدد النتائج: '+arabicResultsCache.length);
+$('arabicMore').style.display=arabicMoreSources.length?'block':'none';
+$('arabicMore').disabled=false;
+
+if(fresh.length)updateBackdrop(fresh.map(x=>({cover:x.cover||x.image})).filter(x=>x.cover));
+}
+
+async function loadArabicPopular(){
+let token=++arabicRequestToken;
+arabicQuery='';
+resetArabicResults();
+
+$('arabicDetails').style.display='none';
+$('arabicReader').style.display='none';
+$('arabicResults').style.display='grid';
+$('arabicMore').style.display='none';
+
+arabicStatus('جاري تحميل الأعمال الشائعة من المصادر الثلاثة...');
+
+try{
+let settled=await requestAllArabic('popular');
+if(token!==arabicRequestToken)return;
+
+let merged=[],errors=[];
+
+settled.forEach((result,index)=>{
+let source=arabicSources[index];
+
+if(result.status==='fulfilled'){
+let data=result.value.data;
+merged.push(...result.value.items.map(item=>({...item,source:item.source||source})));
+arabicNextPages[source]=Number(data.nextPage)||2;
+if(data.hasMore!==false)arabicMoreSources.push(source);
+}else{
+errors.push(sourceLabels[source]+': '+result.reason.message);
+}
+});
+
+renderArabicCards(merged);
+
+if(errors.length)arabicStatus('عدد النتائج: '+arabicResultsCache.length+'\nتعذر جلب بعض المصادر: '+errors.join(' | '));
+}catch(e){
+if(token===arabicRequestToken)arabicStatus('تعذر تحميل الأعمال: '+e.message);
+}
+}
+
+async function searchArabic(){
+let q=$('arabicSearch').value.trim();
+if(!q){loadArabicPopular();return}
+
+let token=++arabicRequestToken;
+arabicQuery=q;
+resetArabicResults();
+
+$('arabicDetails').style.display='none';
+$('arabicReader').style.display='none';
+$('arabicResults').style.display='grid';
+$('arabicMore').style.display='none';
+
+arabicStatus('جاري البحث عن "'+q+'" في المصادر الثلاثة...');
+
+try{
+let settled=await requestAllArabic('search',q);
+if(token!==arabicRequestToken)return;
+
+let merged=[],errors=[];
+
+settled.forEach((result,index)=>{
+let source=arabicSources[index];
+
+if(result.status==='fulfilled'){
+let data=result.value.data;
+merged.push(...result.value.items.map(item=>({...item,source:item.source||source})));
+arabicNextPages[source]=Number(data.nextPage)||2;
+
+if(data.hasMore!==false)arabicMoreSources.push(source);
+}else{
+errors.push(sourceLabels[source]+': '+result.reason.message);
+}
+});
+
+merged=rankArabicResults(merged,q);
+renderArabicCards(merged);
+
+if(errors.length){
+arabicStatus('نتائج البحث: '+arabicResultsCache.length+'\nتعذر البحث في بعض المصادر: '+errors.join(' | '));
+}else{
+arabicStatus('نتائج البحث عن "'+q+'": '+arabicResultsCache.length);
+}
+}catch(e){
+if(token===arabicRequestToken)arabicStatus('فشل البحث: '+e.message);
+}
+}
+
+$('arabicSearch').addEventListener('keydown',e=>{
+if(e.key==='Enter')searchArabic();
+});
+
+async function loadArabicMore(){
+if(arabicMoreBusy||!arabicMoreSources.length)return;
+
+arabicMoreBusy=true;
+$('arabicMore').disabled=true;
+
+let token=arabicRequestToken;
+arabicStatus('جاري تحميل أعمال إضافية من المصادر...');
+
+try{
+let sources=[...arabicMoreSources];
+
+let results=await Promise.allSettled(sources.map(async source=>{
+let type=arabicQuery?'search':'catalog';
+let endpoint=arabicEndpoint(type,source,arabicNextPages[source]||2,arabicQuery);
+let data=await arabicRequest(endpoint);
+return{source,data,items:getArabicItems(data)};
+}));
+
+if(token!==arabicRequestToken)return;
+
+let merged=[],errors=[];
+
+results.forEach((result,index)=>{
+let source=sources[index];
+
+if(result.status==='fulfilled'){
+let data=result.value.data;
+merged.push(...result.value.items.map(item=>({...item,source:item.source||source})));
+
+arabicNextPages[source]=Number(data.nextPage)||((arabicNextPages[source]||2)+1);
+
+if(data.hasMore===false||!result.value.items.length){
+arabicMoreSources=arabicMoreSources.filter(x=>x!==source);
+}
+}else{
+errors.push(sourceLabels[source]+': '+result.reason.message);
+}
+});
+
+let before=arabicResultsCache.length;
+
+if(arabicQuery)merged=rankArabicResults(merged,arabicQuery);
+
+renderArabicCards(merged,true);
+
+let added=arabicResultsCache.length-before;
+
+if(!added&&!errors.length){
+arabicMoreSources=[];
+$('arabicMore').style.display='none';
+arabicStatus('لا توجد أعمال إضافية حالياً.');
+}else{
+arabicStatus('تمت إضافة '+added+' عمل جديد.'+(errors.length?'\nبعض المصادر لم تستجب: '+errors.join(' | '):''));
+}
+
+}catch(e){
+if(token===arabicRequestToken)arabicStatus('تعذر تحميل المزيد: '+e.message);
+}finally{
+arabicMoreBusy=false;
+$('arabicMore').disabled=false;
+}
+}
+
+/* =========================
+   ARABIC SERIES DETAILS
+========================= */
+
+async function openArabicSeries(item){
+if(!item?.url)return;
+
+let source=item.source||'azora';
+currentArabicSeries={...item,source};
+
+let token=++arabicRequestToken;
+
+$('arabicResults').style.display='none';
+$('arabicReader').style.display='none';
+$('arabicDetails').style.display='block';
+
+$('arabicTitle').textContent=getArabicTitle(item)||'تفاصيل المانهو';
+$('arabicDescription').textContent='جاري تحميل التفاصيل والفصول...';
+$('arabicChapters').innerHTML='';
+
+window.scrollTo(0,0);
+
+try{
+let d=await arabicRequest('/series?source='+encodeURIComponent(source)+'&url='+encodeURIComponent(item.url));
+if(token!==arabicRequestToken)return;
+
+currentArabicSeries={...d,...item,source};
+
+$('arabicTitle').textContent=d.title||getArabicTitle(item);
+$('arabicDescription').textContent=d.description||'لا يوجد وصف متاح.';
+
+let c=$('arabicChapters');
+c.innerHTML='';
+
+if(!Array.isArray(d.chapters)||!d.chapters.length){
+c.textContent='لم يتم العثور على فصول.';
+return;
+}
+
+d.chapters.forEach((ch,i)=>{
+let row=document.createElement('div');
+row.className='chapter';
+
+let name=document.createElement('strong');
+name.textContent=ch.title||'الفصل '+(i+1);
+
+let acts=document.createElement('div');
+acts.className='chapter-actions';
+
+let read=document.createElement('button');
+read.textContent='📖 قراءة';
+read.onclick=()=>openArabicChapter(ch.url,ch.title||'الفصل '+(i+1));
+
+let off=document.createElement('button');
+off.className='btn-offline';
+off.textContent='📥 أوفلاين';
+off.onclick=()=>downloadArabicOffline(ch.url,ch.title||'الفصل '+(i+1));
+
+let pdf=document.createElement('button');
+pdf.className='btn-pdf';
+pdf.textContent='📄 PDF';
+pdf.onclick=()=>downloadArabicPDF(ch.url,ch.title||'الفصل '+(i+1));
+
+acts.append(read,off,pdf);
+row.append(name,acts);
+c.appendChild(row);
+});
+}catch(e){
+if(token===arabicRequestToken)$('arabicDescription').textContent='تعذر جلب التفاصيل: '+e.message;
+}
+}
+
+async function fetchArabicChapter(url){
+let source=currentArabicSeries?.source||'azora';
+return arabicRequest('/chapter?source='+encodeURIComponent(source)+'&url='+encodeURIComponent(url));
+}
+
+function arabicPageImage(p){
+return typeof p==='string'?p:p?.image||p?.url||p?.src||'';
+}
+
+async function openArabicChapter(url,title='الفصل'){
+if(!url)return;
+
+let token=++arabicRequestToken;
+
+$('arabicDetails').style.display='none';
+$('arabicReader').style.display='block';
+$('arabicPages').textContent='جاري تحميل صفحات الفصل...';
+
+window.scrollTo(0,0);
+
+try{
+let d=await fetchArabicChapter(url);
+if(token!==arabicRequestToken)return;
+
+let c=$('arabicPages');
+c.innerHTML='';
+
+let pages=Array.isArray(d.pages)?d.pages:[];
+
+if(!pages.length){
+c.textContent='لم يتم العثور على صفحات.';
+return;
+}
+
+pages.forEach((p,i)=>{
+let im=document.createElement('img');
+im.src=arabicPageImage(p);
+im.loading='lazy';
+im.alt='صفحة '+(p.number||i+1);
+
+im.onerror=()=>{
+im.alt='تعذر تحميل الصفحة '+(p.number||i+1);
+im.style.minHeight='100px';
+};
+
+c.appendChild(im);
+});
+}catch(e){
+if(token===arabicRequestToken)$('arabicPages').textContent='تعذر تحميل الفصل: '+e.message;
+}
+}
+
+/* =========================
+   ARABIC OFFLINE
+========================= */
+
+async function downloadArabicOffline(url,chapterTitle){
+let series=currentArabicSeries;
+if(!series?.source)return;
+
+switchView('downloads');
+setProgress(1,'بدء تنزيل '+chapterTitle);
+
+try{
+let d=await fetchArabicChapter(url),pages=[];
+
+if(!d.pages?.length)throw Error('لم يتم العثور على صفحات');
+
+for(let i=0;i<d.pages.length;i++){
+let p=d.pages[i],src=arabicPageImage(p);
+if(!src)throw Error('رابط صورة غير موجود للصفحة '+(i+1));
+
+let blob=await fetchImageBlob(src);
+pages.push({name:String(i+1),blob,type:blob.type,originalUrl:src});
+
+setProgress(Math.floor((i+1)/d.pages.length*95),`حفظ الصفحة ${i+1}/${d.pages.length}`);
+}
+
+let id='arabic:'+series.source+':'+url;
+
+await storePut('chapters',{
+id,
+contentType:'arabic-manhwa',
+source:series.source,
+title:series.title,
+chapterNum:chapterTitle,
+chapterUrl:url,
+pages,
+savedAt:Date.now()
+});
+
+setProgress(100,'تم حفظ الفصل أوفلاين');
+renderDownloadsManager();
+}catch(e){
+console.error(e);
+setProgress(100,'تعذر حفظ الفصل: '+e.message);
+}
+}
+
+async function readArabicOffline(id){
+let saved=await storeGet('chapters',id);
+if(!saved?.pages?.length)return alert('الفصل المحفوظ غير موجود أو فارغ');
+
+chapterToken++;
+activeObjectUrls.forEach(URL.revokeObjectURL);
+activeObjectUrls=[];
+
+$('reader').style.display='block';
+$('readerTitle').textContent=saved.title+' — '+saved.chapterNum;
+$('readerPages').innerHTML='';
+
+saved.pages.forEach((p,i)=>{
+let im=document.createElement('img');
+im.loading=i<3?'eager':'lazy';
+im.alt='صفحة '+(i+1);
+
+let u=URL.createObjectURL(p.blob);
+activeObjectUrls.push(u);
+im.src=u;
+
+$('readerPages').appendChild(im);
+});
+}
+
+/* =========================
+   ARABIC PDF
+========================= */
+
+async function downloadArabicPDF(url,title){
+let series=currentArabicSeries;
+if(!series?.source)return;
+
+switchView('downloads');
+setProgress(1,'إعداد PDF: '+title);
+
+try{
+if(!window.jspdf?.jsPDF)throw Error('مكتبة PDF غير متاحة');
+
+let d=await fetchArabicChapter(url);
+if(!d.pages?.length)throw Error('لا توجد صفحات');
+
+let {jsPDF}=window.jspdf,pdf=null;
+
+for(let i=0;i<d.pages.length;i++){
+let src=arabicPageImage(d.pages[i]);
+if(!src)throw Error('رابط صورة مفقود');
+
+let b=await fetchImageBlob(src);
+let conv=await blobToJpegDataURL(b);
+let ori=conv.width>conv.height?'landscape':'portrait';
+
+if(!pdf)pdf=new jsPDF({orientation:ori,unit:'mm',format:'a4',compress:true});
+else pdf.addPage('a4',ori);
+
+let pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
+let ratio=Math.min(pw/conv.width,ph/conv.height);
+let w=conv.width*ratio,h=conv.height*ratio;
+
+pdf.addImage(conv.data,'JPEG',(pw-w)/2,(ph-h)/2,w,h);
+
+setProgress(Math.floor((i+1)/d.pages.length*95),`تجهيز PDF ${i+1}/${d.pages.length}`);
+}
+
+let fname='KATRO_'+String(title).replace(/[^\w.-]/g,'_')+'.pdf';
+pdf.save(fname);
+
+await storePut('pdf_logs',{id:'arabic:'+series.source+':'+url,name:fname,savedAt:Date.now()});
+
+setProgress(100,'تم إنشاء PDF');
+renderDownloadsManager();
+
+}catch(e){
+console.error(e);
+setProgress(100,'فشل PDF: '+e.message);
+}
+}
+
+function backArabicResults(){
+arabicRequestToken++;
+$('arabicDetails').style.display='none';
+$('arabicReader').style.display='none';
+$('arabicResults').style.display='grid';
+window.scrollTo(0,0);
+}
+
+function closeArabicReader(){
+arabicRequestToken++;
+$('arabicReader').style.display='none';
+$('arabicDetails').style.display='block';
+window.scrollTo(0,0);
+}
+
+/* =========================
+   START
+========================= */
+
 fetchManga('');
-</script></body></html>
+
+</script>
+</body>
+                                                                  </html>
