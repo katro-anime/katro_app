@@ -1,3 +1,4 @@
+
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -41,10 +42,10 @@ convert "$ICON" -strip \
   -extent 432x432 \
   "$RES/drawable-nodpi/ic_launcher_foreground.png"
 
-# Adaptive icon background
-cat > "$RES/values/colors.xml" <<'EOF'
+# KATRO unique background color
+cat > "$RES/values/katro_icon_colors.xml" <<'EOF'
 <resources>
-    <color name="ic_launcher_background">#FFFFFF</color>
+    <color name="katro_icon_background">#FFFFFF</color>
 </resources>
 EOF
 
@@ -52,7 +53,7 @@ EOF
 cat > "$RES/mipmap-anydpi-v26/ic_launcher.xml" <<'EOF'
 <?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background android:drawable="@color/ic_launcher_background"/>
+    <background android:drawable="@color/katro_icon_background"/>
     <foreground android:drawable="@drawable/ic_launcher_foreground"/>
 </adaptive-icon>
 EOF
@@ -60,12 +61,12 @@ EOF
 cat > "$RES/mipmap-anydpi-v26/ic_launcher_round.xml" <<'EOF'
 <?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background android:drawable="@color/ic_launcher_background"/>
+    <background android:drawable="@color/katro_icon_background"/>
     <foreground android:drawable="@drawable/ic_launcher_foreground"/>
 </adaptive-icon>
 EOF
 
-# Force AndroidManifest to use KATRO icon
+# Link KATRO icon to AndroidManifest
 python3 - <<'PY'
 from pathlib import Path
 import re
@@ -76,14 +77,12 @@ if not manifest.exists():
     raise SystemExit("AndroidManifest.xml not found")
 
 content = manifest.read_text(encoding="utf-8")
-
 match = re.search(r"<application\b[^>]*>", content)
 
 if not match:
     raise SystemExit("Application tag not found")
 
 tag = match.group(0)
-
 tag = re.sub(r'\s+android:icon="[^"]*"', '', tag)
 tag = re.sub(r'\s+android:roundIcon="[^"]*"', '', tag)
 
@@ -93,7 +92,6 @@ tag = tag[:-1] + (
 )
 
 content = content[:match.start()] + tag + content[match.end():]
-
 manifest.write_text(content, encoding="utf-8")
 
 print("KATRO icon successfully linked to AndroidManifest")
@@ -106,6 +104,8 @@ test -f "$RES/mipmap-xhdpi/ic_launcher.png"
 test -f "$RES/mipmap-xxhdpi/ic_launcher.png"
 test -f "$RES/mipmap-xxxhdpi/ic_launcher.png"
 test -f "$RES/mipmap-anydpi-v26/ic_launcher.xml"
+test -f "$RES/mipmap-anydpi-v26/ic_launcher_round.xml"
 test -f "$RES/drawable-nodpi/ic_launcher_foreground.png"
+test -f "$RES/values/katro_icon_colors.xml"
 
 echo "KATRO icons generated and verified successfully!"
